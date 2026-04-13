@@ -11,6 +11,7 @@ import userRoutes from './routes/user.routes';
 import skillRoutes from './routes/skill.routes';
 import teamRoutes from './routes/team.routes';
 import notificationRoutes from './routes/notification.routes';
+import chatRoutes from './routes/chat.routes';
 
 import { connectRedis } from './config/redis';
 import passport from './config/passport';
@@ -43,6 +44,7 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/skills', skillRoutes);
 app.use('/api/v1/teams', teamRoutes);
 app.use('/api/v1/notifications', notificationRoutes);
+app.use('/api/v1/chat', chatRoutes);
 
 // Connect to Database and start server
 const startServer = async () => {
@@ -50,8 +52,8 @@ const startServer = async () => {
     await connectDB();
     await connectRedis();
 
-    // Initialize Socket.io (real-time layer)
-    initializeSocket(httpServer);
+    // Initialize Socket.io with Redis adapter (async — must await)
+    await initializeSocket(httpServer);
 
     // Initialize Firebase Admin for push notifications (graceful if not configured)
     initializeFirebase();

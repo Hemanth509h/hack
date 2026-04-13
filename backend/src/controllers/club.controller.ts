@@ -4,6 +4,7 @@ import { ClubMembership } from '../models/ClubMembership';
 import { Notification } from '../models/Notification';
 import { Event } from '../models/Event';
 import { AuthRequest } from '../middleware/auth.middleware';
+import { emitClubAnnouncement } from '../config/socket';
 
 /**
  * @desc    Get all active clubs with filters
@@ -281,6 +282,9 @@ export const sendClubAnnouncement = async (req: AuthRequest, res: Response) => {
     }));
 
     await Notification.insertMany(notifications);
+
+    // Emit via Socket.io to all users currently in the club room
+    await emitClubAnnouncement(req.params.id, req.user!.userId, title, message);
 
     res.json({ message: 'Announcement blast delivered successfully.' });
   } catch (error) {

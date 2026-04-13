@@ -121,11 +121,17 @@ export const processNotificationJob = async (payload: NotificationPayload): Prom
 
   // Channel 1: In-App (Socket.io) — always attempt real-time delivery
   if (prefs.inApp) {
+    const unreadCount = await Notification.countDocuments({ 
+      recipient: new mongoose.Types.ObjectId(payload.recipientId), 
+      isRead: false 
+    });
+    
     emitToUser(payload.recipientId, 'notification:new', {
       type: payload.type,
       title: payload.title,
       message: payload.message,
       dataPayload: payload.dataPayload,
+      unreadCount,
       createdAt: new Date(),
     });
   }

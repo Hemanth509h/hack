@@ -3,6 +3,8 @@ import { Event } from '../models/Event';
 import { RSVP } from '../models/RSVP';
 import { User, IUser } from '../models/User';
 import { AuthRequest } from '../middleware/auth.middleware';
+import { sendBulkNotifications } from '../services/notification.service';
+import { emitRsvpUpdate, emitEventStatusChange, emitNewEventMatch } from '../config/socket';
 
 /**
  * @desc    Get all events with filters, search, and pagination
@@ -79,7 +81,32 @@ export const createEvent = async (req: AuthRequest, res: Response) => {
       organizer: req.user?.userId,
     });
 
-    res.status(201).json({ message: 'Event created', event: newEvent });
+    // Notify users with matching interests or majors
+    const usersToNotify = await User.find({
+      _id: { $ne: req.user?.userId },
+      $or: [
+        { interests: newEvent.category },
+        { major: { $in: newEvent.targetAudience?.majors || [] } }
+      ]
+    }).select('_id');
+
+    if (usersToNotify.length > 0) {
+      const recipientIds = usersToNotify.map(u => String(u._id));
+      
+      // Multi-channel bulk delivery (DB + Email + Push)
+      await sendBulkNotifications(recipientIds, {
+        type: 'event_update',
+        title: 'New Event Matching Your Interests! 🚀',
+        message: `Check out "${newEvent.title}" happening on ${new Date(newEvent.date).toLocaleDateString()}.`,
+        ctaUrl: `${process.env.FRONTEND_URL}/events/${newEvent._id}`,
+        dataPayload: { eventId: newEvent._id }
+      });
+
+      // Targeted real-time socket emission
+      emitNewEventMatch(recipientIds, newEvent);
+    }
+
+    res.status(201).json({ message: 'Event created and matches notified', event: newEvent });
   } catch (error: any) {
     res.status(500).json({ error: 'Failed to create event', details: error.message });
   }
@@ -119,6 +146,10 @@ export const updateEvent = async (req: AuthRequest, res: Response) => {
     }
 
     const updatedEvent = await Event.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    // Emit status change if status was updated
+    if (req.body.status && updatedEvent) {
+      emitEventStatusChange(req.params.id, req.body.status);
+    }
     res.json({ message: 'Event updated', event: updatedEvent });
   } catch (error: any) {
     res.status(500).json({ error: 'Failed to update event' });
@@ -172,12 +203,17 @@ export const rsvpToEvent = async (req: AuthRequest, res: Response) => {
       if (existingRsvp.status === 'cancelled') {
         existingRsvp.status = 'attending';
         await existingRsvp.save();
+        const updatedEvent = await Event.findById(eventId).select('rsvpCount');
+        emitRsvpUpdate(eventId, updatedEvent?.rsvpCount ?? 0, 'added');
         return res.json({ message: 'RSVP restored', status: 'attending' });
       }
       return res.status(400).json({ error: 'You are already registered for this event' });
     }
 
     const newRsvp = await RSVP.create({ user: userId, event: eventId, status: 'attending' });
+    // Fetch updated count and emit to event room for real-time badge update
+    const updatedEvent = await Event.findById(eventId).select('rsvpCount');
+    emitRsvpUpdate(eventId, updatedEvent?.rsvpCount ?? 0, 'added');
     res.status(201).json({ message: 'RSVP confirmed', rsvp: newRsvp });
   } catch (error: any) {
     res.status(500).json({ error: 'Failed to process RSVP' });
@@ -196,6 +232,8 @@ export const cancelRsvp = async (req: AuthRequest, res: Response) => {
     const rsvp = await RSVP.findOneAndDelete({ user: userId, event: eventId, status: 'attending' });
     if (!rsvp) return res.status(404).json({ error: 'Active RSVP not found' });
 
+    const updatedEvent = await Event.findById(eventId).select('rsvpCount');
+    emitRsvpUpdate(eventId, updatedEvent?.rsvpCount ?? 0, 'cancelled');
     res.json({ message: 'RSVP successfully cancelled' });
   } catch (error: any) {
     res.status(500).json({ error: 'Failed to cancel RSVP' });

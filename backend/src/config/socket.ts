@@ -1,22 +1,73 @@
 import { Server as HTTPServer } from 'http';
 import { Server as SocketServer, Socket } from 'socket.io';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { createClient } from 'redis';
 import jwt from 'jsonwebtoken';
 import { TokenPayload } from '../utils/jwt.utils';
+import { Message } from '../models/Message';
+import { User } from '../models/User';
+import mongoose from 'mongoose';
 
 let io: SocketServer;
 
-export const initializeSocket = (httpServer: HTTPServer): SocketServer => {
+// Per-socket event rate limiter state
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+const RATE_LIMIT = { maxEvents: 30, windowMs: 10_000 }; // 30 events per 10s per socket
+
+/**
+ * Check if a socket is within its rate limit.
+ * Returns true if allowed, false if throttled.
+ */
+const checkRateLimit = (socketId: string): boolean => {
+  const now = Date.now();
+  const entry = rateLimitMap.get(socketId);
+
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(socketId, { count: 1, resetAt: now + RATE_LIMIT.windowMs });
+    return true;
+  }
+
+  if (entry.count >= RATE_LIMIT.maxEvents) return false;
+
+  entry.count++;
+  return true;
+};
+
+/** Format a standard room identifier string */
+export const roomId = (type: 'event' | 'club' | 'project' | 'user', id: string) =>
+  `${type}:${id}`;
+
+export const initializeSocket = async (httpServer: HTTPServer): Promise<SocketServer> => {
   io = new SocketServer(httpServer, {
     cors: {
       origin: process.env.FRONTEND_URL || 'http://localhost:5173',
       methods: ['GET', 'POST'],
+      credentials: true,
     },
+    pingTimeout: 60_000,
+    pingInterval: 25_000,
   });
 
-  // JWT Authentication Middleware for every socket connection
+  // ---- Redis Adapter (horizontal scaling across multiple Node processes) ----
+  const redisUrl = process.env.REDIS_URI || 'redis://localhost:6379';
+  const pubClient = createClient({ url: redisUrl });
+  const subClient = pubClient.duplicate();
+
+  await Promise.all([pubClient.connect(), subClient.connect()]);
+  io.adapter(createAdapter(pubClient, subClient));
+  console.log('[socket]: Redis adapter attached for horizontal scaling');
+
+  // ---- JWT Authentication Middleware ----
   io.use((socket: Socket, next) => {
-    const token = socket.handshake.auth?.token;
-    if (!token) return next(new Error('Authentication required'));
+    // Check both handshake auth and headers (for flexibility across different client libraries)
+    let token = socket.handshake.auth?.token || socket.handshake.headers['authorization'];
+    
+    if (token?.startsWith('Bearer ')) {
+      token = token.slice(7);
+    }
+
+    if (!token) return next(new Error('AUTH_REQUIRED'));
 
     try {
       const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret') as TokenPayload;
@@ -24,45 +75,200 @@ export const initializeSocket = (httpServer: HTTPServer): SocketServer => {
       (socket as any).role = payload.role;
       next();
     } catch {
-      next(new Error('Invalid or expired token'));
+      next(new Error('INVALID_TOKEN'));
     }
   });
 
+  // ---- Connection Handler ----
   io.on('connection', (socket: Socket) => {
     const userId = (socket as any).userId as string;
     console.log(`[socket]: User ${userId} connected (${socket.id})`);
 
-    // Join a personal room — used to deliver private notifications
-    socket.join(`user:${userId}`);
+    // Auto-join personal private room
+    socket.join(roomId('user', userId));
 
-    // Room-based architecture: clients can join event/club/project rooms
-    socket.on('join:room', (roomId: string) => {
-      socket.join(roomId);
-      console.log(`[socket]: User ${userId} joined room ${roomId}`);
+    // ----------------------------------------------------------------
+    // ROOM MANAGEMENT
+    // ----------------------------------------------------------------
+    socket.on('room:join', (payload: { type: 'event' | 'club' | 'project'; id: string }) => {
+      if (!checkRateLimit(socket.id)) return socket.emit('error', { code: 'RATE_LIMITED' });
+      const room = roomId(payload.type, payload.id);
+      socket.join(room);
+      socket.emit('room:joined', { room });
     });
 
-    socket.on('leave:room', (roomId: string) => {
-      socket.leave(roomId);
+    socket.on('room:leave', (payload: { type: 'event' | 'club' | 'project'; id: string }) => {
+      const room = roomId(payload.type, payload.id);
+      socket.leave(room);
     });
 
-    socket.on('disconnect', () => {
-      console.log(`[socket]: User ${userId} disconnected`);
+    // ----------------------------------------------------------------
+    // LIVE CHAT — send message to a room
+    // ----------------------------------------------------------------
+    socket.on('chat:send', async (payload: {
+      roomType: 'event' | 'club' | 'project';
+      roomId: string;
+      content: string;
+    }) => {
+      if (!checkRateLimit(socket.id)) return socket.emit('error', { code: 'RATE_LIMITED' });
+      if (!payload.content?.trim()) return;
+
+      try {
+        const sender = await User.findById(userId).select('name avatar').lean();
+
+        const message = await Message.create({
+          roomType: payload.roomType,
+          roomId: new mongoose.Types.ObjectId(payload.roomId),
+          sender: new mongoose.Types.ObjectId(userId),
+          content: payload.content.trim(),
+          type: 'text',
+        });
+
+        // Broadcast message to everyone in the room (including sender for confirmation)
+        const room = roomId(payload.roomType, payload.roomId);
+        io.to(room).emit('chat:message', {
+          _id: message._id,
+          content: message.content,
+          roomType: message.roomType,
+          roomId: message.roomId,
+          type: message.type,
+          sender,
+          createdAt: message.createdAt,
+        });
+      } catch (err) {
+        socket.emit('error', { code: 'CHAT_FAILED', message: 'Message delivery failed' });
+      }
+    });
+
+    // ----------------------------------------------------------------
+    // TYPING INDICATORS
+    // ----------------------------------------------------------------
+    socket.on('chat:typing', (payload: { roomType: string; roomId: string }) => {
+      if (!checkRateLimit(socket.id)) return;
+      const room = roomId(payload.roomType as any, payload.roomId);
+      socket.to(room).emit('chat:typing', { userId });
+    });
+
+    // ----------------------------------------------------------------
+    // CHAT HISTORY — request recent messages for a room
+    // ----------------------------------------------------------------
+    socket.on('chat:history', async (payload: { 
+      roomType: 'event' | 'club' | 'project'; 
+      roomId: string; 
+      limit?: number 
+    }) => {
+      if (!checkRateLimit(socket.id)) return socket.emit('error', { code: 'RATE_LIMITED' });
+      
+      try {
+        const messages = await Message.find({
+          roomType: payload.roomType,
+          roomId: new mongoose.Types.ObjectId(payload.roomId),
+        })
+          .sort({ createdAt: -1 })
+          .limit(payload.limit || 50)
+          .populate('sender', 'name avatar')
+          .lean();
+
+        socket.emit('chat:history', {
+          roomType: payload.roomType,
+          roomId: payload.roomId,
+          messages: messages.reverse(),
+        });
+      } catch (err) {
+        socket.emit('error', { code: 'HISTORY_FAILED', message: 'Failed to load chat history' });
+      }
+    });
+
+    // ----------------------------------------------------------------
+    // DISCONNECT CLEANUP
+    // ----------------------------------------------------------------
+    socket.on('disconnect', (reason) => {
+      rateLimitMap.delete(socket.id);
+      console.log(`[socket]: User ${userId} disconnected — ${reason}`);
+    });
+
+    socket.on('error', (err) => {
+      console.error(`[socket]: Socket error for user ${userId}:`, err.message);
     });
   });
 
   return io;
 };
 
-/** Emit a notification to a specific user's private Socket.io room */
+// ----------------------------------------------------------------
+// EMISSION HELPERS — called from controllers/services
+// ----------------------------------------------------------------
+
+/** Emit to a specific user's private room */
 export const emitToUser = (userId: string, event: string, data: any) => {
   if (!io) return;
-  io.to(`user:${userId}`).emit(event, data);
+  io.to(roomId('user', userId)).emit(event, data);
 };
 
-/** Broadcast to a shared room (e.g. event room for live RSVP counts) */
-export const emitToRoom = (roomId: string, event: string, data: any) => {
+/** Broadcast to a shared room (event/club/project) */
+export const emitToRoom = (type: 'event' | 'club' | 'project', id: string, event: string, data: any) => {
   if (!io) return;
-  io.to(roomId).emit(event, data);
+  io.to(roomId(type, id)).emit(event, data);
+};
+
+/**
+ * Emit live RSVP count update to everyone watching an event room.
+ * Called from the RSVP controller after a successful RSVP action.
+ */
+export const emitRsvpUpdate = (eventId: string, rsvpCount: number, action: 'added' | 'cancelled') => {
+  emitToRoom('event', eventId, 'event:rsvp_update', { eventId, rsvpCount, action });
+};
+
+/**
+ * Emit event status change (live → completed/cancelled etc.)
+ */
+export const emitEventStatusChange = (eventId: string, status: string) => {
+  emitToRoom('event', eventId, 'event:status_change', { eventId, status });
+};
+
+/**
+ * Broadcast a club announcement to the club room + persist as a Message.
+ */
+export const emitClubAnnouncement = async (
+  clubId: string,
+  senderId: string,
+  title: string,
+  content: string
+) => {
+  // Persist as a system announcement message
+  const message = await Message.create({
+    roomType: 'club',
+    roomId: new mongoose.Types.ObjectId(clubId),
+    sender: new mongoose.Types.ObjectId(senderId),
+    content: `📣 ${title}: ${content}`,
+    type: 'announcement',
+  });
+
+  emitToRoom('club', clubId, 'club:announcement', {
+    _id: message._id,
+    title,
+    content,
+    clubId,
+    createdAt: message.createdAt,
+  });
+};
+
+/**
+ * Emit to users interested in a newly created event.
+ */
+export const emitNewEventMatch = (userIds: string[], event: any) => {
+  if (!io) return;
+  userIds.forEach(userId => {
+    io.to(roomId('user', userId)).emit('event:new_match', {
+      event: {
+        _id: event._id,
+        title: event.title,
+        date: event.date,
+        location: event.location,
+        category: event.category
+      }
+    });
+  });
 };
 
 export const getIO = () => io;

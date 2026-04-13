@@ -1,8 +1,8 @@
 import { Response } from 'express';
 import { User } from '../models/User';
 import { TeamProject } from '../models/TeamProject';
-import { Notification } from '../models/Notification';
 import { AuthRequest } from '../middleware/auth.middleware';
+import { sendNotification } from '../services/notification.service';
 import mongoose from 'mongoose';
 import {
   computeSkillScore,
@@ -223,8 +223,8 @@ export const requestToJoin = async (req: AuthRequest, res: Response) => {
     // Notify the project leader
     const { message } = req.body;
     const requester = await User.findById(userId).select('name');
-    await Notification.create({
-      recipient: project.leader,
+    await sendNotification({
+      recipientId: String(project.leader),
       type: 'team_request',
       title: 'New Team Request',
       message: `${requester?.name} wants to join your project "${project.title}"${message ? `: "${message}"` : '.'}`,
@@ -260,8 +260,8 @@ export const acceptRequest = async (req: AuthRequest, res: Response) => {
     });
 
     // Notify requester
-    await Notification.create({
-      recipient: requesterId,
+    await sendNotification({
+      recipientId: requesterId,
       type: 'team_request',
       title: 'Team Request Accepted 🎉',
       message: `You have been accepted into "${project.title}"!`,
@@ -299,8 +299,8 @@ export const declineRequest = async (req: AuthRequest, res: Response) => {
     });
 
     // Notify requester
-    await Notification.create({
-      recipient: requesterId,
+    await sendNotification({
+      recipientId: requesterId,
       type: 'team_request',
       title: 'Team Request Update',
       message: `Your request to join "${project.title}" was not accepted this time.`,
