@@ -12,6 +12,8 @@ import skillRoutes from './routes/skill.routes';
 import teamRoutes from './routes/team.routes';
 import notificationRoutes from './routes/notification.routes';
 import chatRoutes from './routes/chat.routes';
+import searchRoutes from './routes/search.routes';
+import discoveryRoutes from './routes/discovery.routes';
 
 import { connectRedis } from './config/redis';
 import passport from './config/passport';
@@ -45,6 +47,8 @@ app.use('/api/v1/skills', skillRoutes);
 app.use('/api/v1/teams', teamRoutes);
 app.use('/api/v1/notifications', notificationRoutes);
 app.use('/api/v1/chat', chatRoutes);
+app.use('/api/v1/search', searchRoutes);
+app.use('/api/v1/discovery', discoveryRoutes);
 
 // Connect to Database and start server
 const startServer = async () => {

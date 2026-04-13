@@ -1,33 +1,74 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import Navbar from './components/layout/Navbar'
+import SearchOverlay from './components/search/SearchOverlay'
+import DiscoverPage from './pages/DiscoverPage'
+import { SocketProvider } from './context/SocketContext'
+import { motion, AnimatePresence } from 'framer-motion'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  // Keyboard shortcut for search
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      }
+      if (e.key === 'Escape') {
+        setIsSearchOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-vh-100 p-8 space-y-6 text-center">
-      <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-        The Quad 🎓
-      </h1>
-      <p className="text-lg text-gray-300 max-w-xl">
-        College Event & Club Management Platform
-      </p>
-      
-      <div className="p-6 bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-700">
-        <button
-          onClick={() => setCount((count) => count + 1)}
-          className="px-6 py-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-lg font-semibold transition-colors duration-200"
-        >
-          count is {count}
-        </button>
-        <p className="mt-4 text-sm text-gray-400">
-          Edit <code className="px-1 py-0.5 bg-gray-900 rounded font-mono text-pink-400">src/App.tsx</code> to test HMR
-        </p>
+    <SocketProvider>
+      <div className="min-h-screen bg-gray-950 text-gray-100 font-sans selection:bg-blue-500/30">
+        {/* Background Gradients */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-900/20 blur-[120px] rounded-full" />
+          <div className="absolute bottom-[10%] right-[-5%] w-[35%] h-[35%] bg-purple-900/15 blur-[100px] rounded-full" />
+        </div>
+
+        <Navbar onSearchClick={() => setIsSearchOpen(true)} />
+        
+        <main className="pt-32">
+          {/* Hero / Header Section */}
+          <div className="max-w-7xl mx-auto px-4 mb-12 text-center">
+             <motion.h1 
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               className="text-5xl md:text-7xl font-black mb-6 tracking-tighter"
+             >
+               Explore Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">Campus.</span>
+             </motion.h1>
+             <motion.p 
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ delay: 0.1 }}
+               className="text-gray-400 text-lg max-w-2xl mx-auto"
+             >
+               The unified platform for events, clubs, and collaborative projects at The Quad. Stay connected with real-time updates.
+             </motion.p>
+          </div>
+
+          <DiscoverPage />
+        </main>
+
+        <SearchOverlay 
+          isOpen={isSearchOpen} 
+          onClose={() => setIsSearchOpen(false)} 
+        />
+
+        {/* Footer */}
+        <footer className="py-12 border-t border-white/5 text-center text-gray-600 text-sm">
+          <p>© 2026 The Quad • Engineered for Student Excellence</p>
+        </footer>
       </div>
-      
-      <p className="text-sm text-gray-500">
-        Powered by Vite + React + Tailwind CSS + MERN Stack
-      </p>
-    </div>
+    </SocketProvider>
   )
 }
 
