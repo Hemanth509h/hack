@@ -6,6 +6,8 @@ import { connectDB, handleGracefulShutdown } from './config/db';
 import authRoutes from './routes/auth.routes';
 import eventRoutes from './routes/event.routes';
 import clubRoutes from './routes/club.routes';
+import userRoutes from './routes/user.routes';
+import skillRoutes from './routes/skill.routes';
 import { connectRedis } from './config/redis';
 import passport from './config/passport';
 
@@ -28,6 +30,8 @@ app.get('/api/health', (req: Request, res: Response) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/v1/events', eventRoutes);
 app.use('/api/v1/clubs', clubRoutes);
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/skills', skillRoutes);
 
 // Connect to Database and start server
 const startServer = async () => {
