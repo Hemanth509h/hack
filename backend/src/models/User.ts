@@ -37,6 +37,9 @@ export interface IUser extends Document {
   resetPasswordToken?: string;
   resetPasswordExpires?: Date;
 
+  // FCM device tokens for push notifications
+  deviceTokens: string[];
+
   comparePassword(candidate: string): Promise<boolean>;
 }
 
@@ -73,6 +76,7 @@ const UserSchema = new Schema<IUser>({
   isEmailVerified: { type: Boolean, default: false },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
+  deviceTokens: [{ type: String }],
 }, { timestamps: true });
 
 UserSchema.pre<IUser>('save', async function (next) {

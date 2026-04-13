@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import http from 'http';
 import { connectDB, handleGracefulShutdown } from './config/db';
 
 import authRoutes from './routes/auth.routes';
@@ -9,13 +10,21 @@ import clubRoutes from './routes/club.routes';
 import userRoutes from './routes/user.routes';
 import skillRoutes from './routes/skill.routes';
 import teamRoutes from './routes/team.routes';
+import notificationRoutes from './routes/notification.routes';
+
 import { connectRedis } from './config/redis';
 import passport from './config/passport';
+import { initializeSocket } from './config/socket';
+import { initializeFirebase } from './services/push.service';
+import { startNotificationWorker } from './workers/notification.worker';
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 5000;
+
+// Wrap express in native HTTP server so Socket.io can attach
+const httpServer = http.createServer(app);
 
 // Middleware
 app.use(cors());
@@ -27,24 +36,33 @@ app.get('/api/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', message: 'Backend is running!' });
 });
 
-// Authentication Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/v1/events', eventRoutes);
 app.use('/api/v1/clubs', clubRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/skills', skillRoutes);
 app.use('/api/v1/teams', teamRoutes);
+app.use('/api/v1/notifications', notificationRoutes);
 
 // Connect to Database and start server
 const startServer = async () => {
   try {
     await connectDB();
     await connectRedis();
-    
+
+    // Initialize Socket.io (real-time layer)
+    initializeSocket(httpServer);
+
+    // Initialize Firebase Admin for push notifications (graceful if not configured)
+    initializeFirebase();
+
+    // Start BullMQ notification worker
+    startNotificationWorker();
+
     // Register graceful shutdown for process interruption signals
     handleGracefulShutdown();
 
-    app.listen(port, () => {
+    httpServer.listen(port, () => {
       console.log(`[server]: Server is running at http://localhost:${port}`);
     });
   } catch (error) {
