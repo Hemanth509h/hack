@@ -1,0 +1,16 @@
+{
+  "name": "the-quad",
+  "version": "1.0.0",
+  "description": "The Quad - College Event and Club Management Platform",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "start": "docker-compose up --build",
+    "dev": "docker-compose up",
+    "clean": "npm run clean --workspaces",
+    "lint": "npm run lint --workspaces"
+  }
+}
