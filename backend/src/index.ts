@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { connectDB } from './config/db';
+import { connectDB, handleGracefulShutdown } from './config/db';
 
 dotenv.config();
 
@@ -21,6 +21,10 @@ app.get('/api/health', (req: Request, res: Response) => {
 const startServer = async () => {
   try {
     await connectDB();
+    
+    // Register graceful shutdown for process interruption signals
+    handleGracefulShutdown();
+
     app.listen(port, () => {
       console.log(`[server]: Server is running at http://localhost:${port}`);
     });
