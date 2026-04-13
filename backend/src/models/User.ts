@@ -3,65 +3,80 @@ import bcrypt from 'bcrypt';
 
 export interface IUser extends Document {
   email: string;
-  password?: string; // Optional for OAuth users
+  password?: string;
   role: 'student' | 'club_leader' | 'admin';
   name: string;
+  avatar?: string;
   
-  // OAuth details
+  // Profile Enrichment
+  major?: string;
+  graduationYear?: number;
+  bio?: string;
+  portfolioLinks?: {
+    github?: string;
+    linkedin?: string;
+    website?: string;
+  };
+  
+  skills: mongoose.Types.ObjectId[];
+  interests: string[];
+
+  // Notification Preferences
+  notificationPreferences: {
+    email: boolean;
+    push: boolean;
+    inApp: boolean;
+  };
+
+  // Auth fields
   providers: {
     googleId?: string;
     microsoftId?: string;
   };
-
-  // Auth flags
   isEmailVerified: boolean;
-  
-  // Reset token mechanism
   resetPasswordToken?: string;
   resetPasswordExpires?: Date;
 
-  // Validation
   comparePassword(candidate: string): Promise<boolean>;
 }
 
 const UserSchema = new Schema<IUser>({
   email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true,
+    type: String, required: true, unique: true, lowercase: true, trim: true,
   },
-  password: {
-    type: String, // Kept optional for Google/MS OAuth only flows
-  },
+  password: { type: String },
   role: {
-    type: String,
-    enum: ['student', 'club_leader', 'admin'],
-    default: 'student',
+    type: String, enum: ['student', 'club_leader', 'admin'], default: 'student',
   },
-  name: {
-    type: String,
-    required: true,
-    trim: true,
+  name: { type: String, required: true, trim: true },
+  avatar: { type: String },
+  
+  major: { type: String, trim: true },
+  graduationYear: { type: Number },
+  bio: { type: String, trim: true, maxlength: 500 },
+  portfolioLinks: {
+    github: String,
+    linkedin: String,
+    website: String
   },
-  providers: {
-    googleId: String,
-    microsoftId: String,
+  
+  skills: [{ type: Schema.Types.ObjectId, ref: 'Skill' }],
+  interests: [{ type: String, trim: true }],
+
+  notificationPreferences: {
+    email: { type: Boolean, default: true },
+    push: { type: Boolean, default: true },
+    inApp: { type: Boolean, default: true },
   },
-  isEmailVerified: {
-    type: Boolean,
-    default: false,
-  },
+
+  providers: { googleId: String, microsoftId: String },
+  isEmailVerified: { type: Boolean, default: false },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
 }, { timestamps: true });
 
-// Pre-save hook to hash password if it was modified
 UserSchema.pre<IUser>('save', async function (next) {
-  if (!this.isModified('password') || !this.password) {
-    return next();
-  }
+  if (!this.isModified('password') || !this.password) return next();
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
@@ -71,9 +86,8 @@ UserSchema.pre<IUser>('save', async function (next) {
   }
 });
 
-// Instance method to compare hashed passwords
 UserSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
-  if (!this.password) return false; // OAuth users won't have a password.
+  if (!this.password) return false;
   return bcrypt.compare(candidatePassword, this.password);
 };
 
