@@ -4,6 +4,7 @@ import cors from 'cors';
 import { connectDB, handleGracefulShutdown } from './config/db';
 
 import authRoutes from './routes/auth.routes';
+import eventRoutes from './routes/event.routes';
 import { connectRedis } from './config/redis';
 import passport from './config/passport';
 
@@ -24,6 +25,7 @@ app.get('/api/health', (req: Request, res: Response) => {
 
 // Authentication Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/v1/events', eventRoutes);
 
 // Connect to Database and start server
 const startServer = async () => {

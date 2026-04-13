@@ -1,0 +1,332 @@
+import { Request, Response } from 'express';
+import { Event } from '../models/Event';
+import { RSVP } from '../models/RSVP';
+import { User, IUser } from '../models/User';
+import { AuthRequest } from '../middleware/auth.middleware';
+
+/**
+ * @desc    Get all events with filters, search, and pagination
+ * @route   GET /api/v1/events
+ */
+export const getAllEvents = async (req: Request, res: Response) => {
+  try {
+    const { page, limit, search, category, startDate, endDate, club, sortBy } = req.query as any;
+
+    const query: any = { status: 'published' };
+
+    // Full-text search
+    if (search) {
+      query.$text = { $search: search };
+    }
+
+    // Exact Match Filters
+    if (category) query.category = category;
+    if (club) query.club = club;
+
+    // Date Range filters
+    if (startDate || endDate) {
+      query.date = {};
+      if (startDate) query.date.$gte = new Date(startDate);
+      if (endDate) query.date.$lte = new Date(endDate);
+    }
+
+    // Sort mapping
+    let sortOptions: any = {};
+    if (sortBy === 'date') sortOptions = { date: 1 };
+    else if (sortBy === 'popularity') sortOptions = { rsvpCount: -1 };
+    else if (sortBy === 'newest') sortOptions = { createdAt: -1 };
+    else sortOptions = { date: 1 };
+
+    const events = await Event.find(query)
+      .sort(sortOptions)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .populate('organizer', 'name avatar')
+      .populate('location', 'name buildingCode');
+
+    const total = await Event.countDocuments(query);
+
+    res.json({
+      events,
+      pagination: {
+        total,
+        page,
+        pages: Math.ceil(total / limit),
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to fetch events', details: error.message });
+  }
+};
+
+/**
+ * @desc    Create new event
+ * @route   POST /api/v1/events
+ */
+export const createEvent = async (req: AuthRequest, res: Response) => {
+  try {
+    const eventData = req.body;
+    
+    // Check if user is club leader or admin. In a strict system, this check might exist in route middleware.
+    if (req.user?.role === 'student' && !eventData.club) {
+        // Technically pure students shouldn't organize official campus events without a club context generally, 
+        // but we allow it if they are just standard users per the simplified PRD, or limit to club_leader+
+        return res.status(403).json({ error: 'Must be an official club leader to broadcast events.' });
+    }
+
+    const newEvent = await Event.create({
+      ...eventData,
+      organizer: req.user?.userId,
+    });
+
+    res.status(201).json({ message: 'Event created', event: newEvent });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to create event', details: error.message });
+  }
+};
+
+/**
+ * @desc    Get event by ID
+ * @route   GET /api/v1/events/:id
+ */
+export const getEventById = async (req: Request, res: Response) => {
+  try {
+    const event = await Event.findById(req.params.id)
+      .populate('organizer', 'name avatar role')
+      .populate('club', 'name logo')
+      .populate('location', 'name description coordinates buildingCode');
+
+    if (!event) return res.status(404).json({ error: 'Event not found' });
+    
+    res.json(event);
+  } catch (error: any) {
+    res.status(500).json({ error: 'Server error retrieving event details' });
+  }
+};
+
+/**
+ * @desc    Update Event
+ * @route   PUT /api/v1/events/:id
+ */
+export const updateEvent = async (req: AuthRequest, res: Response) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ error: 'Event not found' });
+
+    // Ownership check
+    if (event.organizer.toString() !== req.user?.userId && req.user?.role !== 'admin') {
+      return res.status(403).json({ error: 'Not authorized to update this event' });
+    }
+
+    const updatedEvent = await Event.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    res.json({ message: 'Event updated', event: updatedEvent });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to update event' });
+  }
+};
+
+/**
+ * @desc    Delete Event
+ * @route   DELETE /api/v1/events/:id
+ */
+export const deleteEvent = async (req: AuthRequest, res: Response) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ error: 'Event not found' });
+
+    if (event.organizer.toString() !== req.user?.userId && req.user?.role !== 'admin') {
+      return res.status(403).json({ error: 'Not authorized to delete this event' });
+    }
+
+    await event.deleteOne();
+    // Cascade delete side-effects (clean up RSVPs) could be added to Mongoose pre('remove') hooks
+    res.json({ message: 'Event permanently deleted' });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to delete event' });
+  }
+};
+
+/**
+ * @desc    RSVP to event
+ * @route   POST /api/v1/events/:id/rsvp
+ */
+export const rsvpToEvent = async (req: AuthRequest, res: Response) => {
+  try {
+    const eventId = req.params.id;
+    const userId = req.user?.userId;
+
+    const event = await Event.findById(eventId);
+    if (!event) return res.status(404).json({ error: 'Event not found' });
+
+    if (event.status !== 'published') {
+      return res.status(400).json({ error: 'Cannot RSVP to an unpublished event' });
+    }
+
+    if (event.capacity && event.rsvpCount >= event.capacity) {
+      // Logic for waitlist could execute here
+      return res.status(400).json({ error: 'Event is fully booked' });
+    }
+
+    const existingRsvp = await RSVP.findOne({ user: userId, event: eventId });
+    if (existingRsvp) {
+      if (existingRsvp.status === 'cancelled') {
+        existingRsvp.status = 'attending';
+        await existingRsvp.save();
+        return res.json({ message: 'RSVP restored', status: 'attending' });
+      }
+      return res.status(400).json({ error: 'You are already registered for this event' });
+    }
+
+    const newRsvp = await RSVP.create({ user: userId, event: eventId, status: 'attending' });
+    res.status(201).json({ message: 'RSVP confirmed', rsvp: newRsvp });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to process RSVP' });
+  }
+};
+
+/**
+ * @desc    Cancel RSVP
+ * @route   DELETE /api/v1/events/:id/rsvp
+ */
+export const cancelRsvp = async (req: AuthRequest, res: Response) => {
+  try {
+    const eventId = req.params.id;
+    const userId = req.user?.userId;
+
+    const rsvp = await RSVP.findOneAndDelete({ user: userId, event: eventId, status: 'attending' });
+    if (!rsvp) return res.status(404).json({ error: 'Active RSVP not found' });
+
+    res.json({ message: 'RSVP successfully cancelled' });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to cancel RSVP' });
+  }
+};
+
+/**
+ * @desc    QR Code Check-in
+ * @route   POST /api/v1/events/:id/checkin
+ */
+export const checkInRsvp = async (req: AuthRequest, res: Response) => {
+  try {
+    // Assuming the scanner device sends the userId attached to the QR code.
+    const { userId } = req.body;
+    const eventId = req.params.id;
+
+    // Must be organizer or admin to check people in
+    const event = await Event.findById(eventId);
+    if (!event) return res.status(404).json({ error: 'Event not found' });
+    if (event.organizer.toString() !== req.user?.userId && req.user?.role !== 'admin') {
+      return res.status(403).json({ error: 'Not authorized to operate check-ins' });
+    }
+
+    const rsvp = await RSVP.findOne({ user: userId, event: eventId });
+    if (!rsvp) return res.status(404).json({ error: 'User does not have an RSVP for this event' });
+    
+    if (rsvp.isCheckedIn) return res.status(400).json({ error: 'User is already checked in' });
+
+    rsvp.isCheckedIn = true;
+    rsvp.checkInTime = new Date();
+    await rsvp.save();
+
+    res.json({ message: 'User successfully checked in', rsvp });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to check in user' });
+  }
+};
+
+/**
+ * @desc    List Attendees
+ * @route   GET /api/v1/events/:id/attendees
+ */
+export const getEventAttendees = async (req: AuthRequest, res: Response) => {
+  try {
+    const eventId = req.params.id;
+    const event = await Event.findById(eventId);
+    if (!event) return res.status(404).json({ error: 'Event not found' });
+
+    // Restrict visibility
+    if (event.organizer.toString() !== req.user?.userId && req.user?.role !== 'admin') {
+      return res.status(403).json({ error: 'Not authorized to view attendee list' });
+    }
+
+    const rsvps = await RSVP.find({ event: eventId, status: 'attending' })
+      .populate('user', 'name avatar major graduationYear email')
+      .sort({ createdAt: 1 });
+
+    res.json({ attendees: rsvps });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to load attendees' });
+  }
+};
+
+/**
+ * @desc    Location-based Discovery ($geoNear)
+ * @route   GET /api/v1/events/nearby
+ */
+export const getNearbyEvents = async (req: Request, res: Response) => {
+  try {
+    const { lat, lng, radius } = req.query as any;
+    
+    if (!lat || !lng) {
+      return res.status(400).json({ error: 'Latitude (lat) and Longitude (lng) are required' });
+    }
+
+    // Default to 5000 meters (5km) radius
+    const maxDistance = radius ? parseInt(radius) : 5000;
+
+    const nearbyEvents = await Event.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [parseFloat(lng), parseFloat(lat)]
+          },
+          distanceField: 'distance',
+          maxDistance: maxDistance,
+          spherical: true,
+          query: { status: 'published', date: { $gte: new Date() } } // Only upcoming published
+        }
+      },
+      {
+        $lookup: { localField: 'location', from: 'locations', foreignField: '_id', as: 'locationData' }
+      },
+      { $sort: { distance: 1 } },
+      { $limit: 20 }
+    ]);
+
+    res.json({ events: nearbyEvents });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to fetch nearby events', details: error.message });
+  }
+};
+
+/**
+ * @desc    Personalized recommendations Engine
+ * @route   GET /api/v1/events/recommendations
+ */
+export const getRecommendedEvents = async (req: AuthRequest, res: Response) => {
+  try {
+    const user = await User.findById(req.user?.userId).lean() as unknown as IUser;
+    if (!user) return res.status(404).json({ error: 'User context invalid' });
+
+    const interests = user.interests || [];
+    // Basic recommendation logic: matching categories or tags with user's interests, prioritizing upcoming.
+    
+    const recommendations = await Event.find({
+      status: 'published',
+      date: { $gte: new Date() },
+      $or: [
+        { category: { $in: interests } },
+        { tags: { $in: interests } },
+        { 'targetAudience.majors': user.major }
+      ]
+    })
+    .sort({ date: 1 })
+    .limit(10)
+    .populate('location', 'name buildingCode');
+
+    res.json({ events: recommendations });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to load recommendations' });
+  }
+};
