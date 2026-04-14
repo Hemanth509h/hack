@@ -33,7 +33,8 @@
     "redis": "^4.6.13",
     "sharp": "^0.33.3",
     "@socket.io/redis-adapter": "^8.3.0",
-    "socket.io": "^4.7.5"
+    "socket.io": "^4.7.5",
+    "json2csv": "^6.0.0-alpha.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

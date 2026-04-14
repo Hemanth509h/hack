@@ -49,6 +49,7 @@ app.use('/api/v1/notifications', notificationRoutes);
 app.use('/api/v1/chat', chatRoutes);
 app.use('/api/v1/search', searchRoutes);
 app.use('/api/v1/discovery', discoveryRoutes);
+app.use('/api/v1/admin', adminRoutes);
 
 // Connect to Database and start server
 const startServer = async () => {
