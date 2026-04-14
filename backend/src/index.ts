@@ -14,6 +14,8 @@ import notificationRoutes from './routes/notification.routes';
 import chatRoutes from './routes/chat.routes';
 import searchRoutes from './routes/search.routes';
 import discoveryRoutes from './routes/discovery.routes';
+import adminRoutes from './routes/admin.routes';
+import aiRoutes from './routes/ai.routes';
 
 import { connectRedis } from './config/redis';
 import passport from './config/passport';
@@ -50,6 +52,7 @@ app.use('/api/v1/chat', chatRoutes);
 app.use('/api/v1/search', searchRoutes);
 app.use('/api/v1/discovery', discoveryRoutes);
 app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/ai', aiRoutes);
 
 // Connect to Database and start server
 const startServer = async () => {
