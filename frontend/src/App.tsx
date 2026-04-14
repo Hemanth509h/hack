@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
 import Navbar from './components/layout/Navbar'
 import SearchOverlay from './components/search/SearchOverlay'
-import DiscoverPage from './pages/DiscoverPage'
 import { SocketProvider } from './context/SocketContext'
 import { motion, AnimatePresence } from 'framer-motion'
 
 function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === '/discover' || location.pathname === '/';
 
   // Keyboard shortcut for search
   useEffect(() => {
@@ -26,7 +28,7 @@ function App() {
 
   return (
     <SocketProvider>
-      <div className="min-h-screen bg-gray-950 text-gray-100 font-sans selection:bg-blue-500/30">
+      <div className="min-h-screen bg-gray-950 text-gray-100 font-sans selection:bg-blue-500/30 w-full overflow-x-hidden">
         {/* Background Gradients */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-900/20 blur-[120px] rounded-full" />
@@ -35,27 +37,36 @@ function App() {
 
         <Navbar onSearchClick={() => setIsSearchOpen(true)} />
         
-        <main className="pt-32">
-          {/* Hero / Header Section */}
-          <div className="max-w-7xl mx-auto px-4 mb-12 text-center">
-             <motion.h1 
-               initial={{ opacity: 0, y: 20 }}
-               animate={{ opacity: 1, y: 0 }}
-               className="text-5xl md:text-7xl font-black mb-6 tracking-tighter"
-             >
-               Explore Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">Campus.</span>
-             </motion.h1>
-             <motion.p 
-               initial={{ opacity: 0, y: 20 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ delay: 0.1 }}
-               className="text-gray-400 text-lg max-w-2xl mx-auto"
-             >
-               The unified platform for events, clubs, and collaborative projects at The Quad. Stay connected with real-time updates.
-             </motion.p>
-          </div>
+        <main className="pt-32 min-h-screen">
+          {/* Hero / Header Section - Only show on Home/Discover page */}
+          <AnimatePresence>
+            {isHome && (
+              <motion.div 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="max-w-7xl mx-auto px-4 mb-12 text-center"
+              >
+                 <motion.h1 
+                   initial={{ opacity: 0, y: 20 }}
+                   animate={{ opacity: 1, y: 0 }}
+                   className="text-5xl md:text-7xl font-black mb-6 tracking-tighter"
+                 >
+                   Explore Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">Campus.</span>
+                 </motion.h1>
+                 <motion.p 
+                   initial={{ opacity: 0, y: 20 }}
+                   animate={{ opacity: 1, y: 0 }}
+                   transition={{ delay: 0.1 }}
+                   className="text-gray-400 text-lg max-w-2xl mx-auto"
+                 >
+                   The unified platform for events, clubs, and collaborative projects at The Quad. Stay connected with real-time updates.
+                 </motion.p>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          <DiscoverPage />
+          <Outlet />
         </main>
 
         <SearchOverlay 
