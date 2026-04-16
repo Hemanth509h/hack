@@ -21,6 +21,12 @@ import EventDetailPage from './pages/events/EventDetailPage';
 import CreateEventPage from './pages/events/CreateEventPage';
 import MyEventsPage from './pages/events/MyEventsPage';
 
+import ClubsPage from './pages/clubs/ClubsPage';
+import ClubDetailPage from './pages/clubs/ClubDetailPage';
+import ClubDashboardPage from './pages/clubs/ClubDashboardPage';
+import CreateClubPage from './pages/clubs/CreateClubPage';
+import MyClubsPage from './pages/clubs/MyClubsPage';
+
 export const router = createBrowserRouter([
   {
     path: '/login',
@@ -69,7 +75,13 @@ export const router = createBrowserRouter([
           },
           {
             path: 'clubs',
-            element: <Placeholder title="Clubs" />,
+            children: [
+              { index: true, element: <ClubsPage /> },
+              { path: 'my-clubs', element: <MyClubsPage /> },
+              { path: 'create', element: <CreateClubPage /> },
+              { path: ':id', element: <ClubDetailPage /> },
+              { path: ':id/dashboard', element: <ClubDashboardPage /> },
+            ]
           },
           {
             path: 'teams',

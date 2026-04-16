@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import { api } from '../services/api';
 import authReducer from '../features/auth/authSlice';
 import eventReducer from '../features/events/eventSlice';
+import clubReducer from '../features/clubs/clubSlice';
 
 export const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
     auth: authReducer,
     events: eventReducer,
+    clubs: clubReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware),
