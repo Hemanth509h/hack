@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Sparkles, TrendingUp, Filter, RefreshCw } from 'lucide-react';
-import { motion } from 'framer-motion';
-import api from '../../lib/api';
-import EventCard from '../../components/discovery/EventCard';
+import api from '../lib/api';
+import EventCard from '../components/discovery/EventCard';
 
 const DiscoverPage: React.FC = () => {
   const [trending, setTrending] = useState([]);

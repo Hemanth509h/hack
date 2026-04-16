@@ -55,7 +55,7 @@ export const api = createApi({
   baseQuery: baseQueryWithReauth,
   tagTypes: ['User', 'Event', 'Club', 'Team', 'Notification'],
   endpoints: (builder) => ({
-    getHealth: builder.query<{ status: string, message: string }, void>({
+    getHealth: builder.query<{ status: string; message: string }, void>({
       query: () => '/health',
     }),
   }),

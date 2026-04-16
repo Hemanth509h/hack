@@ -41,24 +41,6 @@ export default function ResetPasswordPage() {
     resolver: zodResolver(resetPasswordSchema),
   });
 
-  const onSubmit = async (data: ResetPasswordValues) => {
-    if (!token || !email) return;
-
-    try {
-      await resetPassword({ 
-        token, 
-        password: data.password,
-        // The backend `resetPassword` takes { email, token, newPassword } actually...
-        // Let's adapt based on authApi expectations: 
-        // In auth.controller: { email, token, newPassword }
-      }).unwrap();
-      // Wait, let's fix backend payload to match frontend or vice-versa.
-      // I'll send full payload manually below
-      setSuccess(true);
-    } catch (err: any) {
-      console.error('Failed to reset password:', err);
-    }
-  };
 
   const handleManualSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

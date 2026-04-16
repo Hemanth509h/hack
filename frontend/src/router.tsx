@@ -16,6 +16,11 @@ import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 import OAuthCallbackPage from './pages/auth/OAuthCallbackPage';
 
+import EventsPage from './pages/events/EventsPage';
+import EventDetailPage from './pages/events/EventDetailPage';
+import CreateEventPage from './pages/events/CreateEventPage';
+import MyEventsPage from './pages/events/MyEventsPage';
+
 export const router = createBrowserRouter([
   {
     path: '/login',
@@ -55,7 +60,12 @@ export const router = createBrowserRouter([
           },
           {
             path: 'events',
-            element: <Placeholder title="Events" />,
+            children: [
+              { index: true, element: <EventsPage /> },
+              { path: 'my-rsvps', element: <MyEventsPage /> },
+              { path: 'create', element: <CreateEventPage /> },
+              { path: ':id', element: <EventDetailPage /> }
+            ]
           },
           {
             path: 'clubs',

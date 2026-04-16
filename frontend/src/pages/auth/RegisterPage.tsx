@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRegisterMutation } from '../../features/auth/authApi';
 import AuthLayout from '../../components/layout/AuthLayout';
-import { Loader2, Mail, Lock, User, BookOpen, Calendar, CheckSquare } from 'lucide-react';
+import { Loader2, Mail, Lock, User, BookOpen, Calendar } from 'lucide-react';
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Name is required'),
