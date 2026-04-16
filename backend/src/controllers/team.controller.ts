@@ -365,3 +365,42 @@ export const browseProjects = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ error: 'Failed to browse projects' });
   }
 };
+
+/**
+ * @desc    Get all incoming requests for the user's projects
+ * @route   GET /api/v1/teams/incoming-requests
+ */
+export const getIncomingRequests = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user!.userId;
+
+    // Find projects where the user is the leader and there are pending requests
+    const projects = await TeamProject.find({
+      leader: userId,
+      'pendingRequests.0': { $exists: true },
+    })
+      .populate('pendingRequests', 'name avatar major graduationYear bio skills')
+      .select('title pendingRequests');
+
+    // Flatten the requests into a single list
+    const flattenedRequests = projects.flatMap((project) =>
+      project.pendingRequests.map((requester: any) => ({
+        projectId: project._id,
+        projectTitle: project.title,
+        requester: {
+          _id: requester._id,
+          name: requester.name,
+          avatar: requester.avatar,
+          major: requester.major,
+          graduationYear: requester.graduationYear,
+          bio: requester.bio,
+          skills: requester.skills,
+        },
+      }))
+    );
+
+    res.json({ requests: flattenedRequests });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch incoming requests' });
+  }
+};

@@ -18,6 +18,7 @@ import {
   declineRequest,
   getMyProjects,
   browseProjects,
+  getIncomingRequests,
 } from '../controllers/team.controller';
 
 const router = Router();
@@ -33,6 +34,7 @@ router.get('/my-projects', getMyProjects);
 
 // ---- Browse Open Projects ----
 router.get('/browse', validateQuery(browseQuerySchema), browseProjects);
+router.get('/requests', getIncomingRequests);
 
 // ---- Project CRUD ----
 router.post('/projects', validateRequest(createProjectSchema), createProject);
