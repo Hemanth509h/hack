@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { incrementUnread, addToast } from '../features/notifications/notificationSlice';
 
 interface SocketContextType {
   socket: Socket | null;
   isConnected: boolean;
-  unreadCount: number;
-  notifications: any[];
 }
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
@@ -19,12 +20,10 @@ export const useSocket = () => {
 export const SocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [notifications, setNotifications] = useState<any[]>([]);
+  const dispatch = useDispatch();
+  const token = useSelector((state: RootState) => state.auth.token);
 
   useEffect(() => {
-    // In a real app, you'd get the token from your auth state/localStorage
-    const token = localStorage.getItem('token');
     if (!token) return;
 
     const socketInstance = io(import.meta.env.VITE_WS_URL || 'http://localhost:5000', {
@@ -35,14 +34,14 @@ export const SocketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     socketInstance.on('connect', () => setIsConnected(true));
     socketInstance.on('disconnect', () => setIsConnected(false));
 
-    // Listen for new notifications and update badge
+    // Listen for new notifications and update Redux Store
     socketInstance.on('notification:new', (data) => {
-      setNotifications((prev) => [data, ...prev]);
-      if (data.unreadCount !== undefined) {
-        setUnreadCount(data.unreadCount);
-      } else {
-        setUnreadCount((prev) => prev + 1);
-      }
+      dispatch(incrementUnread());
+      dispatch(addToast({
+        type: 'info',
+        title: data.title,
+        message: data.message,
+      }));
     });
 
     setSocket(socketInstance);
@@ -50,10 +49,10 @@ export const SocketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     return () => {
       socketInstance.disconnect();
     };
-  }, []);
+  }, [token, dispatch]);
 
   return (
-    <SocketContext.Provider value={{ socket, isConnected, unreadCount, notifications }}>
+    <SocketContext.Provider value={{ socket, isConnected }}>
       {children}
     </SocketContext.Provider>
   );

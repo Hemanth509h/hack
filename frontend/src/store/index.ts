@@ -6,6 +6,8 @@ import clubReducer from '../features/clubs/clubSlice';
 import teamReducer from '../features/teams/teamSlice';
 import dashboardReducer from '../features/dashboard/dashboardSlice';
 import mapReducer from '../features/map/mapSlice';
+import notificationReducer from '../features/notifications/notificationSlice';
+import profileReducer from '../features/profile/profileSlice';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +18,8 @@ export const store = configureStore({
     teams: teamReducer,
     dashboard: dashboardReducer,
     map: mapReducer,
+    notifications: notificationReducer,
+    profile: profileReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware),

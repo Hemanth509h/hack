@@ -29,7 +29,14 @@ import CreateClubPage from './pages/clubs/CreateClubPage';
 import MyClubsPage from './pages/clubs/MyClubsPage';
 import MapPage from './pages/map/MapPage';
 
+// Notifications
+import NotificationsPage from './pages/notifications/NotificationsPage';
+import NotificationPreferences from './pages/notifications/NotificationPreferences';
 
+// Profile
+import ProfilePage from './pages/profile/ProfilePage';
+import EditProfilePage from './pages/profile/EditProfilePage';
+import PortfolioBuilderPage from './pages/profile/PortfolioBuilderPage';
 export const router = createBrowserRouter([
   {
     path: '/login',
@@ -95,8 +102,24 @@ export const router = createBrowserRouter([
             element: <Placeholder title="Team Projects" />,
           },
           {
+            path: 'notifications',
+            element: <NotificationsPage />,
+          },
+          {
+            path: 'settings/notifications',
+            element: <NotificationPreferences />,
+          },
+          {
             path: 'profile',
-            element: <Placeholder title="User Profile" />,
+            children: [
+              { index: true, element: <ProfilePage /> }, // fallback to self if available
+              { path: ':userId', element: <ProfilePage /> },
+              { path: 'edit', element: <EditProfilePage /> },
+            ]
+          },
+          {
+            path: 'portfolio/edit',
+            element: <PortfolioBuilderPage />,
           },
         ]
       },
