@@ -1,13 +1,39 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
+import { setInitializing, updateUser } from '../../features/auth/authSlice';
+import { useGetMeQuery } from '../../features/auth/authApi';
+import { Loader2 } from 'lucide-react';
 
 export const ProtectedRoute: React.FC = () => {
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, token, user, isInitializing } = useSelector((state: RootState) => state.auth);
   const location = useLocation();
+  const dispatch = useDispatch();
 
-  if (!isAuthenticated) {
+  const { data: fetchedUser, isLoading, isError } = useGetMeQuery(undefined, {
+    skip: !token || !!user, // Skip if no token, or user is already loaded
+  });
+
+  useEffect(() => {
+    if (fetchedUser) {
+      dispatch(updateUser(fetchedUser));
+      dispatch(setInitializing(false));
+    } else if (isError || (!token && isInitializing)) {
+      dispatch(setInitializing(false));
+    }
+  }, [fetchedUser, isError, token, isInitializing, dispatch]);
+
+  if (isInitializing || isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-950">
+        <Loader2 className="animate-spin text-blue-500 mb-4" size={48} />
+        <p className="text-gray-400">Loading your profile...</p>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated && !token) {
     // Redirect them to the /login page, but save the current location they were trying to go to
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
@@ -20,13 +46,21 @@ interface RoleGuardProps {
 }
 
 export const RoleGuard: React.FC<RoleGuardProps> = ({ allowedRoles }) => {
-  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, user, isInitializing, token } = useSelector((state: RootState) => state.auth);
 
-  if (!isAuthenticated) {
+  if (isInitializing) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-950">
+        <Loader2 className="animate-spin text-blue-500 mb-4" size={48} />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated && !token) {
     return <Navigate to="/login" replace />;
   }
 
-  // Handle generic JWT state where 'user' details haven't fully populated yet but auth is true
+  // Handle generic JWT state where 'user' details haven't fully populated yet
   if (user && !allowedRoles.includes(user.role)) {
     return <Navigate to="/unauthorized" replace />;
   }

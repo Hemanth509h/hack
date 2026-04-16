@@ -10,25 +10,32 @@ const Placeholder = ({ title }: { title: string }) => (
   </div>
 );
 
-const LoginDummy = () => (
-  <div className="flex flex-col items-center justify-center min-h-screen bg-gray-950 text-white">
-    <h1 className="text-3xl font-bold mb-4">Login to The Quad</h1>
-    <button 
-      onClick={() => {
-        localStorage.setItem('token', 'dummy-token');
-        window.location.href = '/discover';
-      }}
-      className="px-6 py-2 bg-blue-600 rounded-lg hover:bg-blue-700"
-    >
-      Simulate Login
-    </button>
-  </div>
-);
+import LoginPage from './pages/auth/LoginPage';
+import RegisterPage from './pages/auth/RegisterPage';
+import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
+import ResetPasswordPage from './pages/auth/ResetPasswordPage';
+import OAuthCallbackPage from './pages/auth/OAuthCallbackPage';
 
 export const router = createBrowserRouter([
   {
     path: '/login',
-    element: <LoginDummy />,
+    element: <LoginPage />,
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />,
+  },
+  {
+    path: '/forgot-password',
+    element: <ForgotPasswordPage />,
+  },
+  {
+    path: '/reset-password',
+    element: <ResetPasswordPage />,
+  },
+  {
+    path: '/oauth-callback',
+    element: <OAuthCallbackPage />,
   },
   {
     path: '/',

@@ -10,7 +10,7 @@ import crypto from 'crypto';
  */
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, major, graduationYear, interests } = req.body;
 
     const exists = await User.findOne({ email: email.toLowerCase() });
     if (exists) {
@@ -24,6 +24,9 @@ export const registerUser = async (req: Request, res: Response) => {
       name,
       email,
       password,
+      major,
+      graduationYear,
+      interests,
       resetPasswordToken: verificationToken, // Reusing field for email verify token initially
       resetPasswordExpires: Date.now() + 24 * 3600000, // 24 hours
     });

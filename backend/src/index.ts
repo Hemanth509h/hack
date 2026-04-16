@@ -41,7 +41,7 @@ app.get('/api/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', message: 'Backend is running!' });
 });
 
-app.use('/api/auth', authRoutes);
+app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/events', eventRoutes);
 app.use('/api/v1/clubs', clubRoutes);
 app.use('/api/v1/users', userRoutes);
