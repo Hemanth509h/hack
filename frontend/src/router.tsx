@@ -1,7 +1,8 @@
 import { createBrowserRouter, redirect } from 'react-router-dom';
 import App from './App';
-import DiscoverPage from './pages/DiscoverPage';
+import DashboardPage from './pages/dashboard/DashboardPage';
 import { ProtectedRoute, RoleGuard } from './components/auth/ProtectedRoute';
+
 
 // Empty placeholder components for unimplemented routes
 const Placeholder = ({ title }: { title: string }) => (
@@ -26,6 +27,8 @@ import ClubDetailPage from './pages/clubs/ClubDetailPage';
 import ClubDashboardPage from './pages/clubs/ClubDashboardPage';
 import CreateClubPage from './pages/clubs/CreateClubPage';
 import MyClubsPage from './pages/clubs/MyClubsPage';
+import MapPage from './pages/map/MapPage';
+
 
 export const router = createBrowserRouter([
   {
@@ -54,15 +57,19 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        loader: () => redirect('/discover'),
+        loader: () => redirect('/dashboard'),
       },
       // Protected Routes for all authenticated students
       {
         element: <ProtectedRoute />,
         children: [
           {
-            path: 'discover',
-            element: <DiscoverPage />,
+            path: 'dashboard',
+            element: <DashboardPage />,
+          },
+          {
+            path: 'map',
+            element: <MapPage />,
           },
           {
             path: 'events',

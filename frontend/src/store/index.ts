@@ -4,6 +4,8 @@ import authReducer from '../features/auth/authSlice';
 import eventReducer from '../features/events/eventSlice';
 import clubReducer from '../features/clubs/clubSlice';
 import teamReducer from '../features/teams/teamSlice';
+import dashboardReducer from '../features/dashboard/dashboardSlice';
+import mapReducer from '../features/map/mapSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +14,8 @@ export const store = configureStore({
     events: eventReducer,
     clubs: clubReducer,
     teams: teamReducer,
+    dashboard: dashboardReducer,
+    map: mapReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware),
