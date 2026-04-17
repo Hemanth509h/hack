@@ -5,7 +5,7 @@ import * as z from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, Calendar, MapPin, AlignLeft, Info, Loader2 } from 'lucide-react';
 import { useCreateEventMutation } from '../../services/eventApi';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const eventSchema = z.object({
   title: z.string().min(5, 'Title must be at least 5 characters'),
@@ -24,6 +24,8 @@ export const EventForm: React.FC = () => {
   const [step, setStep] = useState(1);
   const [createEvent, { isLoading }] = useCreateEventMutation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const clubId = searchParams.get('clubId');
 
   const {
     register,
@@ -52,6 +54,7 @@ export const EventForm: React.FC = () => {
     try {
       const result = await createEvent({
         ...data,
+        club: clubId || undefined,
         tags: [],
         targetAudience: { majors: [], years: [] }
       }).unwrap();

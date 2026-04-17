@@ -61,11 +61,14 @@ const EventDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 pb-20">
-      {/* Cover Image */}
-      <div className="h-[40vh] md:h-[50vh] relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/40 to-transparent z-10" />
-        <img
+    <div className="min-h-screen bg-[#030303] pb-32">
+      {/* Immersive Cover Image */}
+      <div className="h-[50vh] md:h-[65vh] relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-[#030303]/20 to-transparent z-10" />
+        <motion.img
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
           src={
             event.coverImage ||
             `https://source.unsplash.com/random/1600x900/?${event.category},event`
@@ -73,171 +76,201 @@ const EventDetailPage: React.FC = () => {
           alt={event.title}
           className="w-full h-full object-cover"
         />
-        <div className="absolute top-24 left-6 z-20">
+        <div className="absolute top-28 left-6 md:left-12 z-20">
           <Link
             to="/events"
-            className="flex items-center text-sm font-medium text-gray-300 hover:text-white bg-gray-900/50 backdrop-blur px-3 py-2 rounded-lg"
+            className="flex items-center text-xs font-black uppercase tracking-widest text-white/70 hover:text-white glass bg-white/5 px-5 py-3 rounded-2xl border-white/10 transition-all hover:translate-x-[-4px]"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" /> Back to Events
+            <ArrowLeft className="w-4 h-4 mr-2" /> Back to Pulse
           </Link>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 -mt-32 relative z-20">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 -mt-40 relative z-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Main Content */}
-          <div className="col-span-1 lg:col-span-2 space-y-8">
+          <div className="lg:col-span-8 space-y-12">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-gray-900 border border-gray-800 rounded-2xl p-6 md:p-10 shadow-2xl backdrop-blur-xl"
+              className="glass rounded-[3rem] p-8 md:p-16 shadow-[0_40px_100px_rgba(0,0,0,0.5)] border-white/5 relative overflow-hidden"
             >
-              <span className="inline-block px-3 py-1 bg-indigo-500/20 text-indigo-400 text-xs font-semibold rounded-full mb-4 border border-indigo-500/30">
-                {event.category}
-              </span>
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
-                {event.title}
-              </h1>
+              <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 blur-[100px] -mr-32 -mt-32" />
+              
+              <div className="relative z-10">
+                <motion.div 
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="inline-flex items-center gap-2 px-5 py-2 bg-indigo-500/10 text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-8 border border-indigo-500/20"
+                >
+                  <Info className="h-3 w-3" />
+                  {event.category}
+                </motion.div>
+                
+                <h1 className="text-4xl md:text-7xl font-display font-black text-white mb-10 leading-[0.9] tracking-tighter">
+                  {event.title}
+                </h1>
 
-              <div className="flex flex-wrap items-center gap-4 text-gray-400 mb-8 pb-8 border-b border-gray-800">
-                <div className="flex items-center">
-                  <img
-                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(event.category)}&background=random`}
-                    alt="Organizer"
-                    className="w-8 h-8 rounded-full border border-gray-700 mr-3"
-                  />
-                  <span className="text-sm font-medium">
-                    Hosted by <span className="text-indigo-400">The Quad Clubs</span>
-                  </span>
+                <div className="flex flex-wrap items-center gap-6 text-gray-400 mb-12 pb-12 border-b border-white/5">
+                  <div className="flex items-center glass bg-white/5 px-6 py-3 rounded-2xl border-white/5">
+                    <div className="w-10 h-10 premium-gradient rounded-full flex items-center justify-center font-black text-white mr-4 shadow-lg">
+                      {event.category.charAt(0)}
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-gray-500">Organized By</div>
+                      <div className="text-white font-bold tracking-tight uppercase text-xs">The Quad Elite</div>
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              <div className="prose prose-invert max-w-none">
-                <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-4">
-                  <Info className="w-5 h-5 text-indigo-400" /> About this event
-                </h3>
-                <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">
-                  {event.description}
-                </p>
+                <div className="space-y-8">
+                  <h3 className="text-2xl font-display font-black text-white tracking-tighter flex items-center gap-4">
+                    <div className="w-1.5 h-8 bg-indigo-500 rounded-full" />
+                    Event Manifesto
+                  </h3>
+                  <p className="text-gray-400 text-xl leading-relaxed font-light whitespace-pre-wrap">
+                    {event.description}
+                  </p>
+                </div>
               </div>
             </motion.div>
 
-            {/* Organize & Manage Settings */}
+            {/* Admin/Organizer Terminal */}
             {(currentUser?.id === event.organizer._id || currentUser?.role === 'admin') && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-                className="bg-indigo-900/20 border border-indigo-500/30 rounded-2xl p-6 md:p-10 mt-8"
+                transition={{ delay: 0.1 }}
+                className="glass bg-indigo-500/5 border-indigo-500/20 rounded-[3rem] p-10 md:p-16 relative overflow-hidden"
               >
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-xl font-bold text-indigo-300 flex items-center gap-2">
-                    <ShieldCheck className="w-5 h-5" /> Organizer Dashboard
-                  </h3>
+                <div className="absolute top-0 right-0 w-40 h-40 bg-indigo-500/10 blur-3xl -mr-20 -mt-20" />
+                
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 gap-6 relative z-10">
+                  <div>
+                    <h3 className="text-3xl font-display font-black text-indigo-300 tracking-tighter flex items-center gap-4">
+                      <ShieldCheck className="w-8 h-8" />
+                      Command Center
+                    </h3>
+                    <p className="text-indigo-400/60 font-medium mt-1 uppercase text-[10px] tracking-widest">Operational Oversight</p>
+                  </div>
                   <button 
                     onClick={() => setShowScanner(!showScanner)}
-                    className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl transition font-medium text-sm shadow-lg shadow-indigo-500/20"
+                    className="btn-primary py-4 px-8 shadow-indigo-500/30 text-[11px] font-black uppercase tracking-widest"
                   >
-                    {showScanner ? 'Hide Scanner' : 'Check-in Scanner'}
+                    {showScanner ? 'Deactivate Scanner' : 'Activate Check-in'}
                   </button>
                 </div>
                 
                 <AnimatePresence>
                    {showScanner && (
                       <motion.div 
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="mb-8"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        className="mb-12 glass bg-white/5 rounded-3xl p-8 border-indigo-500/30"
                       >
                          <QRScanner eventId={event._id} />
                       </motion.div>
                    )}
                 </AnimatePresence>
 
-                <h3 className="text-xl font-bold text-white mb-4 mt-4">
-                  Attendees ({event.rsvpCount})
-                </h3>
-                <AttendeeList eventId={event._id} />
+                <div className="flex items-center gap-4 mb-8">
+                   <div className="w-2 h-10 bg-indigo-400 rounded-full" />
+                   <h3 className="text-2xl font-display font-black text-white tracking-tighter">
+                     Confirmed Delegates ({event.rsvpCount})
+                   </h3>
+                </div>
+                <div className="glass bg-white/5 rounded-[2rem] p-8 border-white/5">
+                  <AttendeeList eventId={event._id} />
+                </div>
               </motion.div>
             )}
 
-            {/* Attendees (Public view if not organizer) */}
+            {/* Public Attendee View */}
             {currentUser?.id !== event.organizer._id && currentUser?.role !== 'admin' && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6 md:p-10"
+                transition={{ delay: 0.2 }}
+                className="glass rounded-[3rem] p-10 md:p-16 border-white/5"
               >
-                <h3 className="text-xl font-bold text-white mb-4">
-                  Attendees ({event.rsvpCount})
+                <h3 className="text-3xl font-display font-black text-white mb-10 tracking-tighter">
+                  Attendee Registry ({event.rsvpCount})
                 </h3>
-                <AttendeeList eventId={event._id} />
+                <div className="glass bg-white/5 rounded-[2rem] p-8 border-white/5">
+                  <AttendeeList eventId={event._id} />
+                </div>
               </motion.div>
             )}
           </div>
 
-          {/* Sidebar */}
-          <div className="col-span-1 space-y-6">
+          {/* Immersive Sidebar */}
+          <div className="lg:col-span-4 space-y-8">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-2xl sticky top-24"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+              className="glass rounded-[3rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.4)] sticky top-28 border-white/10 relative overflow-hidden"
             >
-              <div className="mb-6 space-y-4">
+              <div className="absolute bottom-0 right-0 w-40 h-40 bg-indigo-500/10 blur-3xl -mr-20 -mb-20" />
+              
+              <div className="mb-10 space-y-6">
                 <RSVPButton
                   eventId={event._id}
                   initialIsRsvpd={false}
-                  className="w-full py-4 text-lg"
+                  className="w-full py-6 text-sm font-black uppercase tracking-[0.2em] shadow-indigo-500/30"
                 />
-                {/* Notice: You technically could show this conditionally on RSVP status if it was exposed to this scope */}
-                <QRCodeDisplay eventId={event._id} />
+                <div className="glass bg-white/5 rounded-[2.5rem] p-8 border-white/5 flex flex-col items-center">
+                  <QRCodeDisplay eventId={event._id} />
+                  <p className="mt-6 text-[10px] font-black text-gray-500 uppercase tracking-widest">Your Digital Access Key</p>
+                </div>
               </div>
 
-              <div className="space-y-6 text-sm">
-                <div className="flex items-start">
-                  <div className="bg-gray-800 p-2 rounded-lg mr-4 text-indigo-400">
-                    <Calendar className="w-5 h-5" />
+              <div className="space-y-8 mb-10">
+                <div className="flex items-start group">
+                  <div className="glass bg-white/5 p-4 rounded-2xl mr-5 text-indigo-400 border-white/10 group-hover:scale-110 transition-transform">
+                    <Calendar className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="font-semibold text-white">{formattedDate}</p>
-                    <p className="text-gray-400">
+                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Schedule</p>
+                    <p className="font-bold text-white tracking-tight">{formattedDate}</p>
+                    <p className="text-gray-400 font-medium">
                       {formattedTime} — {formattedEndTime}
                     </p>
-                    <div className="mt-2 text-indigo-400">
+                    <div className="mt-4">
                       <AddToCalendarDropdown event={event} />
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-start">
-                  <div className="bg-gray-800 p-2 rounded-lg mr-4 text-indigo-400">
-                    <MapPin className="w-5 h-5" />
+                <div className="flex items-start group">
+                  <div className="glass bg-white/5 p-4 rounded-2xl mr-5 text-indigo-400 border-white/10 group-hover:scale-110 transition-transform">
+                    <MapPin className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="font-semibold text-white">{locationStr || 'TBA'}</p>
-                    <p className="text-gray-400">On Campus</p>
+                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Nexus Location</p>
+                    <p className="font-bold text-white tracking-tight">{locationStr || 'TBA'}</p>
+                    <p className="text-gray-400 font-medium">Campus Grounds</p>
                   </div>
                 </div>
 
-                <div className="flex items-start">
-                  <div className="bg-gray-800 p-2 rounded-lg mr-4 text-indigo-400">
-                    <Clock className="w-5 h-5" />
+                <div className="flex items-start group">
+                  <div className="glass bg-white/5 p-4 rounded-2xl mr-5 text-indigo-400 border-white/10 group-hover:scale-110 transition-transform">
+                    <Clock className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="font-semibold text-white">{event.durationMinutes} Minutes</p>
+                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Duration</p>
+                    <p className="font-bold text-white tracking-tight">{event.durationMinutes} Minutes Experience</p>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-gray-800">
+              <div className="pt-8 border-t border-white/5">
                 <button
                   onClick={handleShare}
-                  className="w-full flex items-center justify-center px-4 py-3 bg-gray-800/50 hover:bg-gray-800 text-white font-medium rounded-xl transition-colors"
+                  className="w-full flex items-center justify-center gap-3 px-6 py-4 glass bg-white/5 hover:bg-white/10 text-white font-black uppercase tracking-widest text-[11px] rounded-2xl transition-all duration-300 border-white/10"
                 >
-                  <Share2 className="w-4 h-4 mr-2" /> Copy Event Link
+                  <Share2 className="w-4 h-4" /> Synchronize Link
                 </button>
               </div>
             </motion.div>

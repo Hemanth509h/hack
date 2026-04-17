@@ -49,6 +49,10 @@ import EditProfilePage from './pages/profile/EditProfilePage';
 import DiscoverPage from './pages/DiscoverPage';
 import TeamsPage from './pages/teams/TeamsPage';
 import SettingsPage from './pages/settings/SettingsPage';
+import ChatPage from './pages/chat/ChatPage';
+import PrivacySettingsPage from './pages/settings/PrivacySettingsPage';
+import SecuritySettingsPage from './pages/settings/SecuritySettingsPage';
+import CommunityFeedPage from './pages/feed/CommunityFeedPage';
 import RootErrorPage from './components/RootErrorPage';
 
 export const router = createBrowserRouter([
@@ -104,6 +108,10 @@ export const router = createBrowserRouter([
             element: <SearchPage />,
           },
           {
+            path: 'feed',
+            element: <CommunityFeedPage />,
+          },
+          {
             path: 'events',
             children: [
               { index: true, element: <EventsPage /> },
@@ -135,7 +143,13 @@ export const router = createBrowserRouter([
             children: [
               { index: true, element: <SettingsPage /> },
               { path: 'notifications', element: <NotificationPreferences /> },
+              { path: 'privacy', element: <PrivacySettingsPage /> },
+              { path: 'security', element: <SecuritySettingsPage /> },
             ]
+          },
+          {
+            path: 'chat',
+            element: <ChatPage />,
           },
           {
             path: 'profile',

@@ -13,11 +13,26 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleSidebar } from '../../features/admin/adminSlice';
 import { RootState } from '../../store';
+import { useLogoutMutation } from '../../features/auth/authApi';
+import { logout } from '../../features/auth/authSlice';
 
 const AdminLayout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isSidebarOpen = useSelector((state: RootState) => state.admin.isSidebarOpen);
+  const [logoutApi] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      await logoutApi().unwrap();
+      dispatch(logout());
+      navigate('/login');
+    } catch (err) {
+      console.error('Logout failed:', err);
+      dispatch(logout());
+      navigate('/login');
+    }
+  };
 
   const navItems = [
     { name: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={20} />, exact: true },
@@ -79,7 +94,7 @@ const AdminLayout = () => {
 
         <div className="p-4 border-t border-gray-800">
            <button 
-             onClick={() => navigate('/dashboard')}
+             onClick={handleLogout}
              className="flex items-center w-full px-3 py-3 text-red-400 hover:text-red-300 hover:bg-red-950/30 rounded-xl transition-all"
              title={!isSidebarOpen ? "Exit Admin" : undefined}
            >

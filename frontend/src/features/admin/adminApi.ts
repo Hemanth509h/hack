@@ -40,7 +40,7 @@ export const adminApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAdminStats: builder.query<AdminStats, { range: string }>({
       query: (params) => ({
-        url: '/admin/stats',
+        url: '/admin/dashboard',
         params,
       }),
       providesTags: ['User', 'Event', 'Club'],
@@ -62,7 +62,7 @@ export const adminApi = api.injectEndpoints({
     updateUserRole: builder.mutation<UserDTO, { userId: string; role: string }>({
       query: ({ userId, role }) => ({
         url: `/admin/users/${userId}/role`,
-        method: 'PATCH',
+        method: 'PUT',
         body: { role },
       }),
       invalidatesTags: ['User'],
@@ -73,10 +73,10 @@ export const adminApi = api.injectEndpoints({
       providesTags: ['Club'],
     }),
 
-    resolveClubApplication: builder.mutation<{ success: boolean; message: string }, { clubId: string; status: 'approved' | 'rejected'; reason?: string }>({
-      query: ({ clubId, ...body }) => ({
-        url: `/admin/clubs/pending/${clubId}`,
-        method: 'POST',
+    resolveClubApplication: builder.mutation<{ success: boolean; message: string }, { clubId: string; status: 'approve' | 'reject'; reason?: string }>({
+      query: ({ clubId, status, ...body }) => ({
+        url: `/admin/clubs/${clubId}/${status}`,
+        method: 'PUT',
         body,
       }),
       invalidatesTags: ['Club'],

@@ -5,6 +5,7 @@ import { createClient } from 'redis';
 import jwt from 'jsonwebtoken';
 import { TokenPayload } from '../utils/jwt.utils';
 import { Message } from '../models/Message';
+import { Conversation } from '../models/Conversation';
 import { User } from '../models/User';
 import mongoose from 'mongoose';
 
@@ -35,7 +36,7 @@ const checkRateLimit = (socketId: string): boolean => {
 };
 
 /** Format a standard room identifier string */
-export const roomId = (type: 'event' | 'club' | 'project' | 'user', id: string) =>
+export const roomId = (type: 'event' | 'club' | 'project' | 'user' | 'direct', id: string) =>
   `${type}:${id}`;
 
 export const initializeSocket = async (httpServer: HTTPServer): Promise<SocketServer> => {
@@ -113,7 +114,7 @@ export const initializeSocket = async (httpServer: HTTPServer): Promise<SocketSe
     // LIVE CHAT — send message to a room
     // ----------------------------------------------------------------
     socket.on('chat:send', async (payload: {
-      roomType: 'event' | 'club' | 'project';
+      roomType: 'event' | 'club' | 'project' | 'direct';
       roomId: string;
       content: string;
     }) => {
@@ -142,6 +143,14 @@ export const initializeSocket = async (httpServer: HTTPServer): Promise<SocketSe
           sender,
           createdAt: message.createdAt,
         });
+
+        // Update conversation if it's a direct message
+        if (payload.roomType === 'direct') {
+          await Conversation.findByIdAndUpdate(payload.roomId, {
+            lastMessage: message._id,
+            updatedAt: new Date()
+          });
+        }
       } catch (err) {
         socket.emit('error', { code: 'CHAT_FAILED', message: 'Message delivery failed' });
       }
@@ -160,7 +169,7 @@ export const initializeSocket = async (httpServer: HTTPServer): Promise<SocketSe
     // CHAT HISTORY — request recent messages for a room
     // ----------------------------------------------------------------
     socket.on('chat:history', async (payload: { 
-      roomType: 'event' | 'club' | 'project'; 
+      roomType: 'event' | 'club' | 'project' | 'direct'; 
       roomId: string; 
       limit?: number 
     }) => {
@@ -212,8 +221,8 @@ export const emitToUser = (userId: string, event: string, data: any) => {
   io.to(roomId('user', userId)).emit(event, data);
 };
 
-/** Broadcast to a shared room (event/club/project) */
-export const emitToRoom = (type: 'event' | 'club' | 'project', id: string, event: string, data: any) => {
+/** Broadcast to a shared room (event/club/project/direct) */
+export const emitToRoom = (type: 'event' | 'club' | 'project' | 'direct', id: string, event: string, data: any) => {
   if (!io) return;
   io.to(roomId(type, id)).emit(event, data);
 };

@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export type MessageRoomType = 'event' | 'club' | 'project';
+export type MessageRoomType = 'event' | 'club' | 'project' | 'direct';
 
 export interface IMessage extends Document {
   roomType: MessageRoomType;
@@ -12,7 +12,7 @@ export interface IMessage extends Document {
 }
 
 const MessageSchema = new Schema<IMessage>({
-  roomType: { type: String, enum: ['event', 'club', 'project'], required: true },
+  roomType: { type: String, enum: ['event', 'club', 'project', 'direct'], required: true },
   roomId: { type: Schema.Types.ObjectId, required: true, index: true },
   sender: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   content: { type: String, required: true, trim: true, maxlength: 2000 },

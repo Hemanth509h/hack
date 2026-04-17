@@ -81,6 +81,32 @@ export const deleteUser = async (req: AuthRequest, res: Response) => {
 };
 
 /**
+ * @desc    Get pending club applications
+ * @route   GET /api/v1/admin/clubs/pending
+ */
+export const getPendingClubs = async (req: AuthRequest, res: Response) => {
+  try {
+    const pendingClubs = await Club.find({ status: 'pending' })
+      .sort({ createdAt: -1 });
+
+    // Format the response to match the frontend PendingClubDTO
+    const formattedClubs = pendingClubs.map(club => ({
+      id: club._id,
+      name: club.name,
+      category: club.category,
+      description: club.description,
+      proposedLeaders: [], // Assuming we don't fetch users here for simplicity, or we can fetch the president from ClubMembership
+      expectedMembership: 0,
+      applicationDate: club.createdAt
+    }));
+
+    res.json(formattedClubs);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch pending clubs' });
+  }
+};
+
+/**
  * @desc    Approve/Reject club application
  * @route   PUT /api/v1/admin/clubs/:id/:action
  */

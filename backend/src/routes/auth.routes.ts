@@ -10,7 +10,8 @@ import {
   refreshToken,
   logoutUser,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  getMe
 } from '../controllers/auth.controller';
 
 const router = Router();
@@ -59,8 +60,6 @@ router.get('/microsoft/callback',
 );
 
 // --- Protected Test Route ---
-router.get('/me', requireAuth, (req, res) => {
-  res.json({ message: 'You have access', user: (req as any).user });
-});
+router.get('/me', requireAuth, getMe);
 
 export default router;

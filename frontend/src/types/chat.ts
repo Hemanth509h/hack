@@ -5,8 +5,20 @@ export interface IMessage {
     name: string;
     avatar?: string;
   };
-  roomType: 'event' | 'club' | 'team';
+  roomType: 'event' | 'club' | 'project' | 'direct';
   roomId: string;
   content: string;
   createdAt: string;
+}
+
+export interface IConversation {
+  _id: string;
+  participants: {
+    _id: string;
+    name: string;
+    avatar?: string;
+    major?: string;
+  }[];
+  lastMessage?: IMessage;
+  updatedAt: string;
 }

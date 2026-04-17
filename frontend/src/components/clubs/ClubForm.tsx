@@ -62,7 +62,7 @@ export const ClubForm: React.FC = () => {
       };
       
       const result = await createClub(formattedData).unwrap();
-      navigate(`/clubs/${result._id}`);
+      navigate(`/clubs/${result.club._id}`);
     } catch (error) {
       console.error('Submission error', error);
     }

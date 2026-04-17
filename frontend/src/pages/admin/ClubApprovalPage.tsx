@@ -1,138 +1,167 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Users, X, Check, MessageSquare, ShieldCheck } from 'lucide-react';
 
 
-const mockPendingApps = [
-  {
-    id: 'req_1',
-    name: 'Quantum Computing Society',
-    category: 'Academic',
-    description: 'A club dedicated to exploring quantum algorithms and hardware access.',
-    proposedLeaders: [{ name: 'Alex Johnson', email: 'alex.j@quad.edu' }],
-    expectedMembership: 45,
-    applicationDate: '2026-03-28'
-  },
-  {
-    id: 'req_2',
-    name: 'Sustainable Campus Initiative',
-    category: 'Volunteering',
-    description: 'Focused on creating actionable eco-friendly projects across the campus.',
-    proposedLeaders: [{ name: 'Sarah Williams', email: 'sarah.w@quad.edu' }, { name: 'Mike Chen', email: 'mike.c@quad.edu' }],
-    expectedMembership: 120,
-    applicationDate: '2026-04-02'
-  }
-];
+import { useGetPendingClubsQuery, useResolveClubApplicationMutation } from '../../features/admin/adminApi';
 
 const ClubApprovalPage = () => {
   const [selectedApp, setSelectedApp] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState('');
 
-  // const { data: pendingClubs } = useGetPendingClubsQuery();
-  const pendingClubs = mockPendingApps;
+  const { data: pendingClubs = [], isLoading } = useGetPendingClubsQuery();
+  const [resolveClubApplication] = useResolveClubApplicationMutation();
 
-  const handleApprove = (id: string) => {
-    // In actual implementation: useResolveClubApplicationMutation({ clubId: id, status: 'approved' })
-    alert(`Approved club application ${id}`);
+  const handleApprove = async (id: string) => {
+    try {
+      await resolveClubApplication({ clubId: id, status: 'approve' }).unwrap();
+    } catch (err) {
+      console.error('Failed to approve club', err);
+    }
   };
 
-  const handleReject = (id: string) => {
-    // In actual implementation: useResolveClubApplicationMutation({ clubId: id, status: 'rejected', reason: rejectReason })
-    alert(`Rejected club application ${id} for reason: ${rejectReason}`);
-    setSelectedApp(null);
-    setRejectReason('');
+  const handleReject = async (id: string) => {
+    try {
+      await resolveClubApplication({ clubId: id, status: 'reject', reason: rejectReason }).unwrap();
+      setSelectedApp(null);
+      setRejectReason('');
+    } catch (err) {
+      console.error('Failed to reject club', err);
+    }
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
-      <div>
-         <h1 className="text-3xl font-black mb-2">Club Approvals</h1>
-         <p className="text-gray-400">Review and moderate pending organization applications.</p>
+    <div className="space-y-10 py-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+         <div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="inline-block px-4 py-1.5 mb-4 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-black uppercase tracking-[0.2em]"
+            >
+              Administrative Portal
+            </motion.div>
+            <h1 className="text-4xl md:text-5xl font-display font-black mb-3 tracking-tighter text-white">Club Approvals</h1>
+            <p className="text-gray-500 font-medium text-lg">Curate and moderate the next generation of campus organizations.</p>
+         </div>
+         <div className="bg-white/5 border border-white/10 rounded-2xl px-6 py-3 flex items-center gap-4">
+            <div className="text-right">
+               <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Queue Status</div>
+               <div className="text-white font-black text-xl">{pendingClubs.length} Pending</div>
+            </div>
+            <div className="w-1.5 h-10 bg-indigo-500 rounded-full" />
+         </div>
       </div>
 
-      {pendingClubs.length === 0 ? (
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-12 text-center shadow-xl">
-           <div className="w-16 h-16 bg-blue-500/10 text-blue-400 rounded-full flex items-center justify-center mx-auto mb-4">
-             <ShieldCheck size={32} />
-           </div>
-           <h3 className="text-xl font-bold text-white mb-2">You're all caught up!</h3>
-           <p className="text-gray-400">There are no pending club applications right now.</p>
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center py-32 space-y-6">
+          <div className="w-16 h-16 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
+          <p className="text-gray-500 font-bold uppercase tracking-widest text-sm">Syncing applications...</p>
         </div>
+      ) : pendingClubs.length === 0 ? (
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass rounded-[3rem] p-24 text-center shadow-2xl border-white/5"
+        >
+           <div className="w-24 h-24 bg-indigo-500/10 text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
+             <ShieldCheck size={40} />
+           </div>
+           <h3 className="text-3xl font-display font-black text-white mb-4 tracking-tighter">Excellence Maintained</h3>
+           <p className="text-gray-500 text-lg font-light">All organization applications have been reviewed. The campus is in harmony.</p>
+        </motion.div>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2">
-          {pendingClubs.map(app => (
-            <div key={app.id} className="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl relative overflow-hidden flex flex-col transition hover:border-gray-700">
+        <div className="grid gap-10 md:grid-cols-2">
+          {pendingClubs.map((app, index) => (
+            <motion.div 
+              key={app.id} 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="glass rounded-[2.5rem] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] relative overflow-hidden flex flex-col transition-all duration-500 border-white/5 hover:border-indigo-500/30 group"
+            >
+               {/* Decorative Gradient */}
+               <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 blur-3xl -mr-16 -mt-16 group-hover:bg-indigo-500/10 transition-colors" />
+               
                {/* Badge */}
-               <div className="absolute top-6 right-6">
-                 <span className="bg-purple-500/10 text-purple-400 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-purple-500/20">
-                   {app.category}
+               <div className="absolute top-10 right-10">
+                 <span className="px-4 py-1.5 bg-indigo-500/10 text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em] rounded-full border border-indigo-500/20">
+                    {app.category}
                  </span>
                </div>
                
-               <h3 className="text-xl font-bold text-white mb-2 pr-24">{app.name}</h3>
-               <p className="text-gray-400 text-sm mb-6 flex-1">{app.description}</p>
+               <h3 className="text-3xl font-display font-black text-white mb-4 pr-24 tracking-tighter leading-tight">{app.name}</h3>
+               <p className="text-gray-500 text-base mb-10 flex-1 leading-relaxed font-light">{app.description}</p>
                
-               <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="bg-gray-950 rounded-xl p-3 border border-gray-800">
-                    <div className="text-gray-500 text-xs font-semibold mb-1 flex items-center gap-1.5"><Calendar size={14}/> Applied</div>
-                    <div className="text-gray-200 text-sm font-medium">{new Date(app.applicationDate).toLocaleDateString()}</div>
+               <div className="grid grid-cols-2 gap-6 mb-10">
+                  <div className="glass bg-white/5 rounded-2xl p-5 border-white/5">
+                    <div className="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-2"><Calendar size={14} className="text-indigo-500" /> Application Date</div>
+                    <div className="text-white text-lg font-black">{new Date(app.applicationDate).toLocaleDateString()}</div>
                   </div>
-                  <div className="bg-gray-950 rounded-xl p-3 border border-gray-800">
-                    <div className="text-gray-500 text-xs font-semibold mb-1 flex items-center gap-1.5"><Users size={14}/> Expected</div>
-                    <div className="text-gray-200 text-sm font-medium">{app.expectedMembership} members</div>
+                  <div className="glass bg-white/5 rounded-2xl p-5 border-white/5">
+                    <div className="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-2"><Users size={14} className="text-indigo-500" /> Expected Members</div>
+                    <div className="text-white text-lg font-black">{app.expectedMembership} Elite</div>
                   </div>
                </div>
 
-               <div className="mb-6">
-                 <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Proposed Leaders</div>
-                 <div className="space-y-2">
+               <div className="mb-10">
+                 <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 opacity-50">Visionary Leaders</div>
+                 <div className="space-y-3">
                    {app.proposedLeaders.map((leader, i) => (
-                     <div key={i} className="flex justify-between items-center bg-gray-950 border border-gray-800 px-3 py-2 rounded-lg">
-                       <span className="text-sm font-medium text-gray-200">{leader.name}</span>
-                       <span className="text-xs text-gray-500">{leader.email}</span>
+                     <div key={i} className="flex justify-between items-center glass bg-white/2 px-5 py-4 rounded-2xl border-white/5 hover:bg-white/5 transition-colors">
+                       <span className="text-base font-bold text-white tracking-tight">{leader.name}</span>
+                       <span className="text-xs text-gray-500 font-medium">{leader.email}</span>
                      </div>
                    ))}
                  </div>
                </div>
 
-               <div className="grid grid-cols-2 gap-3 mt-auto pt-6 border-t border-gray-800">
+               <div className="grid grid-cols-2 gap-5 mt-auto pt-10 border-t border-white/5">
                   <button 
                     onClick={() => setSelectedApp(app.id)}
-                    className="flex items-center justify-center gap-2 py-2.5 bg-red-500/10 text-red-500 hover:bg-red-500/20 rounded-xl font-bold transition"
+                    className="flex items-center justify-center gap-3 py-4 bg-white/5 text-gray-400 hover:text-red-400 hover:bg-red-400/5 rounded-2xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 border border-white/5 hover:border-red-500/20"
                   >
                      <X size={18} /> Reject
                   </button>
                   <button 
                     onClick={() => handleApprove(app.id)}
-                    className="flex items-center justify-center gap-2 py-2.5 bg-green-500 text-gray-900 rounded-xl font-bold hover:bg-green-400 transition"
+                    className="btn-primary py-4 px-0 shadow-indigo-500/20 flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-widest"
                   >
                      <Check size={18} /> Approve
                   </button>
                </div>
 
-               {/* Rejection Modal overlay inline */}
-               {selectedApp === app.id && (
-                 <div className="absolute inset-0 bg-gray-900/95 p-6 backdrop-blur-sm z-10 flex flex-col justify-center animate-in fade-in zoom-in-95 duration-200">
-                    <h4 className="text-lg font-bold text-red-400 mb-2 flex items-center gap-2">
-                      <MessageSquare size={18} /> Rejection Feedback
-                    </h4>
-                    <p className="text-gray-400 text-sm mb-4">Provide a reason to the applicants. They will receive this via email and can re-apply.</p>
-                    <textarea 
-                      value={rejectReason}
-                      onChange={(e) => setRejectReason(e.target.value)}
-                      className="w-full h-32 bg-gray-950 border border-gray-700 rounded-xl p-3 text-sm text-gray-200 focus:border-red-500 focus:outline-none mb-4 resize-none custom-scrollbar"
-                      placeholder="e.g. Please elaborate on your financial plan..."
-                    />
-                    <div className="flex gap-3">
-                       <button onClick={() => setSelectedApp(null)} className="flex-1 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition">
-                         Cancel
-                       </button>
-                       <button onClick={() => handleReject(app.id)} disabled={!rejectReason.trim()} className="flex-1 py-2 bg-red-600 hover:bg-red-500 disabled:opacity-50 text-white rounded-lg font-medium transition">
-                         Confirm Rejection
-                       </button>
-                    </div>
-                 </div>
-               )}
-            </div>
+               {/* Premium Rejection Modal */}
+               <AnimatePresence>
+                 {selectedApp === app.id && (
+                   <motion.div 
+                     initial={{ opacity: 0, scale: 0.95 }}
+                     animate={{ opacity: 1, scale: 1 }}
+                     exit={{ opacity: 0, scale: 0.95 }}
+                     className="absolute inset-0 bg-[#030303]/98 p-10 backdrop-blur-xl z-20 flex flex-col justify-center"
+                   >
+                      <h4 className="text-3xl font-display font-black text-red-400 mb-4 tracking-tighter flex items-center gap-4">
+                        <MessageSquare size={32} /> Constructive Feedback
+                      </h4>
+                      <p className="text-gray-500 text-lg mb-8 font-light leading-relaxed">Please provide clarity on why this application does not currently meet our campus excellence standards.</p>
+                      <textarea 
+                        value={rejectReason}
+                        onChange={(e) => setRejectReason(e.target.value)}
+                        className="w-full h-40 bg-white/5 border border-white/10 rounded-3xl p-6 text-base text-white focus:border-red-500/50 focus:outline-none mb-8 resize-none transition-colors"
+                        placeholder="Detail the necessary improvements..."
+                      />
+                      <div className="flex gap-4">
+                         <button onClick={() => setSelectedApp(null)} className="flex-1 py-4 glass bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black uppercase tracking-widest text-[11px] transition-all border-white/10">
+                           Cancel
+                         </button>
+                         <button onClick={() => handleReject(app.id)} disabled={!rejectReason.trim()} className="flex-1 py-4 bg-red-600 hover:bg-red-500 disabled:opacity-50 text-white rounded-2xl font-black uppercase tracking-widest text-[11px] transition-all shadow-lg shadow-red-500/20">
+                           Confirm Rejection
+                         </button>
+                      </div>
+                   </motion.div>
+                 )}
+               </AnimatePresence>
+            </motion.div>
           ))}
         </div>
       )}

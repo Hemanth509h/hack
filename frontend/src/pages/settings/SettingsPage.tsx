@@ -1,4 +1,3 @@
-import React from 'react';
 import { 
   Settings, 
   Bell, 
@@ -9,12 +8,34 @@ import {
   MessageSquare,
   Globe,
   ChevronRight,
-  LogOut
+  LogOut,
+  ShieldCheck
 } from 'lucide-react';
 import PageContainer from '../../components/layout/PageContainer';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { useLogoutMutation } from '../../features/auth/authApi';
+import { logout } from '../../features/auth/authSlice';
 
 const SettingsPage: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const [logoutApi] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      await logoutApi().unwrap();
+      dispatch(logout());
+      navigate('/login');
+    } catch (err) {
+      console.error('Logout failed:', err);
+      dispatch(logout());
+      navigate('/login');
+    }
+  };
+
   const sections = [
     {
       title: 'Personal',
@@ -52,6 +73,25 @@ const SettingsPage: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="md:col-span-2 space-y-8">
+          
+          {user?.role === 'admin' && (
+            <button 
+              onClick={() => navigate('/admin')}
+              className="w-full flex items-center justify-between p-6 bg-gradient-to-r from-blue-600/20 to-purple-600/20 hover:from-blue-600/30 hover:to-purple-600/30 border border-blue-500/30 rounded-3xl transition-all group"
+            >
+              <div className="flex items-center gap-5">
+                <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <ShieldCheck className="text-blue-400" />
+                </div>
+                <div className="text-left">
+                  <h3 className="font-bold text-blue-400">Admin Panel</h3>
+                  <p className="text-sm text-blue-400/70">Manage users, clubs, and system settings</p>
+                </div>
+              </div>
+              <ChevronRight className="text-blue-500 group-hover:translate-x-1 transition-transform" />
+            </button>
+          )}
+
           {sections.map((section, idx) => (
             <div key={idx} className="space-y-4">
               <h2 className="text-xs font-bold text-gray-500 uppercase tracking-widest px-4">{section.title}</h2>
@@ -80,7 +120,10 @@ const SettingsPage: React.FC = () => {
             </div>
           ))}
 
-          <button className="w-full flex items-center justify-between p-6 bg-red-500/5 hover:bg-red-500/10 border border-red-500/10 rounded-3xl transition-all group mt-12">
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center justify-between p-6 bg-red-500/5 hover:bg-red-500/10 border border-red-500/10 rounded-3xl transition-all group mt-12"
+          >
             <div className="flex items-center gap-5">
               <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center">
                 <LogOut className="text-red-500" />

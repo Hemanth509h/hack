@@ -18,6 +18,8 @@ import uploadRoutes from './routes/upload.routes';
 import emailRoutes from './routes/email.routes';
 import analyticsRoutes from './routes/analytics.routes';
 import locationRoutes from './routes/location.routes';
+import feedRoutes from './routes/feed.routes';
+import socialRoutes from './routes/social.routes';
 
 const app: Express = express();
 
@@ -45,5 +47,7 @@ app.use('/api/v1/upload', uploadRoutes);
 app.use('/api/v1/emails', emailRoutes);
 app.use('/api/v1/analytics', analyticsRoutes);
 app.use('/api/v1/locations', locationRoutes);
+app.use('/api/v1/feed', feedRoutes);
+app.use('/api/v1/social', socialRoutes);
 
 export default app;

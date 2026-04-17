@@ -1,5 +1,10 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { useLogoutMutation } from '../../features/auth/authApi';
+import { logout } from '../../features/auth/authSlice';
 import { 
   Home, 
   Calendar, 
@@ -10,7 +15,10 @@ import {
   Settings,
   LogOut,
   Bell,
-  Search
+  Search,
+  ShieldCheck,
+  MessageSquare,
+  Activity
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -21,13 +29,31 @@ function cn(...inputs: ClassValue[]) {
 
 const Sidebar: React.FC<{ onSearchClick: () => void }> = ({ onSearchClick }) => {
   const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const [logoutApi] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      await logoutApi().unwrap();
+      dispatch(logout());
+      navigate('/login');
+    } catch (err) {
+      console.error('Logout failed:', err);
+      dispatch(logout()); // Ensure local state is cleared even if server fails
+      navigate('/login');
+    }
+  };
 
   const navItems = [
     { to: '/discover', icon: <Home size={22} />, label: 'Home' },
+    { to: '/feed', icon: <Activity size={22} />, label: 'Pulse' },
     { to: '/events', icon: <Calendar size={22} />, label: 'Events' },
     { to: '/clubs', icon: <Users size={22} />, label: 'Clubs' },
     { to: '/teams', icon: <Briefcase size={22} />, label: 'Teams' },
     { to: '/map', icon: <MapIcon size={22} />, label: 'Campus Map' },
+    { to: '/chat', icon: <MessageSquare size={22} />, label: 'Messages' },
   ];
 
   const secondaryItems = [
@@ -36,31 +62,35 @@ const Sidebar: React.FC<{ onSearchClick: () => void }> = ({ onSearchClick }) => 
     { to: '/settings', icon: <Settings size={22} />, label: 'Settings' },
   ];
 
+  if (user?.role === 'admin') {
+    secondaryItems.push({ to: '/admin', icon: <ShieldCheck size={22} />, label: 'Admin Panel' });
+  }
+
   return (
-    <aside className="hidden md:flex fixed left-0 top-0 h-screen w-64 bg-gray-950 border-r border-white/5 flex-col z-40 transition-all duration-300">
-      <div className="p-8 flex items-center space-x-3">
-        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center font-bold text-xl text-white shadow-lg">
+    <aside className="hidden md:flex fixed left-0 top-0 h-screen w-64 bg-[#030303] border-r border-white/5 flex-col z-40 transition-all duration-300">
+      <div className="p-10 flex items-center space-x-3">
+        <div className="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center font-bold text-xl text-white shadow-lg">
           Q
         </div>
-        <span className="font-bold text-xl tracking-tight text-white">The Quad</span>
+        <span className="font-display font-bold text-2xl tracking-tighter text-white">The Quad</span>
       </div>
 
-      <div className="px-4 mb-6">
+      <div className="px-6 mb-10">
         <button
           onClick={onSearchClick}
-          className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5 group"
+          className="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-white/5 hover:bg-white/10 transition-all duration-300 border border-white/5 group"
         >
           <Search size={20} className="text-gray-400 group-hover:text-white transition-colors" />
           <span className="text-sm text-gray-400 group-hover:text-white transition-colors font-medium">Search...</span>
-          <kbd className="ml-auto hidden lg:flex items-center px-1.5 h-5 font-mono text-[10px] font-medium bg-white/5 border border-white/10 rounded text-gray-500">
+          <kbd className="ml-auto hidden lg:flex items-center px-2 h-6 font-mono text-[10px] font-medium bg-white/5 border border-white/10 rounded-lg text-gray-500">
             ⌘K
           </kbd>
         </button>
       </div>
 
-      <nav className="flex-1 px-4 space-y-2 mt-4">
-        <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest px-4 mb-4">
-          Navigation
+      <nav className="flex-1 px-4 space-y-1.5 mt-2">
+        <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest px-6 mb-4 opacity-50">
+          Main Menu
         </div>
         {navItems.map((item) => (
           <SidebarLink 
@@ -70,8 +100,8 @@ const Sidebar: React.FC<{ onSearchClick: () => void }> = ({ onSearchClick }) => 
           />
         ))}
 
-        <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest px-4 mb-4 mt-8">
-          Personal
+        <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest px-6 mb-4 mt-12 opacity-50">
+          Personal Workspace
         </div>
         {secondaryItems.map((item) => (
           <SidebarLink 
@@ -82,10 +112,13 @@ const Sidebar: React.FC<{ onSearchClick: () => void }> = ({ onSearchClick }) => 
         ))}
       </nav>
 
-      <div className="p-4 mt-auto">
-        <button className="flex items-center space-x-3 px-4 py-3 w-full rounded-xl text-gray-500 hover:text-red-400 hover:bg-red-400/5 transition-all duration-200 group">
-          <LogOut size={22} className="group-hover:translate-x-0.5 transition-transform" />
-          <span className="font-medium">Logout</span>
+      <div className="p-6 mt-auto">
+        <button 
+          onClick={handleLogout}
+          className="flex items-center space-x-3 px-6 py-4 w-full rounded-2xl text-gray-500 hover:text-red-400 hover:bg-red-400/5 transition-all duration-300 group"
+        >
+          <LogOut size={22} className="group-hover:-translate-x-1 transition-transform" />
+          <span className="font-semibold">Logout</span>
         </button>
       </div>
     </aside>
@@ -96,22 +129,25 @@ const SidebarLink: React.FC<{ to: string; icon: React.ReactNode; label: string; 
   <Link 
     to={to} 
     className={cn(
-      "flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 group relative",
+      "flex items-center space-x-4 px-6 py-3.5 rounded-2xl transition-all duration-300 group relative overflow-hidden",
       active 
-        ? "bg-blue-500/10 text-blue-400" 
+        ? "bg-indigo-500/10 text-indigo-400 shadow-[inset_0_0_20px_rgba(99,102,241,0.05)]" 
         : "text-gray-500 hover:text-white hover:bg-white/5"
     )}
   >
     <div className={cn(
-      "transition-transform duration-200 group-hover:scale-110",
-      active ? "text-blue-400" : "text-gray-500 group-hover:text-white"
+      "transition-all duration-300",
+      active ? "text-indigo-400 scale-110" : "text-gray-500 group-hover:text-white group-hover:scale-110"
     )}>
       {icon}
     </div>
-    <span className="font-medium">{label}</span>
+    <span className="font-semibold tracking-tight">{label}</span>
     
     {active && (
-      <div className="absolute left-0 w-1 h-6 bg-blue-500 rounded-r-full" />
+      <motion.div 
+        layoutId="sidebar-active"
+        className="absolute left-0 w-1.5 h-8 bg-indigo-500 rounded-r-full shadow-[0_0_15px_rgba(99,102,241,0.5)]" 
+      />
     )}
   </Link>
 );

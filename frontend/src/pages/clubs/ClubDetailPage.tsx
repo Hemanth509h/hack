@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useFetchClubByIdQuery, useFetchClubMembersQuery } from '../../services/clubApi';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -40,94 +41,129 @@ export const ClubDetailPage: React.FC = () => {
   const isPresident = leadership.some(m => m.user._id === user?.id && m.role === 'president');
 
   return (
-    <div className="min-h-screen pb-20">
+    <div className="min-h-screen bg-[#030303] pb-32">
       <ClubDetailHeader 
         club={club} 
         isMember={isMember} 
         isPresident={isPresident} 
       />
 
-      <div className="max-w-full md:px-12 lg:px-20 mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-12">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-12">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 lg:grid-cols-12 gap-16 mt-16">
+        {/* Main Content Area */}
+        <div className="lg:col-span-8 space-y-16">
           {/* About Section */}
-          <section>
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-              <Info className="h-6 w-6 text-indigo-400" />
-              About the Club
-            </h2>
-            <div className="bg-gray-900/50 border border-gray-800 rounded-3xl p-8">
-              <p className="text-gray-300 leading-relaxed whitespace-pre-line text-lg">
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="flex items-center gap-4 mb-8 px-2">
+               <div className="w-2 h-10 bg-indigo-500 rounded-full" />
+               <h2 className="text-4xl font-display font-black text-white tracking-tighter">
+                 Club Manifesto
+               </h2>
+            </div>
+            <div className="glass rounded-[3rem] p-10 md:p-16 border-white/5 relative overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.4)]">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 blur-[100px] -mr-32 -mt-32" />
+              <p className="text-gray-400 leading-relaxed font-light text-xl whitespace-pre-line relative z-10">
                 {club.description}
               </p>
               {club.tags && club.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-8">
+                <div className="flex flex-wrap gap-3 mt-12 relative z-10">
                   {club.tags.map(tag => (
-                    <span key={tag} className="bg-gray-800 text-gray-400 px-3 py-1 rounded-lg text-xs font-medium">
+                    <span key={tag} className="glass bg-white/5 text-gray-500 px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest border-white/5 hover:text-indigo-400 transition-colors">
                       #{tag}
                     </span>
                   ))}
                 </div>
               )}
             </div>
-          </section>
+          </motion.section>
 
-          {/* Announcements */}
-          <section>
+          {/* Announcements Terminal */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="glass bg-white/2 rounded-[3rem] p-1 border-white/5"
+          >
              <ClubAnnouncements />
-          </section>
+          </motion.section>
 
-          {/* Members Grid */}
-          <section>
-            <MemberList members={membersData?.members || []} />
-          </section>
+          {/* Members Registry */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="flex items-center gap-4 mb-10 px-2">
+               <div className="w-2 h-10 bg-purple-500 rounded-full" />
+               <h2 className="text-4xl font-display font-black text-white tracking-tighter">
+                 Confirmed Members
+               </h2>
+            </div>
+            <div className="glass rounded-[3rem] p-1 border-white/5">
+              <MemberList members={membersData?.members || []} />
+            </div>
+          </motion.section>
         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-8">
-          {/* Schedule Card */}
-          <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6">
-            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-6">Logistics</h3>
-            <div className="space-y-6">
-              <div className="flex gap-4">
-                <div className="h-10 w-10 bg-indigo-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Calendar className="h-5 w-5 text-indigo-400" />
+        {/* Tactical Sidebar */}
+        <div className="lg:col-span-4 space-y-10">
+          {/* Logistics Intelligence */}
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="glass rounded-[3rem] p-10 border-white/10 shadow-2xl relative overflow-hidden"
+          >
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-indigo-500/5 blur-3xl -ml-16 -mb-16" />
+            <h3 className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-10">Logistics Protocols</h3>
+            <div className="space-y-10 relative z-10">
+              <div className="flex gap-6 group">
+                <div className="h-14 w-14 glass bg-white/5 border-white/10 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                  <Calendar className="h-6 w-6 text-indigo-400" />
                 </div>
                 <div>
-                  <div className="text-xs text-gray-500 font-bold uppercase mb-1">Schedule</div>
-                  <div className="text-white font-medium">{club.meetingSchedule}</div>
+                  <div className="text-[10px] text-gray-500 font-black uppercase tracking-widest mb-1">Weekly Period</div>
+                  <div className="text-white text-lg font-bold tracking-tight">{club.meetingSchedule}</div>
                 </div>
               </div>
-              <div className="flex gap-4">
-                <div className="h-10 w-10 bg-purple-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <MapPin className="h-5 w-5 text-purple-400" />
+              <div className="flex gap-6 group">
+                <div className="h-14 w-14 glass bg-white/5 border-white/10 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                  <MapPin className="h-6 w-6 text-purple-400" />
                 </div>
                 <div>
-                  <div className="text-xs text-gray-500 font-bold uppercase mb-1">Primary Location</div>
-                  <div className="text-white font-medium">Campus Activities Center</div>
+                  <div className="text-[10px] text-gray-500 font-black uppercase tracking-widest mb-1">Nexus Location</div>
+                  <div className="text-white text-lg font-bold tracking-tight">Campus Activities Center</div>
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Leadership Sidebar */}
-          <LeadershipSection leadership={leadership} />
+          {/* High Command Sidebar */}
+          <div className="glass rounded-[3rem] p-2 border-white/5">
+            <LeadershipSection leadership={leadership} />
+          </div>
           
-          {/* Quick Actions Card */}
-          <div className="bg-indigo-600 rounded-3xl p-8 relative overflow-hidden shadow-2xl">
-            <div className="absolute top-0 right-0 p-4 opacity-10">
-               <Trophy className="h-32 w-32" />
+          {/* Strategic Contact Card */}
+          <motion.div 
+            whileHover={{ scale: 1.02 }}
+            className="premium-gradient rounded-[3rem] p-10 relative overflow-hidden shadow-[0_30px_60px_rgba(99,102,241,0.3)] group"
+          >
+            <div className="absolute top-0 right-0 p-6 opacity-20 group-hover:scale-110 transition-transform duration-700">
+               <Trophy className="h-32 w-32 text-white" />
             </div>
             <div className="relative z-10">
-              <h3 className="text-2xl font-bold text-white mb-2">Want to lead?</h3>
-              <p className="text-indigo-100/80 text-sm mb-6 leading-relaxed">
-                Connect with the board members to learn about upcoming leadership opportunities and roles.
+              <h3 className="text-3xl font-display font-black text-white mb-4 tracking-tighter">Lead the Future.</h3>
+              <p className="text-indigo-100/70 text-base mb-10 leading-relaxed font-medium">
+                Our board is seeking visionaries to scale our impact. Inquire about vacant leadership protocols.
               </p>
-              <button className="w-full bg-white text-indigo-600 py-3 rounded-2xl font-bold hover:bg-indigo-50 transition-all shadow-lg">
-                Contact Board
+              <button className="w-full bg-white text-indigo-900 py-5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-gray-100 transition-all shadow-xl shadow-black/20">
+                Contact High Command
               </button>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

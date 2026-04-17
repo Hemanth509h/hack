@@ -1,28 +1,39 @@
 import { useState } from 'react';
-import { Search, Filter, MoreVertical, Download, Shield, ShieldOff, Eye } from 'lucide-react';
-// import { useGetUsersQuery } from '../../features/admin/adminApi';
-
-// Mock users to develop UI immediately
-const mockUsers = [
-  { id: '1', name: 'Alex Johnson', email: 'alex.j@quad.edu', role: 'admin', status: 'Active', joinedDate: '2025-08-15' },
-  { id: '2', name: 'Sarah Williams', email: 'sarah.w@quad.edu', role: 'student', status: 'Active', joinedDate: '2025-09-01' },
-  { id: '3', name: 'Mike Chen', email: 'mike.c@quad.edu', role: 'student', status: 'Inactive', joinedDate: '2025-09-12' },
-  { id: '4', name: 'Emily Davis', email: 'emily.d@quad.edu', role: 'club_admin', status: 'Active', joinedDate: '2025-10-05' },
-  { id: '5', name: 'James Wilson', email: 'james.w@quad.edu', role: 'student', status: 'Suspended', joinedDate: '2026-01-20' },
-];
+import { Search, Filter, MoreVertical, Download, Shield, ShieldOff, Eye, Edit3, X, Check } from 'lucide-react';
+import { useGetUsersQuery, useUpdateUserRoleMutation } from '../../features/admin/adminApi';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const UserManagementPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('All');
+  const [page, setPage] = useState(1);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   
   // Real endpoint hook
-  // const { data, isLoading } = useGetUsersQuery({ page: 1, search: searchTerm, role: roleFilter });
-
+  const { data, isLoading } = useGetUsersQuery({ 
+    page, 
+    search: searchTerm, 
+    role: roleFilter === 'All' ? undefined : roleFilter.toLowerCase() 
+  });
   
-  const filteredUsers = mockUsers.filter(u => 
-    (roleFilter === 'All' || u.role === roleFilter.toLowerCase() || (roleFilter === 'Student' && u.role === 'student')) &&
-    (u.name.toLowerCase().includes(searchTerm.toLowerCase()) || u.email.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const [updateUserRole, { isLoading: isUpdatingRole }] = useUpdateUserRoleMutation();
+
+  const filteredUsers = data?.users || [];
+
+  const handleRoleUpdate = async (userId: string, newRole: string) => {
+    try {
+      await updateUserRole({ userId, role: newRole }).unwrap();
+      setIsEditModalOpen(false);
+    } catch (err) {
+      console.error('Failed to update role', err);
+    }
+  };
+
+  const openEditModal = (user: any) => {
+    setSelectedUser(user);
+    setIsEditModalOpen(true);
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
@@ -61,7 +72,7 @@ const UserManagementPage = () => {
                  >
                    <option>All</option>
                    <option>Student</option>
-                   <option>Club_Admin</option>
+                   <option>Club_Leader</option>
                    <option>Admin</option>
                  </select>
                </div>
@@ -81,8 +92,8 @@ const UserManagementPage = () => {
                   </tr>
                </thead>
                <tbody className="divide-y divide-gray-800">
-                 {filteredUsers.map((user) => (
-                   <tr key={user.id} className="hover:bg-gray-800/30 transition">
+                 {filteredUsers.map((user: any) => (
+                   <tr key={user._id} className="hover:bg-gray-800/30 transition">
                      <td className="px-6 py-4">
                        <div className="flex items-center gap-3">
                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center font-bold text-xs text-white">
@@ -112,7 +123,7 @@ const UserManagementPage = () => {
                        </span>
                      </td>
                      <td className="px-6 py-4 text-gray-400">
-                       {new Date(user.joinedDate).toLocaleDateString()}
+                       {new Date(user.createdAt || user.joinedDate).toLocaleDateString()}
                      </td>
                      <td className="px-6 py-4 text-right">
                        <div className="flex items-center justify-end gap-2">
@@ -120,14 +131,26 @@ const UserManagementPage = () => {
                            <Eye size={18} />
                          </button>
                          {user.role !== 'admin' ? (
-                           <button className="text-gray-400 hover:text-purple-400 p-1.5 transition" title="Make Admin">
+                           <button 
+                             onClick={() => handleRoleUpdate(user._id, 'admin')}
+                             className="text-gray-400 hover:text-purple-400 p-1.5 transition" title="Make Admin"
+                           >
                              <Shield size={18} />
                            </button>
                          ) : (
-                           <button className="text-purple-400 hover:text-red-400 p-1.5 transition" title="Remove Admin">
+                           <button 
+                             onClick={() => handleRoleUpdate(user._id, 'student')}
+                             className="text-purple-400 hover:text-red-400 p-1.5 transition" title="Remove Admin"
+                           >
                              <ShieldOff size={18} />
                            </button>
                          )}
+                         <button 
+                           onClick={() => openEditModal(user)}
+                           className="text-gray-400 hover:text-white p-1.5 transition" title="Edit User"
+                         >
+                           <Edit3 size={18} />
+                         </button>
                          <div className="relative group inline-block">
                            <button className="text-gray-400 hover:text-white p-1.5 transition">
                              <MoreVertical size={18} />
@@ -149,13 +172,90 @@ const UserManagementPage = () => {
          </div>
          {/* Pagination Footer */}
          <div className="p-4 border-t border-gray-800 bg-gray-900/50 flex items-center justify-between text-sm text-gray-400">
-            <span>Showing {filteredUsers.length} users</span>
+            <span>Showing {filteredUsers.length} users (Total: {data?.total || 0})</span>
             <div className="flex gap-2">
-               <button className="px-3 py-1.5 bg-gray-800 rounded-lg hover:bg-gray-700 transition" disabled>Previous</button>
-               <button className="px-3 py-1.5 bg-gray-800 rounded-lg hover:bg-gray-700 transition">Next</button>
+               <button 
+                 onClick={() => setPage(p => Math.max(1, p - 1))}
+                 disabled={page === 1}
+                 className="px-3 py-1.5 bg-gray-800 rounded-lg hover:bg-gray-700 disabled:opacity-50 transition"
+               >Previous</button>
+               <button 
+                 onClick={() => setPage(p => p + 1)}
+                 disabled={filteredUsers.length === 0}
+                 className="px-3 py-1.5 bg-gray-800 rounded-lg hover:bg-gray-700 disabled:opacity-50 transition"
+               >Next</button>
             </div>
          </div>
       </div>
+
+      <AnimatePresence>
+        {isEditModalOpen && selectedUser && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-gray-900 border border-gray-800 rounded-[2rem] w-full max-w-md overflow-hidden shadow-2xl"
+            >
+              <div className="p-6 border-b border-gray-800 flex justify-between items-center">
+                <h3 className="text-xl font-black text-white">Edit User Role</h3>
+                <button onClick={() => setIsEditModalOpen(false)} className="text-gray-500 hover:text-white transition">
+                  <X size={24} />
+                </button>
+              </div>
+
+              <div className="p-8 space-y-8">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-black text-xl text-white">
+                    {selectedUser.name.charAt(0)}
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-lg">{selectedUser.name}</h4>
+                    <p className="text-gray-500 text-sm">{selectedUser.email}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">System Role</label>
+                  <div className="grid grid-cols-1 gap-3">
+                    {[
+                      { id: 'student', label: 'Student', desc: 'Standard campus access', color: 'blue' },
+                      { id: 'club_leader', label: 'Club Leader', desc: 'Manage events and club content', color: 'emerald' },
+                      { id: 'admin', label: 'Administrator', desc: 'Full system control', color: 'indigo' },
+                    ].map((role) => (
+                      <button
+                        key={role.id}
+                        onClick={() => handleRoleUpdate(selectedUser._id, role.id)}
+                        disabled={isUpdatingRole}
+                        className={`flex items-center justify-between p-4 rounded-2xl border-2 transition-all group ${
+                          selectedUser.role === role.id 
+                            ? `bg-${role.color}-500/10 border-${role.color}-500/50 text-${role.color}-400` 
+                            : 'bg-gray-950/50 border-gray-800 text-gray-500 hover:border-gray-700'
+                        }`}
+                      >
+                        <div className="text-left">
+                          <p className="font-black uppercase tracking-widest text-xs">{role.label}</p>
+                          <p className="text-[10px] opacity-70">{role.desc}</p>
+                        </div>
+                        {selectedUser.role === role.id && <Check size={18} />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 bg-gray-950/50 border-t border-gray-800 flex justify-end">
+                <button 
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="px-6 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-xl text-sm font-bold transition"
+                >
+                  Done
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

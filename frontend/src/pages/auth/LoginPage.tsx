@@ -45,7 +45,9 @@ export default function LoginPage() {
           refreshToken: response.refreshToken,
         })
       );
-      navigate(from, { replace: true });
+      
+      const redirectPath = response.user.role === 'admin' && !location.state?.from ? '/admin' : from;
+      navigate(redirectPath, { replace: true });
     } catch (err: any) {
       console.error('Login failed:', err);
     }

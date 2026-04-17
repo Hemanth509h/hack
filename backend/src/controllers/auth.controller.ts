@@ -194,3 +194,34 @@ export const resetPassword = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Server error resetting password' });
   }
 };
+
+/**
+ * @desc    Get Current User
+ * @route   GET /api/auth/me
+ */
+export const getMe = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user?.userId;
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const user = await User.findById(userId).select('name email role avatar');
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({
+      message: 'You have access',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error fetching user' });
+  }
+};

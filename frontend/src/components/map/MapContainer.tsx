@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import Map, { Marker, Popup, NavigationControl, GeolocateControl, ViewStateChangeEvent } from 'react-map-gl/mapbox';
 
-import { MapPin, Info, Users, X } from 'lucide-react';
+import { MapPin, Info, Users, X, Library, Coffee, Utensils, BookOpen } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setViewport, setSelectedLocationId } from '../../features/map/mapSlice';
 import { useGetEventsQuery } from '../../services/eventApi';
@@ -9,6 +9,13 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 // We need an exact token. Given in instructions, or fallback.
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
+
+const CAMPUS_RESOURCES = [
+  { id: 'lib-1', type: 'building', name: 'Central Library', category: 'Study', coords: [-71.1097, 42.3736] },
+  { id: 'din-1', type: 'dining', name: 'Main Canteen', category: 'Food', coords: [-71.105, 42.375] },
+  { id: 'din-2', type: 'dining', name: 'Starbucks @ Union', category: 'Coffee', coords: [-71.112, 42.372] },
+  { id: 'bld-2', type: 'building', name: 'Science Center', category: 'Labs', coords: [-71.115, 42.376] },
+];
 
 export const MapContainer: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -33,6 +40,10 @@ export const MapContainer: React.FC = () => {
   const selectedEvent = useMemo(() => {
     return activeEvents.find(e => e._id === selectedLocationId);
   }, [activeEvents, selectedLocationId]);
+
+  const selectedResource = useMemo(() => {
+    return CAMPUS_RESOURCES.find(r => r.id === selectedLocationId);
+  }, [selectedLocationId]);
 
   if (!MAPBOX_TOKEN) {
     return (
@@ -93,6 +104,33 @@ export const MapContainer: React.FC = () => {
           );
         })}
 
+        {CAMPUS_RESOURCES.map((res) => {
+          const isSelected = selectedLocationId === res.id;
+          if (res.type === 'building' && !toggles.buildings) return null;
+          if (res.type === 'dining' && !toggles.dining) return null;
+
+          return (
+            <Marker
+              key={res.id}
+              longitude={res.coords[0]}
+              latitude={res.coords[1]}
+              onClick={(e) => {
+                e.originalEvent.stopPropagation();
+                dispatch(setSelectedLocationId(res.id));
+              }}
+              style={{ cursor: 'pointer', zIndex: isSelected ? 10 : 1 }}
+            >
+              <div className={`
+                p-2 rounded-xl bg-gray-900 border-2 transition-all shadow-xl flex items-center gap-2
+                ${isSelected ? 'border-amber-500 scale-110' : 'border-white/10 hover:border-white/30'}
+              `}>
+                {res.type === 'dining' ? <Coffee size={14} className="text-amber-400" /> : <Library size={14} className="text-blue-400" />}
+                <span className="text-[10px] font-bold text-white whitespace-nowrap">{res.name}</span>
+              </div>
+            </Marker>
+          );
+        })}
+
         {/* Selected Popup logic */}
         {selectedEvent && (selectedEvent.location as any)?.coordinates && (
            <Popup
@@ -132,6 +170,35 @@ export const MapContainer: React.FC = () => {
              </div>
            </Popup>
         )}
+         {selectedResource && (
+            <Popup
+              longitude={selectedResource.coords[0]}
+              latitude={selectedResource.coords[1]}
+              anchor="bottom"
+              onClose={() => dispatch(setSelectedLocationId(null))}
+              offset={24}
+              className="z-50"
+              closeButton={false}
+              maxWidth="300px"
+            >
+              <div className="bg-gray-900 border border-gray-700 rounded-xl overflow-hidden shadow-2xl p-4 min-w-[240px]">
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <div className="flex items-center gap-2">
+                    {selectedResource.type === 'dining' ? <Coffee className="text-amber-400" size={18} /> : <Library className="text-blue-400" size={18} />}
+                    <h3 className="font-bold text-white leading-tight">{selectedResource.name}</h3>
+                  </div>
+                  <button onClick={() => dispatch(setSelectedLocationId(null))} className="text-gray-500 hover:text-white shrink-0">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 mb-4">{selectedResource.category} resource available to all students.</p>
+                <div className="flex items-center gap-2 text-[10px] font-bold text-green-500 uppercase tracking-widest bg-green-500/10 px-2 py-1 rounded w-fit">
+                   <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                   Open Now
+                </div>
+              </div>
+            </Popup>
+         )}
       </Map>
     </div>
   );

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Message } from '../models/Message';
+import { Conversation } from '../models/Conversation';
 import { AuthRequest } from '../middleware/auth.middleware';
 import mongoose from 'mongoose';
 
@@ -13,8 +14,8 @@ export const getMessageHistory = async (req: AuthRequest, res: Response) => {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 50;
 
-    if (!['event', 'club', 'project'].includes(roomType)) {
-      return res.status(400).json({ error: 'Invalid room type. Must be event, club, or project.' });
+    if (!['event', 'club', 'project', 'direct'].includes(roomType)) {
+      return res.status(400).json({ error: 'Invalid room type. Must be event, club, project, or direct.' });
     }
 
     const messages = await Message.find({
@@ -50,5 +51,57 @@ export const deleteMessage = async (req: AuthRequest, res: Response) => {
     res.json({ message: 'Message deleted' });
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete message' });
+  }
+};
+/**
+ * @desc    Get all conversations for the user
+ * @route   GET /api/v1/chat/conversations
+ */
+export const getConversations = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(req.user!.userId);
+    const conversations = await Conversation.find({ participants: userId })
+      .populate('participants', 'name avatar major')
+      .populate({
+        path: 'lastMessage',
+        populate: { path: 'sender', select: 'name' }
+      })
+      .sort({ updatedAt: -1 });
+
+    res.json({ conversations });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to fetch conversations', details: error.message });
+  }
+};
+
+/**
+ * @desc    Find or create a conversation between two users
+ * @route   POST /api/v1/chat/conversations
+ */
+export const getOrCreateConversation = async (req: AuthRequest, res: Response) => {
+  try {
+    const { participantId } = req.body;
+    const userId = new mongoose.Types.ObjectId(req.user!.userId);
+    const otherId = new mongoose.Types.ObjectId(participantId);
+
+    if (userId.equals(otherId)) {
+      return res.status(400).json({ error: 'Cannot start conversation with yourself' });
+    }
+
+    // Find existing conversation
+    let conversation = await Conversation.findOne({
+      participants: { $all: [userId, otherId], $size: 2 }
+    }).populate('participants', 'name avatar major');
+
+    if (!conversation) {
+      conversation = await Conversation.create({
+        participants: [userId, otherId]
+      });
+      await conversation.populate('participants', 'name avatar major');
+    }
+
+    res.json({ conversation });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to handle conversation', details: error.message });
   }
 };

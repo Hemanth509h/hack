@@ -9,8 +9,10 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ChatWidget } from './components/chat/ChatWidget'
 import { initAnalytics, trackPageView } from './lib/analytics'
 import CookieBanner from './components/shared/CookieBanner'
+import { useNotifications } from './hooks/useNotifications'
 
 function App() {
+  useNotifications();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === '/discover' || location.pathname === '/';
@@ -41,11 +43,12 @@ function App() {
 
   return (
     <SocketProvider>
-      <div className="min-h-screen bg-gray-950 text-gray-100 font-sans selection:bg-blue-500/30 w-full overflow-x-hidden">
-        {/* Background Gradients */}
+      <div className="min-h-screen bg-[#030303] text-gray-100 font-sans selection:bg-indigo-500/30 w-full overflow-x-hidden">
+        {/* Advanced Background Gradients */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-900/20 blur-[120px] rounded-full" />
-          <div className="absolute bottom-[10%] right-[-5%] w-[35%] h-[35%] bg-purple-900/15 blur-[100px] rounded-full" />
+          <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-indigo-900/10 blur-[150px] rounded-full animate-float" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-900/10 blur-[130px] rounded-full" style={{ animation: 'float 8s ease-in-out infinite reverse' }} />
+          <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-blue-900/5 blur-[100px] rounded-full animate-pulse" />
         </div>
 
         <div className="md:hidden">
@@ -54,32 +57,50 @@ function App() {
         
         <Sidebar onSearchClick={() => setIsSearchOpen(true)} />
         
-        <main className="pt-24 md:pt-0 md:pl-64 min-h-screen">
+        <main className="pt-24 md:pt-0 md:pl-64 min-h-screen relative z-10">
           {/* Hero / Header Section - Only show on Home/Discover page */}
           <AnimatePresence>
             {isHome && (
-              <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-16 pt-12 md:pt-20">
+              <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pt-16 md:pt-28">
                 <motion.div 
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="mb-8 text-center md:text-left"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -30 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  className="mb-16 text-center md:text-left"
                 >
-                  <motion.h1 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tighter leading-tight"
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="inline-block px-4 py-1.5 mb-6 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold uppercase tracking-widest"
                   >
-                    Explore Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">Campus.</span>
+                    Campus Intelligence Platform
+                  </motion.div>
+                  <motion.h1 
+                    className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tighter leading-[0.9] text-white"
+                  >
+                    Explore Your <br />
+                    <span className="text-gradient">Campus.</span>
                   </motion.h1>
                   <motion.p 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="text-gray-400 text-base sm:text-lg md:text-xl max-w-2xl md:mx-0 mx-auto"
+                    transition={{ delay: 0.4 }}
+                    className="text-gray-400 text-lg sm:text-xl md:text-2xl max-w-2xl md:mx-0 mx-auto font-light leading-relaxed"
                   >
-                    The unified platform for events, clubs, and collaborative projects at The Quad. Stay connected with real-time updates.
+                    The unified ecosystem for events, clubs, and collaborative projects. Stay ahead with real-time campus pulse.
                   </motion.p>
+                  
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                    className="mt-10 flex flex-wrap items-center justify-center md:justify-start gap-4"
+                  >
+                    <button className="btn-primary">Get Started</button>
+                    <button className="btn-glass">View Events</button>
+                  </motion.div>
                 </motion.div>
               </div>
             )}

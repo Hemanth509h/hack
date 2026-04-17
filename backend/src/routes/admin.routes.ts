@@ -29,6 +29,7 @@ router.delete('/users/:id', adminController.deleteUser);
 /**
  * Club Workflow
  */
+router.get('/clubs/pending', adminController.getPendingClubs);
 router.put('/clubs/:id/:action', adminController.handleClubWorkflow); // action = approve | reject
 
 /**

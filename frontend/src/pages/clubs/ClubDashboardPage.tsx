@@ -47,7 +47,10 @@ export const ClubDashboardPage: React.FC = () => {
           <button className="bg-gray-900 border border-gray-800 text-white px-5 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-gray-800 transition-all">
             <Bell className="h-4 w-4" /> Send Announcement
           </button>
-          <button className="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-500/20">
+          <button 
+            onClick={() => navigate(`/events/create?clubId=${id}`)}
+            className="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-500/20"
+          >
             <Plus className="h-4 w-4" /> Create Event
           </button>
         </div>

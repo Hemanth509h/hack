@@ -18,9 +18,11 @@ import {
 import PageContainer from '../../components/layout/PageContainer';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { CreateProjectModal } from '../../components/teams/CreateProjectModal';
 
 const TeamsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'browse' | 'matches' | 'my-projects'>('browse');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   const { data: browseData, isLoading: browseLoading } = useBrowseProjectsQuery({});
   const { data: matchesData, isLoading: matchesLoading } = useGetMatchesQuery();
@@ -37,7 +39,10 @@ const TeamsPage: React.FC = () => {
           <p className="text-gray-400 text-lg">Collaborate on hackathons, research, and campus initiatives.</p>
         </div>
         
-        <button className="flex items-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all shadow-lg shadow-blue-500/20 group">
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          className="flex items-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all shadow-lg shadow-blue-500/20 group"
+        >
           <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
           <span>Post a Project</span>
         </button>
@@ -173,6 +178,11 @@ const TeamsPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      <CreateProjectModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </PageContainer>
   );
 };

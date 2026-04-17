@@ -42,7 +42,13 @@ export interface IUser extends Document {
   resetPasswordToken?: string;
   resetPasswordExpires?: Date;
 
-
+  // Gamification
+  points: number;
+  badges: {
+    name: string;
+    icon: string;
+    unlockedAt: Date;
+  }[];
 
   comparePassword(candidate: string): Promise<boolean>;
 }
@@ -90,6 +96,13 @@ const UserSchema = new Schema<IUser>({
   resetPasswordToken: String,
   resetPasswordExpires: Date,
 
+  // Gamification
+  points: { type: Number, default: 0 },
+  badges: [{
+    name: { type: String, required: true },
+    icon: { type: String, required: true },
+    unlockedAt: { type: Date, default: Date.now }
+  }],
 }, { timestamps: true });
 
 UserSchema.index({ homeLocation: '2dsphere' });

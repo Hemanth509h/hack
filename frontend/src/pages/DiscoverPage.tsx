@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Sparkles, TrendingUp, Filter, RefreshCw } from 'lucide-react';
+import { Sparkles, TrendingUp, Filter, RefreshCw, User } from 'lucide-react';
+import { motion } from 'framer-motion';
 import api from '../lib/api';
 import EventCard from '../components/discovery/EventCard';
 import NearbyEvents from '../components/events/NearbyEvents';
@@ -40,70 +41,101 @@ const DiscoverPage: React.FC = () => {
   }
 
   return (
-    <PageContainer className="space-y-16">
+    <PageContainer className="space-y-24 py-10">
       {/* Featured / Trending Section */}
       <section>
-        <div className="flex items-center justify-between mb-8 px-2">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-orange-500/10 rounded-xl">
-              <TrendingUp className="text-orange-500" size={24} />
+        <div className="flex items-center justify-between mb-12 px-2">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-indigo-500/10 rounded-2xl shadow-inner border border-indigo-500/10">
+              <TrendingUp className="text-indigo-400" size={28} />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white">Trending Now</h2>
-              <p className="text-sm text-gray-500">What everyone is talking about on campus</p>
+              <h2 className="text-4xl font-black text-white tracking-tighter">Trending Now</h2>
+              <p className="text-gray-500 font-medium">What's igniting the campus conversation</p>
             </div>
           </div>
-          <button className="text-blue-500 hover:text-blue-400 text-sm font-medium transition-colors">
-            See all
+          <button className="btn-glass text-indigo-400 hover:text-indigo-300 text-sm font-bold uppercase tracking-widest px-8">
+            Explore All
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-12">
           {trending.slice(0, 1).map((event: any) => (
-            <EventCard key={event._id} event={event} featured />
+            <motion.div
+              key={event._id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <EventCard event={event} featured />
+            </motion.div>
           ))}
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-          {trending.slice(1, 4).map((event: any) => (
-            <EventCard key={event._id} event={event} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-12">
+          {trending.slice(1, 4).map((event: any, index) => (
+            <motion.div
+              key={event._id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <EventCard event={event} />
+            </motion.div>
           ))}
         </div>
       </section>
 
       {/* Nearby Events Section */}
-      <NearbyEvents />
+      <section className="relative">
+         <div className="absolute inset-0 bg-indigo-500/5 blur-[100px] -z-10 rounded-full" />
+         <NearbyEvents />
+      </section>
 
       {/* Recommended Section */}
       <section>
-        <div className="flex items-center justify-between mb-8 px-2">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-blue-500/10 rounded-xl">
-              <Sparkles className="text-blue-500" size={24} />
+        <div className="flex items-center justify-between mb-12 px-2">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-purple-500/10 rounded-2xl shadow-inner border border-purple-500/10">
+              <Sparkles className="text-purple-400" size={28} />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white">For You</h2>
-              <p className="text-sm text-gray-500">Based on your interests and activity</p>
+              <h2 className="text-4xl font-black text-white tracking-tighter">Personalized For You</h2>
+              <p className="text-gray-500 font-medium">Curated based on your campus fingerprint</p>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
-             <button className="p-2 bg-white/5 hover:bg-white/10 rounded-xl text-gray-400 transition-all border border-white/5">
-                <Filter size={18} />
+          <div className="flex items-center space-x-3">
+             <button className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl text-gray-400 transition-all border border-white/5 shadow-lg group">
+                <Filter size={20} className="group-hover:rotate-180 transition-transform duration-500" />
              </button>
-             <button onClick={fetchData} className="p-2 bg-white/5 hover:bg-white/10 rounded-xl text-gray-400 transition-all border border-white/5">
-                <RefreshCw size={18} />
+             <button onClick={fetchData} className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl text-gray-400 transition-all border border-white/5 shadow-lg group">
+                <RefreshCw size={20} className="group-hover:rotate-180 transition-transform duration-500" />
              </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {recommended.length > 0 ? (
-            recommended.map((event: any) => (
-              <EventCard key={event._id} event={event} />
+            recommended.map((event: any, index) => (
+              <motion.div
+                key={event._id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+              >
+                <EventCard event={event} />
+              </motion.div>
             ))
           ) : (
-             <div className="col-span-full py-20 text-center bg-white/5 rounded-[2.5rem] border border-dashed border-white/10">
-                <p className="text-gray-500">Complete your profile to get personalized suggestions!</p>
+             <div className="col-span-full py-24 text-center glass rounded-[3rem] border border-dashed border-white/10 group hover:border-indigo-500/30 transition-colors">
+                <div className="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <User className="text-indigo-400" size={32} />
+                </div>
+                <p className="text-gray-400 text-lg font-medium">Complete your profile to unlock <span className="text-indigo-400">Personalized Insights.</span></p>
+                <button className="mt-8 btn-glass">Complete Profile</button>
              </div>
           )}
         </div>

@@ -47,8 +47,22 @@ interface RoleGuardProps {
 
 export const RoleGuard: React.FC<RoleGuardProps> = ({ allowedRoles }) => {
   const { isAuthenticated, user, isInitializing, token } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
 
-  if (isInitializing) {
+  const { data: fetchedUser, isLoading, isError } = useGetMeQuery(undefined, {
+    skip: !token || !!user,
+  });
+
+  useEffect(() => {
+    if (fetchedUser) {
+      dispatch(updateUser(fetchedUser));
+      dispatch(setInitializing(false));
+    } else if (isError || (!token && isInitializing)) {
+      dispatch(setInitializing(false));
+    }
+  }, [fetchedUser, isError, token, isInitializing, dispatch]);
+
+  if (isInitializing || isLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-950">
         <Loader2 className="animate-spin text-blue-500 mb-4" size={48} />
@@ -60,8 +74,13 @@ export const RoleGuard: React.FC<RoleGuardProps> = ({ allowedRoles }) => {
     return <Navigate to="/login" replace />;
   }
 
+  // If user is not yet populated but we're not initializing/loading, they shouldn't be here
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
   // Handle generic JWT state where 'user' details haven't fully populated yet
-  if (user && !allowedRoles.includes(user.role)) {
+  if (!allowedRoles.includes(user.role)) {
     return <Navigate to="/unauthorized" replace />;
   }
 

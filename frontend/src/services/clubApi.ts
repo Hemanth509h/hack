@@ -24,7 +24,7 @@ export const clubApi = api.injectEndpoints({
       query: (id) => `/clubs/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Club', id }],
     }),
-    createClub: builder.mutation<IClub, Partial<IClub>>({
+    createClub: builder.mutation<{ message: string; club: IClub }, Partial<IClub>>({
       query: (newClub) => ({
         url: '/clubs',
         method: 'POST',
