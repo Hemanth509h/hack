@@ -12,6 +12,10 @@ export const registerUser = async (req: Request, res: Response) => {
   try {
     const { name, email, password, major, graduationYear, interests } = req.body;
 
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required' });
+    }
+
     const exists = await User.findOne({ email: email.toLowerCase() });
     if (exists) {
       return res.status(400).json({ error: 'User already exists' });
@@ -20,13 +24,14 @@ export const registerUser = async (req: Request, res: Response) => {
     const verificationToken = crypto.randomBytes(20).toString('hex');
     
     // Create unverified user
+    // Normalize interests and ensure graduationYear is not NaN
     const user = await User.create({
       name,
-      email,
+      email: email.toLowerCase(),
       password,
       major,
-      graduationYear,
-      interests,
+      graduationYear: (graduationYear && !isNaN(Number(graduationYear))) ? Number(graduationYear) : undefined,
+      interests: Array.isArray(interests) ? interests : [],
       resetPasswordToken: verificationToken, // Reusing field for email verify token initially
       resetPasswordExpires: Date.now() + 24 * 3600000, // 24 hours
     });
@@ -41,7 +46,11 @@ export const registerUser = async (req: Request, res: Response) => {
 
     res.status(201).json({ message: 'Registration successful. Please check your email to verify your account.' });
   } catch (error: any) {
-    res.status(500).json({ error: 'Server error during registration', details: error.message });
+    console.error('[auth]: Registration error:', error);
+    res.status(500).json({ 
+      error: 'Server error during registration', 
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined 
+    });
   }
 };
 

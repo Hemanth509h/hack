@@ -83,8 +83,8 @@ export default function RegisterPage() {
         email: data.email,
         password: data.password,
         major: data.major,
-        graduationYear: Number(data.graduationYear),
-        interests: data.interests,
+        graduationYear: data.graduationYear ? Number(data.graduationYear) : undefined,
+        interests: data.interests || [],
         // Backend currently only expects partial fields but we send them all.
       }).unwrap();
       
