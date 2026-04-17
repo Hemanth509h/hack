@@ -1,5 +1,7 @@
-import app from './app';
 import dotenv from 'dotenv';
+dotenv.config();
+
+import app from './app';
 import http from 'http';
 import { connectDB, handleGracefulShutdown } from './config/db';
 import { connectRedis, isRedisConnected } from './config/redis';
@@ -7,8 +9,6 @@ import { initializeSocket } from './config/socket';
 
 import { initializeQueues } from './config/queue';
 import { startNotificationWorker } from './workers/notification.worker';
-
-dotenv.config();
 
 const port = process.env.PORT || 5000;
 

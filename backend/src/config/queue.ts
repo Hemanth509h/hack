@@ -2,10 +2,26 @@ import { Queue, QueueEvents } from 'bullmq';
 import { isRedisConnected } from './redis';
 
 // BullMQ re-uses the same Redis connection settings
-const redisConnection = {
-  host: (process.env.REDIS_URI || 'redis://localhost:6379').replace('redis://', '').split(':')[0],
-  port: parseInt((process.env.REDIS_URI || 'redis://localhost:6379').split(':')[2] || '6379'),
+// Helper to parse Redis URI into BullMQ connection options
+const getRedisConnection = () => {
+  const uri = process.env.REDIS_URI || 'redis://localhost:6379';
+  try {
+    const parsed = new URL(uri);
+    return {
+      host: parsed.hostname,
+      port: parseInt(parsed.port) || 6379,
+      username: parsed.username || undefined,
+      password: parsed.password || undefined,
+      // Some Redis Cloud providers require TLS
+      tls: uri.startsWith('rediss://') ? {} : undefined,
+    };
+  } catch (err) {
+    console.warn('[queue]: Invalid REDIS_URI, falling back to default localhost');
+    return { host: 'localhost', port: 6379 };
+  }
 };
+
+const redisConnection = getRedisConnection();
 
 let notificationQueue: Queue | null = null;
 let notificationQueueEvents: QueueEvents | null = null;

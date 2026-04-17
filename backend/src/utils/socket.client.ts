@@ -40,15 +40,15 @@ export class SocketClient {
       console.log('[Socket] Connected to server:', this.socket?.id);
     });
 
-    this.socket.on('disconnect', (reason) => {
+    this.socket.on('disconnect', (reason: string) => {
       console.warn('[Socket] Disconnected:', reason);
     });
 
-    this.socket.on('connect_error', (error) => {
+    this.socket.on('connect_error', (error: Error) => {
       console.error('[Socket] Connection error:', error.message);
     });
 
-    this.socket.on('error', (data) => {
+    this.socket.on('error', (data: any) => {
       console.error('[Socket] Application error:', data);
     });
   }

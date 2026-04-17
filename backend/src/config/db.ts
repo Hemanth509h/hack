@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
 /**
  * Retrieves the MongoDB URI based on environment variables.
@@ -37,30 +38,46 @@ const getMongooseOptions = (): mongoose.ConnectOptions => {
  * Initializes the MongoDB connection and sets up core event listeners.
  */
 export const connectDB = async (): Promise<void> => {
+  const options = getMongooseOptions();
+  const uri = getDatabaseUri();
+
+  // Set up MongoDB connection event listeners
+  mongoose.connection.on('connected', () => {
+    const dbName = mongoose.connection.name;
+    console.log(`[database]: Successfully connected to database: "${dbName}"`);
+  });
+
+  mongoose.connection.on('error', (err) => {
+    console.error('[database]: MongoDB connection error:', err);
+  });
+
+  mongoose.connection.on('disconnected', () => {
+    console.warn('[database]: MongoDB disconnected from the server');
+  });
+
   try {
-    const uri = getDatabaseUri();
-    const options = getMongooseOptions();
-    
-    // Set up MongoDB connection event listeners to monitor database health
-    mongoose.connection.on('connected', () => {
-      const dbName = mongoose.connection.name;
-      console.log(`[database]: Successfully connected to database: "${dbName}"`);
-    });
-
-    mongoose.connection.on('error', (err) => {
-      console.error('[database]: MongoDB connection error:', err);
-    });
-
-    mongoose.connection.on('disconnected', () => {
-      console.warn('[database]: MongoDB disconnected from the server');
-    });
-
-    // Attempt initial connection
+    // Attempt initial connection to Atlas/specified URI
+    console.log(`[database]: Attempting to connect to MongoDB...`);
     const conn = await mongoose.connect(uri, options);
     console.log(`[database]: Mongoose connection established with host: ${conn.connection.host}`);
   } catch (error: any) {
-    console.error(`[database]: Failed to establish initial MongoDB connection: ${error.message}`);
-    process.exit(1);
+    console.error(`[database]: Failed to connect to primary MongoDB: ${error.message}`);
+    
+    // Fallback to MongoMemoryServer for development if Atlas connection fails
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[database]: Falling back to MongoMemoryServer for local development...');
+      try {
+        const mongoServer = await MongoMemoryServer.create();
+        const memoryUri = mongoServer.getUri();
+        const conn = await mongoose.connect(memoryUri, options);
+        console.log(`[database]: Mongoose connected to Memory Server: ${conn.connection.host}`);
+      } catch (fallbackError: any) {
+        console.error(`[database]: Critical failure - Fallback to Memory Server also failed: ${fallbackError.message}`);
+        process.exit(1);
+      }
+    } else {
+      process.exit(1);
+    }
   }
 };
 
