@@ -24,7 +24,6 @@ export interface IUser extends Document {
   // Notification Preferences
   notificationPreferences: {
     email: boolean;
-    push: boolean;
     inApp: boolean;
   };
 
@@ -43,8 +42,7 @@ export interface IUser extends Document {
   resetPasswordToken?: string;
   resetPasswordExpires?: Date;
 
-  // FCM device tokens for push notifications
-  deviceTokens: string[];
+
 
   comparePassword(candidate: string): Promise<boolean>;
 }
@@ -74,7 +72,6 @@ const UserSchema = new Schema<IUser>({
 
   notificationPreferences: {
     email: { type: Boolean, default: true },
-    push: { type: Boolean, default: true },
     inApp: { type: Boolean, default: true },
   },
 
@@ -93,7 +90,7 @@ const UserSchema = new Schema<IUser>({
   isEmailVerified: { type: Boolean, default: false },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
-  deviceTokens: [{ type: String }],
+
 }, { timestamps: true });
 
 UserSchema.index({ homeLocation: '2dsphere' });

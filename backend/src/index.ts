@@ -4,7 +4,7 @@ import http from 'http';
 import { connectDB, handleGracefulShutdown } from './config/db';
 import { connectRedis, isRedisConnected } from './config/redis';
 import { initializeSocket } from './config/socket';
-import { initializeFirebase } from './services/push.service';
+
 import { initializeQueues } from './config/queue';
 import { startNotificationWorker } from './workers/notification.worker';
 
@@ -25,8 +25,7 @@ const startServer = async () => {
     // Refactored to handle its own fallback internaly
     await initializeSocket(httpServer);
 
-    // Initialize Firebase Admin for push notifications (graceful if not configured)
-    initializeFirebase();
+
 
     // Only set up BullMQ if Redis is available
     if (isRedisConnected()) {

@@ -4,7 +4,7 @@ import { User } from '../models/User';
 import { getNotificationQueue } from '../config/queue';
 import { sendEmail } from '../utils/email.utils';
 import { emitToUser } from '../config/socket';
-import { sendBatchPushNotifications } from './push.service';
+
 import { renderEmailHtml } from './email-renderer.service';
 import mongoose from 'mongoose';
 
@@ -174,20 +174,5 @@ export const processNotificationJob = async (payload: NotificationPayload): Prom
     });
   }
 
-  // Channel 3: Push (Firebase FCM)
-  if (prefs.push && (user as any).deviceTokens?.length > 0) {
-    const staleTokens = await sendBatchPushNotifications(
-      (user as any).deviceTokens,
-      payload.title,
-      payload.message,
-      { type: payload.type, ...(payload.dataPayload as Record<string, string> ?? {}) }
-    );
 
-    // Remove invalid tokens to prevent future failed sends
-    if (staleTokens.length > 0) {
-      await User.findByIdAndUpdate(payload.recipientId, {
-        $pull: { deviceTokens: { $in: staleTokens } },
-      });
-    }
-  }
 };
