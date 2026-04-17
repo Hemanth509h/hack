@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { Search, Filter, Calendar as CalendarIcon, Users, SlidersHorizontal } from 'lucide-react';
+import { Search, Calendar as CalendarIcon, Users, SlidersHorizontal } from 'lucide-react';
 import api from '../../lib/api';
 import { motion } from 'framer-motion';
 

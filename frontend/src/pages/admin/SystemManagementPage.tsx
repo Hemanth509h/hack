@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { 
   Server, Database, Activity, Cpu, RotateCw, Trash2, ShieldAlert
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 const SystemManagementPage = () => {
   const [isClearing, setIsClearing] = useState(false);
@@ -15,6 +14,12 @@ const SystemManagementPage = () => {
       alert('Redis cache cleared successfully.');
     }, 1500);
   };
+
+  const logs = [
+    { time: '2026-04-17T09:12:45Z', level: 'ERROR', color: 'text-red-400', msg: '[AuthService] Failed to validate OAuth token from Google provider.' },
+    { time: '2026-04-17T08:44:12Z', level: 'WARN',  color: 'text-yellow-400', msg: "[Database] Slow query detected on clubs.find({ category: 'Sports' }). Duration: 1200ms." },
+    { time: '2026-04-17T07:22:01Z', level: 'ERROR', color: 'text-red-400', msg: "[RedisClient] Connection timeout when writing key 'user:4092:session'. Retrying..." },
+  ];
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
@@ -101,21 +106,13 @@ const SystemManagementPage = () => {
            </div>
            
            <div className="bg-gray-950 border border-gray-800 rounded-xl flex-1 font-mono text-xs p-4 overflow-y-auto space-y-3 custom-scrollbar h-[300px]">
-             <div className="flex gap-4 items-start">
-               <span className="text-gray-500 whitespace-nowrap">2026-04-17T09:12:45Z</span>
-               <span className="text-red-400 font-bold w-12 flex-shrink-0">ERROR</span>
-               <span className="text-gray-300">[AuthService] Failed to validate OAuth token from Google provider.</span>
-             </div>
-             <div className="flex gap-4 items-start">
-               <span className="text-gray-500 whitespace-nowrap">2026-04-17T08:44:12Z</span>
-               <span className="text-yellow-400 font-bold w-12 flex-shrink-0">WARN</span>
-               <span className="text-gray-300">[Database] Slow query detected on clubs.find({ category: 'Sports' }). Duration: 1200ms.</span>
-             </div>
-             <div className="flex gap-4 items-start">
-               <span className="text-gray-500 whitespace-nowrap">2026-04-17T07:22:01Z</span>
-               <span className="text-red-400 font-bold w-12 flex-shrink-0">ERROR</span>
-               <span className="text-gray-300">[RedisClient] Connection timeout when writing key 'user:4092:session'. Retrying...</span>
-             </div>
+             {logs.map((log, i) => (
+               <div key={i} className="flex gap-4 items-start">
+                 <span className="text-gray-500 whitespace-nowrap">{log.time}</span>
+                 <span className={`${log.color} font-bold w-12 flex-shrink-0`}>{log.level}</span>
+                 <span className="text-gray-300">{log.msg}</span>
+               </div>
+             ))}
            </div>
         </div>
 

@@ -119,7 +119,7 @@ const AnalyticsPage = () => {
                     dataKey="value"
                     stroke="none"
                   >
-                    {eventCategoriesData.map((entry, index) => (
+                    {eventCategoriesData.map((_entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
@@ -147,7 +147,7 @@ const AnalyticsPage = () => {
                     contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '8px' }}
                   />
                   <Bar dataKey="count" fill="#a855f7" radius={[0, 4, 4, 0]} barSize={24}>
-                    {demographicsData.map((entry, index) => (
+                    {demographicsData.map((_entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[(index + 1) % COLORS.length]} />
                     ))}
                   </Bar>

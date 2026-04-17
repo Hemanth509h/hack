@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { 
-  Users, CalendarEvent, ShieldCheck, Activity, 
+  Users, Calendar, ShieldCheck, Activity, 
   TrendingUp, TrendingDown, ArrowRight, ExternalLink
 } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -75,7 +75,7 @@ const AdminDashboardPage = () => {
           change={5.2} 
           isPositive={true} 
           subValue="scheduled"
-          icon={CalendarEvent}
+          icon={Calendar}
         />
         <StatCard 
           title="New Club Requests" 

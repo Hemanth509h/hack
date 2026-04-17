@@ -1,4 +1,5 @@
-import { Queue, Worker, QueueEvents } from 'bullmq';
+import { Queue, QueueEvents } from 'bullmq';
+import { isRedisConnected } from './redis';
 
 // BullMQ re-uses the same Redis connection settings
 const redisConnection = {
@@ -6,27 +7,46 @@ const redisConnection = {
   port: parseInt((process.env.REDIS_URI || 'redis://localhost:6379').split(':')[2] || '6379'),
 };
 
-// Single notification queue — workers consume from this
-export const notificationQueue = new Queue('notifications', {
-  connection: redisConnection,
-  defaultJobOptions: {
-    attempts: 3, // Retry failed deliveries up to 3 times
-    backoff: { type: 'exponential', delay: 5000 }, // 5s, 10s, 20s backoff
-    removeOnComplete: 100, // Keep last 100 completed jobs for debugging
-    removeOnFail: 50,
-  },
-});
+let notificationQueue: Queue | null = null;
+let notificationQueueEvents: QueueEvents | null = null;
 
-export const notificationQueueEvents = new QueueEvents('notifications', {
-  connection: redisConnection,
-});
+/**
+ * Initialize BullMQ queues and events only if Redis is available.
+ */
+export const initializeQueues = () => {
+  if (!isRedisConnected()) {
+    console.warn('[queue]: Redis not connected. BullMQ queues will not be initialized.');
+    return;
+  }
 
-notificationQueueEvents.on('failed', ({ jobId, failedReason }) => {
-  console.error(`[queue]: Notification job ${jobId} failed — ${failedReason}`);
-});
+  try {
+    notificationQueue = new Queue('notifications', {
+      connection: redisConnection,
+      defaultJobOptions: {
+        attempts: 3,
+        backoff: { type: 'exponential', delay: 5000 },
+        removeOnComplete: 100,
+        removeOnFail: 50,
+      },
+    });
 
-notificationQueueEvents.on('completed', ({ jobId }) => {
-  console.log(`[queue]: Notification job ${jobId} delivered`);
-});
+    notificationQueueEvents = new QueueEvents('notifications', {
+      connection: redisConnection,
+    });
 
+    notificationQueueEvents.on('failed', ({ jobId, failedReason }) => {
+      console.error(`[queue]: Notification job ${jobId} failed — ${failedReason}`);
+    });
+
+    notificationQueueEvents.on('completed', ({ jobId }) => {
+      console.log(`[queue]: Notification job ${jobId} delivered`);
+    });
+
+    console.log('[queue]: BullMQ queues initialized');
+  } catch (err) {
+    console.error('[queue]: Failed to initialize BullMQ:', err);
+  }
+};
+
+export const getNotificationQueue = () => notificationQueue;
 export { redisConnection };

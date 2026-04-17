@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { authenticate } from '../middleware/auth.middleware';
+// analytics track route is intentionally public — no auth middleware needed
 import { AnalyticsEvent } from '../models/AnalyticsEvent';
 import mongoose from 'mongoose';
 

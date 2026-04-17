@@ -4,7 +4,6 @@ import { Club } from '../models/Club';
 import { RSVP } from '../models/RSVP';
 import { Message } from '../models/Message';
 import mongoose from 'mongoose';
-import { AsyncParser } from 'json2csv';
 
 /**
  * Overview Metrics for Admin Dashboard
@@ -112,12 +111,13 @@ export const getDemographics = async () => {
 };
 
 /**
- * CSV Generation for Engagement Reports
+ * CSV Generation for Engagement Reports (manual, no external dependency needed)
  */
-export const generateCSVReport = async (data: any[]) => {
-  const opts = {
-    fields: ['_id', 'count', 'type']
-  };
-  const parser = new AsyncParser(opts);
-  return parser.parse(data).promise();
+export const generateCSVReport = async (data: Record<string, any>[]): Promise<string> => {
+  if (!data || data.length === 0) return '';
+  const headers = Object.keys(data[0]);
+  const rows = data.map(row =>
+    headers.map(h => JSON.stringify(row[h] ?? '')).join(',')
+  );
+  return [headers.join(','), ...rows].join('\n');
 };

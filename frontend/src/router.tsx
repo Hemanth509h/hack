@@ -18,7 +18,7 @@ import ClubApprovalPage from './pages/admin/ClubApprovalPage';
 import AnalyticsPage from './pages/admin/AnalyticsPage';
 import SystemManagementPage from './pages/admin/SystemManagementPage';
 
-import NetworkPage from './pages/network/NetworkPage';
+// NetworkPage not yet implemented — using Placeholder
 import SearchPage from './pages/search/SearchPage';
 
 import LoginPage from './pages/auth/LoginPage';
@@ -46,7 +46,7 @@ import NotificationPreferences from './pages/notifications/NotificationPreferenc
 // Profile
 import ProfilePage from './pages/profile/ProfilePage';
 import EditProfilePage from './pages/profile/EditProfilePage';
-import PortfolioBuilderPage from './pages/profile/PortfolioBuilderPage';
+// PortfolioBuilderPage reserved for future use
 export const router = createBrowserRouter([
   {
     path: '/login',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Calendar, Users, Briefcase, Map as MapIcon, User } from 'lucide-react';
+import { Home, Calendar, Users, Map as MapIcon, User } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';

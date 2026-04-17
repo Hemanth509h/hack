@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useFetchMyClubsQuery, useLeaveClubMutation } from '../../services/clubApi';
 import { ClubCard } from '../../components/clubs/ClubCard';
 import { Loader2, Shield, Users, Compass, ArrowRight, LayoutDashboard, LogOut } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const MyClubsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'leading' | 'member'>('leading');
   const { data, isLoading } = useFetchMyClubsQuery();
   const [leaveClub] = useLeaveClubMutation();
-  const navigate = useNavigate();
+
 
   if (isLoading) {
     return (

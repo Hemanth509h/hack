@@ -118,8 +118,9 @@ export const refreshToken = async (req: Request, res: Response) => {
  */
 export const logoutUser = async (req: Request, res: Response) => {
   try {
-    const { token } = req.body; // refresh token to wipe
-    const payload = await verifyAndRefreshTokens(token); // To extract user securely
+    const { token } = req.body;
+    const { verifyRefreshToken } = await import('../utils/jwt.utils');
+    const payload = verifyRefreshToken(token);
     await revokeTokens(payload.userId);
     res.json({ message: 'Logged out successfully' });
   } catch (error) {
@@ -183,7 +184,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     await user.save();
 
     // Revoke any active sessions when password changes
-    await revokeTokens(user._id as string);
+    await revokeTokens(user._id.toString());
 
     res.json({ message: 'Password has been successfully reset' });
   } catch (error) {

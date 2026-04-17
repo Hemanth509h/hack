@@ -1,7 +1,7 @@
 import Handlebars from 'handlebars';
 import { Notification } from '../models/Notification';
 import { User } from '../models/User';
-import { notificationQueue } from '../config/queue';
+import { getNotificationQueue } from '../config/queue';
 import { sendEmail } from '../utils/email.utils';
 import { emitToUser } from '../config/socket';
 import { sendBatchPushNotifications } from './push.service';
@@ -79,9 +79,12 @@ export const sendNotification = async (payload: NotificationPayload): Promise<vo
   });
 
   // 2. Push delivery job to BullMQ queue (async processing)
-  await notificationQueue.add('deliver', payload, {
-    jobId: `notify-${payload.recipientId}-${Date.now()}`,
-  });
+  const queue = getNotificationQueue();
+  if (queue) {
+    await queue.add('deliver', payload, {
+      jobId: `notify-${payload.recipientId}-${Date.now()}`,
+    });
+  }
 };
 
 /** ----------------------------------------------------------------
@@ -103,11 +106,14 @@ export const sendBulkNotifications = async (
   await Notification.insertMany(notifications);
 
   // Enqueue one job per recipient for multi-channel delivery
-  const jobs = recipientIds.map((id) => ({
-    name: 'deliver',
-    data: { ...base, recipientId: id },
-  }));
-  await notificationQueue.addBulk(jobs);
+  const queue = getNotificationQueue();
+  if (queue) {
+    const jobs = recipientIds.map((id) => ({
+      name: 'deliver',
+      data: { ...base, recipientId: id },
+    }));
+    await queue.addBulk(jobs);
+  }
 };
 
 /** ----------------------------------------------------------------

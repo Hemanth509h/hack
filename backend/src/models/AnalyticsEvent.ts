@@ -25,7 +25,7 @@ const AnalyticsEventSchema = new Schema<IAnalyticsEvent>({
   metadata: { type: Schema.Types.Mixed },
   ipAddress: { type: String },
   userAgent: { type: String },
-  timestamp: { type: Date, default: Date.now, index: true }
+  timestamp: { type: Date, default: Date.now }
 });
 
 // Drop massive logs after 2 Years (730 days) to prevent unconstrained scaling

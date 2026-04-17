@@ -50,13 +50,20 @@ export const initializeSocket = async (httpServer: HTTPServer): Promise<SocketSe
   });
 
   // ---- Redis Adapter (horizontal scaling across multiple Node processes) ----
-  const redisUrl = process.env.REDIS_URI || 'redis://localhost:6379';
-  const pubClient = createClient({ url: redisUrl });
-  const subClient = pubClient.duplicate();
+  try {
+    const redisUrl = process.env.REDIS_URI || 'redis://localhost:6379';
+    const pubClient = createClient({ 
+      url: redisUrl,
+      socket: { reconnectStrategy: (retries) => retries > 3 ? false : 100 }
+    });
+    const subClient = pubClient.duplicate();
 
-  await Promise.all([pubClient.connect(), subClient.connect()]);
-  io.adapter(createAdapter(pubClient, subClient));
-  console.log('[socket]: Redis adapter attached for horizontal scaling');
+    await Promise.all([pubClient.connect(), subClient.connect()]);
+    io.adapter(createAdapter(pubClient, subClient));
+    console.log('[socket]: Redis adapter attached for horizontal scaling');
+  } catch (err) {
+    console.warn('[socket]: Redis adapter failed to connect. Falling back to local in-memory adapter.');
+  }
 
   // ---- JWT Authentication Middleware ----
   io.use((socket: Socket, next) => {

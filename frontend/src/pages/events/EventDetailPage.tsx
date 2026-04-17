@@ -123,7 +123,7 @@ const EventDetailPage: React.FC = () => {
             </motion.div>
 
             {/* Organize & Manage Settings */}
-            {(currentUser?._id === event.organizer._id || currentUser?.role === 'admin') && (
+            {(currentUser?.id === event.organizer._id || currentUser?.role === 'admin') && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -163,7 +163,7 @@ const EventDetailPage: React.FC = () => {
             )}
 
             {/* Attendees (Public view if not organizer) */}
-            {currentUser?._id !== event.organizer._id && currentUser?.role !== 'admin' && (
+            {currentUser?.id !== event.organizer._id && currentUser?.role !== 'admin' && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

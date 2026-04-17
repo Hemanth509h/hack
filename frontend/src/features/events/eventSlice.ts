@@ -25,8 +25,12 @@ const eventSlice = createSlice({
     setViewMode: (state, action: PayloadAction<'grid' | 'list'>) => {
       state.viewMode = action.payload;
     },
+    clearFilters: (state) => {
+      state.searchQuery = '';
+      state.selectedCategory = 'All Events';
+    },
   },
 });
 
-export const { setSearchQuery, setSelectedCategory, setViewMode } = eventSlice.actions;
+export const { setSearchQuery, setSelectedCategory, setViewMode, clearFilters } = eventSlice.actions;
 export default eventSlice.reducer;

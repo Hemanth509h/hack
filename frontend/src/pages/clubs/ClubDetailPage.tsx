@@ -7,8 +7,7 @@ import { ClubDetailHeader } from '../../components/clubs/detail/ClubDetailHeader
 import { LeadershipSection } from '../../components/clubs/detail/LeadershipSection';
 import { MemberList } from '../../components/clubs/detail/MemberList';
 import { ClubAnnouncements } from '../../components/clubs/detail/ClubAnnouncements';
-import { Loader2, ChevronLeft, MapPin, Calendar, Clock, Info } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Loader2, ChevronLeft, MapPin, Calendar, Info, Trophy } from 'lucide-react';
 
 export const ClubDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -37,8 +36,8 @@ export const ClubDetailPage: React.FC = () => {
   }
 
   const { club, leadership } = detailData;
-  const isMember = membersData?.members.some(m => m.user._id === user?._id && m.status === 'approved') || false;
-  const isPresident = leadership.some(m => m.user._id === user?._id && m.role === 'president');
+  const isMember = membersData?.members.some(m => m.user._id === user?.id && m.status === 'approved') || false;
+  const isPresident = leadership.some(m => m.user._id === user?.id && m.role === 'president');
 
   return (
     <div className="min-h-screen pb-20">

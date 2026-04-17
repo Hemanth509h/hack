@@ -2,6 +2,8 @@ import React from 'react';
 import { Search, Bell, Home, Calendar, Users, Briefcase } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSocket } from '../../context/SocketContext';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -14,7 +16,8 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ onSearchClick }) => {
-  const { unreadCount, isConnected } = useSocket();
+  const { isConnected } = useSocket();
+  const unreadCount = useSelector((state: RootState) => state.notifications.unreadCount);
   const location = useLocation();
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Star, Briefcase, ChevronRight, Zap } from 'lucide-react';
+import { Users, ChevronRight, Zap } from 'lucide-react';
 import type { TeamMatch } from '../../services/teamApi';
 
 interface MatchCardProps {

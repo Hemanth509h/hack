@@ -1,11 +1,11 @@
 import { api } from './api';
-import { IProfile, ISkill } from '../types/profile';
+import { IProfile } from '../types/profile';
 
 export const profileApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getProfile: builder.query<IProfile, string>({
       query: (userId) => `/users/${userId}/profile`,
-      providesTags: (result, error, arg) => [{ type: 'User', id: arg }],
+      providesTags: (_result, _error, arg) => [{ type: 'User', id: arg }],
     }),
     updateProfile: builder.mutation<IProfile, { userId: string; body: Partial<IProfile> }>({
       query: ({ userId, body }) => ({
@@ -13,7 +13,7 @@ export const profileApi = api.injectEndpoints({
         method: 'PUT',
         body,
       }),
-      invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.userId }],
+      invalidatesTags: (_r, _e, arg) => [{ type: 'User', id: arg.userId }],
     }),
     updateInterests: builder.mutation<IProfile, { userId: string; interests: string[] }>({
       query: ({ userId, interests }) => ({
@@ -21,7 +21,7 @@ export const profileApi = api.injectEndpoints({
         method: 'PUT',
         body: { interests },
       }),
-      invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.userId }],
+      invalidatesTags: (_r, _e, arg) => [{ type: 'User', id: arg.userId }],
     }),
     uploadAvatar: builder.mutation<{ avatarUrl: string }, { userId: string; formData: FormData }>({
       query: ({ userId, formData }) => ({
@@ -29,7 +29,7 @@ export const profileApi = api.injectEndpoints({
         method: 'POST',
         body: formData,
       }),
-      invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.userId }],
+      invalidatesTags: (_r, _e, arg) => [{ type: 'User', id: arg.userId }],
     }),
     addSkill: builder.mutation<IProfile, { userId: string; skillId: string; proficiency?: string }>({
       query: ({ userId, skillId, proficiency }) => ({
@@ -37,14 +37,14 @@ export const profileApi = api.injectEndpoints({
         method: 'POST',
         body: { skillId, proficiency },
       }),
-      invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.userId }],
+      invalidatesTags: (_r, _e, arg) => [{ type: 'User', id: arg.userId }],
     }),
     removeSkill: builder.mutation<IProfile, { userId: string; skillId: string }>({
       query: ({ userId, skillId }) => ({
         url: `/users/${userId}/skills/${skillId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.userId }],
+      invalidatesTags: (_r, _e, arg) => [{ type: 'User', id: arg.userId }],
     }),
     updateLocation: builder.mutation<{ message: string, homeLocation: any }, { userId: string; latitude: number; longitude: number }>({
       query: ({ userId, latitude, longitude }) => ({
@@ -52,7 +52,7 @@ export const profileApi = api.injectEndpoints({
         method: 'POST',
         body: { latitude, longitude },
       }),
-      invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.userId }],
+      invalidatesTags: (_r, _e, arg) => [{ type: 'User', id: arg.userId }],
     }),
   }),
   overrideExisting: false,

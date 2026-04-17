@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { CalendarPlus, Download, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IEvent } from '../../../types/event';
-import { buildGoogleCalendarUrl, buildOutlookCalendarUrl, getIcsDownloadUrl } from '../../../lib/calendarUtils';
+import { IEvent } from '../../types/event';
+import { buildGoogleCalendarUrl, buildOutlookCalendarUrl, getIcsDownloadUrl } from '../../lib/calendarUtils';
 
 interface AddToCalendarDropdownProps {
   event: IEvent;

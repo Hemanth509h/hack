@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { ClubCard } from '../../components/clubs/ClubCard';
 import { ClubFilters } from '../../components/clubs/ClubFilters';
-import { motion } from 'framer-motion';
+
 import { Sparkles, Trophy, Plus, Compass } from 'lucide-react';
 import { Link } from 'react-router-dom';
 

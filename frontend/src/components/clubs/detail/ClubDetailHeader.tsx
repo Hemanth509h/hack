@@ -1,8 +1,8 @@
 import React from 'react';
 import { IClub } from '../../../types/club';
-import { Users, Calendar, MapPin, Globe, Instagram, MessageCircle } from 'lucide-react';
+import { Users, Calendar, Globe, Instagram, MessageCircle } from 'lucide-react';
 import { useJoinClubMutation, useLeaveClubMutation } from '../../../services/clubApi';
-import { motion } from 'framer-motion';
+
 
 interface ClubDetailHeaderProps {
   club: IClub;

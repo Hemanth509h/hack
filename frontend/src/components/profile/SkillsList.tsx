@@ -1,6 +1,6 @@
 import React from 'react';
 import { ISkill } from '../../types/profile';
-import { Code, Hash, Search } from 'lucide-react';
+import { Code, Search } from 'lucide-react';
 
 export const SkillsList: React.FC<{ skills?: ISkill[] }> = ({ skills }) => {
   if (!skills || skills.length === 0) {

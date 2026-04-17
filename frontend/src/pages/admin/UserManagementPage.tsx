@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Search, Filter, MoreVertical, Download, Shield, ShieldOff, Eye } from 'lucide-react';
-import { useGetUsersQuery } from '../../features/admin/adminApi';
+// import { useGetUsersQuery } from '../../features/admin/adminApi';
 
 // Mock users to develop UI immediately
 const mockUsers = [
@@ -17,7 +17,7 @@ const UserManagementPage = () => {
   
   // Real endpoint hook
   // const { data, isLoading } = useGetUsersQuery({ page: 1, search: searchTerm, role: roleFilter });
-  const isLoading = false;
+
   
   const filteredUsers = mockUsers.filter(u => 
     (roleFilter === 'All' || u.role === roleFilter.toLowerCase() || (roleFilter === 'Student' && u.role === 'student')) &&

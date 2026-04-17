@@ -1,6 +1,6 @@
 import React from 'react';
 import { IClub } from '../../types/club';
-import { Users, ExternalLink, ChevronRight } from 'lucide-react';
+import { Users, ChevronRight } from 'lucide-react';
 import { useJoinClubMutation } from '../../services/clubApi';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';

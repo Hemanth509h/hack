@@ -29,7 +29,7 @@ RSVPSchema.post<IRSVP>('save', async function(doc) {
   }
 });
 
-RSVPSchema.post<IRSVP>('findOneAndDelete', async function(doc) {
+RSVPSchema.post('findOneAndDelete', async function(doc: IRSVP | null) {
   if (doc && doc.status === 'attending') {
     await Event.findByIdAndUpdate(doc.event, { $inc: { rsvpCount: -1 } }).exec();
   }

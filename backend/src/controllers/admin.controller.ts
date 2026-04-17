@@ -48,7 +48,7 @@ export const updateUserRole = async (req: AuthRequest, res: Response) => {
       req.user!.userId,
       'UPDATE_USER_ROLE',
       'User',
-      user._id as string,
+      user._id.toString(),
       { newRole: role }
     );
 
@@ -71,7 +71,7 @@ export const deleteUser = async (req: AuthRequest, res: Response) => {
       req.user!.userId,
       'DELETE_USER',
       'User',
-      user._id as string
+      user._id.toString()
     );
 
     res.json({ message: 'User account deleted successfully' });
@@ -97,7 +97,7 @@ export const handleClubWorkflow = async (req: AuthRequest, res: Response) => {
       req.user!.userId,
       action === 'approve' ? 'APPROVE_CLUB' : 'REJECT_CLUB',
       'Club',
-      club._id as string,
+      club._id.toString(),
       { reason }
     );
 

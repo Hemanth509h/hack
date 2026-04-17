@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, ExternalLink, Zap, Star, Code, Brain, Users, CheckCircle } from 'lucide-react';
+import { X, Send, ExternalLink, Zap, Star, Code, Brain, CheckCircle } from 'lucide-react';
 import type { TeamMatch } from '../../services/teamApi';
 import { useRequestToJoinMutation, useBrowseProjectsQuery } from '../../services/teamApi';
 
@@ -9,12 +9,7 @@ interface MatchDetailModalProps {
   onClose: () => void;
 }
 
-const proficiencyColors: Record<string, string> = {
-  beginner: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
-  intermediate: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  advanced: 'bg-violet-500/20 text-violet-400 border-violet-500/30',
-  expert: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-};
+
 
 const avatarColors = ['from-violet-500 to-indigo-600', 'from-pink-500 to-rose-600', 'from-emerald-500 to-teal-600'];
 

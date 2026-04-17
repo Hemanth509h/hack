@@ -23,7 +23,7 @@ const ChatSessionSchema = new Schema<IChatSession>({
     tool_call_id: String,
     tool_calls: Schema.Types.Mixed
   }],
-  lastInteraction: { type: Date, default: Date.now, index: true }
+  lastInteraction: { type: Date, default: Date.now }
 }, { timestamps: true });
 
 // Optional: Expire idle sessions after 7 days

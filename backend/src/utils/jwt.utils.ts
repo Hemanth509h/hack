@@ -15,8 +15,8 @@ export interface TokenPayload {
  * Generate Access and Refresh Tokens
  */
 export const generateTokens = async (payload: TokenPayload) => {
-  const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: ACCESS_EXPIRES });
-  const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: REFRESH_EXPIRES });
+  const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: ACCESS_EXPIRES as any });
+  const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: REFRESH_EXPIRES as any });
   
   // Store the refresh token in Redis mapped to userId
   // e.g. "refreshToken:userId" -> "abc123token", expires in 7 days (604800 seconds)
@@ -30,6 +30,13 @@ export const generateTokens = async (payload: TokenPayload) => {
  */
 export const verifyAccessToken = (token: string): TokenPayload => {
   return jwt.verify(token, JWT_SECRET) as TokenPayload;
+};
+
+/**
+ * Verify a Refresh Token (without rotating — used for logout)
+ */
+export const verifyRefreshToken = (token: string): TokenPayload => {
+  return jwt.verify(token, JWT_REFRESH_SECRET) as TokenPayload;
 };
 
 /**

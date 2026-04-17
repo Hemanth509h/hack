@@ -27,7 +27,7 @@ ClubMembershipSchema.post<IClubMembership>('save', async function(doc) {
   }
 });
 
-ClubMembershipSchema.post<IClubMembership>('findOneAndDelete', async function(doc) {
+ClubMembershipSchema.post('findOneAndDelete', async function(doc: IClubMembership | null) {
   if (doc && doc.status === 'approved') {
     await Club.findByIdAndUpdate(doc.club, { $inc: { memberCount: -1 } }).exec();
   }

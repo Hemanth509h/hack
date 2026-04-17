@@ -1,7 +1,4 @@
-import OpenAI from 'openai';
 import { redisClient } from '../config/redis';
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 /** ----------------------------------------------------------------
  *  WEIGHTS — Adjustable matching factors
@@ -31,7 +28,7 @@ export const cosineSimilarity = (a: number[], b: number[]): number => {
 
 /** ----------------------------------------------------------------
  *  JACCARD SIMILARITY (fast local fallback for skill ID overlap)
- *  Used when OpenAI embeddings are disabled/unavailable.
+ *  Now the primary matching logic since OpenAI is removed.
  * ---------------------------------------------------------------- */
 export const jaccardSimilarity = (setA: string[], setB: string[]): number => {
   if (setA.length === 0 && setB.length === 0) return 0;
@@ -43,51 +40,14 @@ export const jaccardSimilarity = (setA: string[], setB: string[]): number => {
 };
 
 /** ----------------------------------------------------------------
- *  OPENAI EMBEDDING FETCH — with Redis caching to avoid re-calling
- *  Cache key: `embed:<skillId>,<skillId>,...` → TTL 24 hours
- * ---------------------------------------------------------------- */
-export const getEmbedding = async (text: string, cacheKey: string): Promise<number[]> => {
-  // Check cache first
-  const cached = await redisClient.get(`embed:${cacheKey}`);
-  if (cached) return JSON.parse(cached);
-
-  const response = await openai.embeddings.create({
-    model: 'text-embedding-3-small',
-    input: text
-  });
-
-  const embedding = response.data[0].embedding;
-  // Cache for 24 hours (86400 seconds)
-  await redisClient.setEx(`embed:${cacheKey}`, 86400, JSON.stringify(embedding));
-  return embedding;
-};
-
-/** ----------------------------------------------------------------
  *  SKILL SCORE
- *  If OPENAI_API_KEY is set → use semantic embeddings (more nuanced).
- *  Otherwise → fall back to Jaccard (fast, free, but purely exact).
+ *  Uses Jaccard (fast, free, exact keyword matching).
  * ---------------------------------------------------------------- */
 export const computeSkillScore = async (
   mySkillNames: string[],
   theirSkillNames: string[]
 ): Promise<number> => {
   if (mySkillNames.length === 0 || theirSkillNames.length === 0) return 0;
-
-  if (process.env.OPENAI_API_KEY) {
-    try {
-      const myText = mySkillNames.join(', ');
-      const theirText = theirSkillNames.join(', ');
-      const [myEmbed, theirEmbed] = await Promise.all([
-        getEmbedding(myText, `skills:${mySkillNames.sort().join(',')}` ),
-        getEmbedding(theirText, `skills:${theirSkillNames.sort().join(',')}`)
-      ]);
-      return cosineSimilarity(myEmbed, theirEmbed);
-    } catch {
-      // Graceful degradation to Jaccard on OpenAI error
-      return jaccardSimilarity(mySkillNames, theirSkillNames);
-    }
-  }
-
   return jaccardSimilarity(mySkillNames, theirSkillNames);
 };
 

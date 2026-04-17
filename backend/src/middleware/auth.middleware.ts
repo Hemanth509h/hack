@@ -2,10 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { verifyAccessToken } from '../utils/jwt.utils';
 
 export interface AuthRequest extends Request {
-  user?: {
-    userId: string;
-    role: string;
-  };
+  user?: any; // Accepts both passport IUser docs and our JWT { userId, role } payload
 }
 
 export const requireAuth = (req: AuthRequest, res: Response, next: NextFunction) => {

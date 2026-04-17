@@ -4,14 +4,14 @@ import { useFetchClubByIdQuery, useFetchClubMembersQuery, useFetchClubAnalyticsQ
 import { StatCards } from '../../components/clubs/dashboard/StatCards';
 import { MemberManagementTable } from '../../components/clubs/dashboard/MemberManagementTable';
 import { Loader2, LayoutDashboard, Calendar, Bell, Users, Settings, Plus, ArrowLeft, BarChart3 } from 'lucide-react';
-import { motion } from 'framer-motion';
+// framer-motion intentionally not used in this layout
 
 export const ClubDashboardPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: detailData, isLoading: isDetailLoading } = useFetchClubByIdQuery(id!);
   const { data: membersData, isLoading: isMembersLoading } = useFetchClubMembersQuery(id!);
-  const { data: analyticsData } = useFetchClubAnalyticsQuery(id!);
+  const { data: _analyticsData } = useFetchClubAnalyticsQuery(id!);
 
   if (isDetailLoading || isMembersLoading) {
     return (

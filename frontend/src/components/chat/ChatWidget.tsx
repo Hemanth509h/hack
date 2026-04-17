@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, X, Send, Mic, Sparkles, CalendarPlus } from 'lucide-react';
+import { X, Send, Mic, Sparkles, CalendarPlus } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { RootState } from '../../store';

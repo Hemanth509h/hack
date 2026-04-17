@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Bell, Info, Calendar, Users, Briefcase } from 'lucide-react';
+import { X, Bell, Calendar, Users, Briefcase } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setNotificationPanelOpen } from '../../features/dashboard/dashboardSlice';
 import { Link } from 'react-router-dom';

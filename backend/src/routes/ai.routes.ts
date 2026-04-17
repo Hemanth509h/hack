@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import * as aiController from '../controllers/ai.controller';
-import { authenticate } from '../middleware/auth.middleware';
+import { requireAuth } from '../middleware/auth.middleware';
 import rateLimit from 'express-rate-limit';
 
 const router = Router();
@@ -12,7 +12,7 @@ const aiRateLimiter = rateLimit({
   message: { error: 'Too many requests to Nexus AI, please try again after an hour' }
 });
 
-router.use(authenticate);
+router.use(requireAuth);
 
 router.post('/chat', aiRateLimiter, aiController.chatWithNexus);
 router.get('/chat/history', aiController.getChatHistory);

@@ -95,8 +95,10 @@ const QRScanner = ({ eventId }: QRScannerProps) => {
        <div className="relative aspect-square bg-black">
           {!manualMode ? (
              <Scanner 
-               onResult={(text, result) => handleScan(text)} 
-               onError={(error) => console.log(error?.message)}
+               // @ts-ignore
+               onResult={(text: any, _result: any) => handleScan(text)} 
+               onError={(error: any) => console.log(error?.message)}
+               // @ts-ignore
                options={{ delayBetweenScanAttempts: 1000 }}
              />
           ) : (

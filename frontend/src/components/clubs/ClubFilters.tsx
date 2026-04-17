@@ -3,7 +3,7 @@ import { Search, Filter, SortAsc } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setFilters } from '../../features/clubs/clubSlice';
-import { motion } from 'framer-motion';
+
 
 const CATEGORIES = [
   'All Interests', 'Tech', 'Arts', 'Debate', 'Volley', 'Music', 'Sports', 'Cultural', 'Business'

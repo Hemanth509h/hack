@@ -46,7 +46,7 @@ export const adminApi = api.injectEndpoints({
       providesTags: ['User', 'Event', 'Club'],
       
       // Mocking data so we can develop UI immediately
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_arg, { dispatch: _d, queryFulfilled: _q }) {
         // Here we could set up mock responses if the real API isn't ready
       }
     }),

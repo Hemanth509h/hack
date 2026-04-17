@@ -15,7 +15,7 @@ const AuditLogSchema = new Schema<IAuditLog>({
   resource: { type: String, required: true, index: true },
   resourceId: { type: Schema.Types.ObjectId },
   metadata: { type: Schema.Types.Mixed },
-  timestamp: { type: Date, default: Date.now, index: true }
+  timestamp: { type: Date, default: Date.now }
 }, { timestamps: true });
 
 // TTL Index for auto-cleanup (Default: 90 days)

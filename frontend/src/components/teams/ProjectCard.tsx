@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Clock, Users, Wrench, CalendarDays, Edit3, Eye, UserPlus, CheckCircle, Circle } from 'lucide-react';
+import { Users, Wrench, CalendarDays, Edit3, Eye, UserPlus, CheckCircle, Circle } from 'lucide-react';
 import type { TeamProject } from '../../services/teamApi';
 
 interface ProjectCardProps {

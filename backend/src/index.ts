@@ -2,9 +2,10 @@ import app from './app';
 import dotenv from 'dotenv';
 import http from 'http';
 import { connectDB, handleGracefulShutdown } from './config/db';
-import { connectRedis } from './config/redis';
+import { connectRedis, isRedisConnected } from './config/redis';
 import { initializeSocket } from './config/socket';
 import { initializeFirebase } from './services/push.service';
+import { initializeQueues } from './config/queue';
 import { startNotificationWorker } from './workers/notification.worker';
 
 dotenv.config();
@@ -21,13 +22,17 @@ const startServer = async () => {
     await connectRedis();
 
     // Initialize Socket.io with Redis adapter (async — must await)
+    // Refactored to handle its own fallback internaly
     await initializeSocket(httpServer);
 
     // Initialize Firebase Admin for push notifications (graceful if not configured)
     initializeFirebase();
 
-    // Start BullMQ notification worker
-    startNotificationWorker();
+    // Only set up BullMQ if Redis is available
+    if (isRedisConnected()) {
+      initializeQueues();
+      startNotificationWorker();
+    }
 
     // Register graceful shutdown for process interruption signals
     handleGracefulShutdown();

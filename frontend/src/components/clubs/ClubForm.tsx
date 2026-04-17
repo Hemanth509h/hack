@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, ChevronLeft, Info, Image as ImageIcon, Link as LinkIcon, Users, Loader2 } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Info, Image as ImageIcon, Link as LinkIcon, Loader2 } from 'lucide-react';
 import { useCreateClubMutation } from '../../services/clubApi';
 import { useNavigate } from 'react-router-dom';
 

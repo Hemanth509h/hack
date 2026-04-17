@@ -1,6 +1,6 @@
 import React from 'react';
 import { IClubMember } from '../../../types/club';
-import { Shield, Award, User } from 'lucide-react';
+import { Shield, User } from 'lucide-react';
 
 interface LeadershipSectionProps {
   leadership: IClubMember[];
