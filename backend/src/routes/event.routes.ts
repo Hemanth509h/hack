@@ -13,7 +13,9 @@ import {
   checkInRsvp,
   getEventAttendees,
   getNearbyEvents,
-  getRecommendedEvents
+  getRecommendedEvents,
+  getEventIcs,
+  getQrCodeData
 } from '../controllers/event.controller';
 
 const router = Router();
@@ -24,6 +26,7 @@ router.get('/', validateQuery(eventQuerySchema), getAllEvents);
 router.get('/nearby', getNearbyEvents); // Manual validation inside controller for float parses
 router.get('/recommendations', requireAuth, getRecommendedEvents);
 router.get('/:id', getEventById);
+router.get('/:id/calendar.ics', getEventIcs);
 
 // ---- Event Lifecycle Management ----
 // Creating requires an explicitly verified club leader or admin and valid body structure
@@ -51,6 +54,9 @@ router.delete('/:id/rsvp', requireAuth, cancelRsvp);
 
 // Organizers check attendee list
 router.get('/:id/attendees', requireAuth, getEventAttendees);
+
+// QR Code generation route
+router.get('/:id/checkin/qr', requireAuth, getQrCodeData);
 
 // QR Checking route. Must be organizer/admin
 router.post('/:id/checkin', requireAuth, requireRole(['club_leader', 'admin']), checkInRsvp);

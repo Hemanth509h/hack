@@ -3,12 +3,19 @@ import { useParams, Link } from 'react-router-dom';
 import { useGetEventByIdQuery } from '../../services/eventApi';
 import { RSVPButton } from '../../components/events/RSVPButton';
 import { AttendeeList } from '../../components/events/AttendeeList';
-import { Calendar, MapPin, Share2, ArrowLeft, Clock, Info } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Calendar, MapPin, Share2, ArrowLeft, Clock, Info, ShieldCheck } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import AddToCalendarDropdown from '../../components/events/AddToCalendarDropdown';
+import QRCodeDisplay from '../../components/events/checkin/QRCodeDisplay';
+import QRScanner from '../../components/events/checkin/QRScanner';
 
 const EventDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { data: event, isLoading, error } = useGetEventByIdQuery(id!);
+  const currentUser = useSelector((state: RootState) => state.auth.user);
+  const [showScanner, setShowScanner] = React.useState(false);
 
   if (isLoading) {
     return (
@@ -44,13 +51,10 @@ const EventDetailPage: React.FC = () => {
     minute: '2-digit',
   });
 
-  // Google Calendar link
-  const gcalFormat = (d: Date) => d.toISOString().replace(/-|:|\.\d\d\d/g, '');
   const locationStr =
     typeof event.location === 'object' && event.location?.name
       ? event.location.name
       : event.locationDetails ?? '';
-  const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${gcalFormat(startDate)}/${gcalFormat(endDate)}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(locationStr)}`;
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -118,18 +122,60 @@ const EventDetailPage: React.FC = () => {
               </div>
             </motion.div>
 
-            {/* Attendees */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6 md:p-10"
-            >
-              <h3 className="text-xl font-bold text-white mb-4">
-                Attendees ({event.rsvpCount})
-              </h3>
-              <AttendeeList eventId={event._id} />
-            </motion.div>
+            {/* Organize & Manage Settings */}
+            {(currentUser?._id === event.organizer._id || currentUser?.role === 'admin') && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="bg-indigo-900/20 border border-indigo-500/30 rounded-2xl p-6 md:p-10 mt-8"
+              >
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-xl font-bold text-indigo-300 flex items-center gap-2">
+                    <ShieldCheck className="w-5 h-5" /> Organizer Dashboard
+                  </h3>
+                  <button 
+                    onClick={() => setShowScanner(!showScanner)}
+                    className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl transition font-medium text-sm shadow-lg shadow-indigo-500/20"
+                  >
+                    {showScanner ? 'Hide Scanner' : 'Check-in Scanner'}
+                  </button>
+                </div>
+                
+                <AnimatePresence>
+                   {showScanner && (
+                      <motion.div 
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="mb-8"
+                      >
+                         <QRScanner eventId={event._id} />
+                      </motion.div>
+                   )}
+                </AnimatePresence>
+
+                <h3 className="text-xl font-bold text-white mb-4 mt-4">
+                  Attendees ({event.rsvpCount})
+                </h3>
+                <AttendeeList eventId={event._id} />
+              </motion.div>
+            )}
+
+            {/* Attendees (Public view if not organizer) */}
+            {currentUser?._id !== event.organizer._id && currentUser?.role !== 'admin' && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6 md:p-10"
+              >
+                <h3 className="text-xl font-bold text-white mb-4">
+                  Attendees ({event.rsvpCount})
+                </h3>
+                <AttendeeList eventId={event._id} />
+              </motion.div>
+            )}
           </div>
 
           {/* Sidebar */}
@@ -140,12 +186,14 @@ const EventDetailPage: React.FC = () => {
               transition={{ delay: 0.2 }}
               className="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-2xl sticky top-24"
             >
-              <div className="mb-6">
+              <div className="mb-6 space-y-4">
                 <RSVPButton
                   eventId={event._id}
                   initialIsRsvpd={false}
                   className="w-full py-4 text-lg"
                 />
+                {/* Notice: You technically could show this conditionally on RSVP status if it was exposed to this scope */}
+                <QRCodeDisplay eventId={event._id} />
               </div>
 
               <div className="space-y-6 text-sm">
@@ -158,14 +206,9 @@ const EventDetailPage: React.FC = () => {
                     <p className="text-gray-400">
                       {formattedTime} — {formattedEndTime}
                     </p>
-                    <a
-                      href={gcalUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-indigo-400 hover:text-indigo-300 mt-1 inline-block"
-                    >
-                      Add to Google Calendar
-                    </a>
+                    <div className="mt-2 text-indigo-400">
+                      <AddToCalendarDropdown event={event} />
+                    </div>
                   </div>
                 </div>
 

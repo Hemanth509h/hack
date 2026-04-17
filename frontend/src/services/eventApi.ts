@@ -98,6 +98,19 @@ export const eventApi = api.injectEndpoints({
       query: (userId) => `/users/${userId}/events`,
       providesTags: [{ type: 'Event' as const, id: 'MY_RSVPS' }],
     }),
+
+    getQrCodeData: builder.query<{ data: string; signature: string }, string>({
+      query: (eventId) => `/events/${eventId}/checkin/qr`,
+    }),
+
+    submitCheckIn: builder.mutation<{ message: string; rsvp: any; userId: string }, { eventId: string; data?: string; signature?: string; userId?: string }>({
+      query: ({ eventId, ...body }) => ({
+        url: `/events/${eventId}/checkin`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: (_result, _error, { eventId }) => [{ type: 'User' as const, id: `EVENT_ATTENDEES_${eventId}` }],
+    }),
   }),
 });
 
@@ -110,4 +123,6 @@ export const {
   useCancelRsvpMutation,
   useGetEventAttendeesQuery,
   useGetMyRsvpsQuery,
+  useGetQrCodeDataQuery,
+  useSubmitCheckInMutation,
 } = eventApi;

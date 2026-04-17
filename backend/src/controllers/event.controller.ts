@@ -246,9 +246,34 @@ export const cancelRsvp = async (req: AuthRequest, res: Response) => {
  */
 export const checkInRsvp = async (req: AuthRequest, res: Response) => {
   try {
-    // Assuming the scanner device sends the userId attached to the QR code.
-    const { userId } = req.body;
     const eventId = req.params.id;
+    const { data: rawData, signature } = req.body;
+
+    let targetUserId: string;
+
+    // Support both manual bypass checkin (just raw userId) OR highly secure QR checks
+    if (!signature) {
+       // Manual mode fallback for organizers pushing buttons
+       targetUserId = req.body.userId;
+       if (!targetUserId) return res.status(400).json({ error: 'QR Payload or Manual userId required' });
+    } else {
+       // Cryptographic QR verification
+       const secret = process.env.QR_SECRET || 'dev_fallback_secret';
+       const expectedSig = crypto.createHmac('sha256', secret).update(rawData).digest('hex');
+       
+       if (signature !== expectedSig) {
+         return res.status(403).json({ error: 'Invalid or forged QR signature.' });
+       }
+       const parsedData = JSON.parse(rawData);
+       targetUserId = parsedData.userId;
+       
+       // Verify timestamp freshness (e.g. valid for 24 hours only, or 10 mins?)
+       // Using 24hrs for events to be safe
+       const qrAge = Date.now() - parsedData.timestamp;
+       if (qrAge > 24 * 60 * 60 * 1000) {
+          return res.status(400).json({ error: 'QR Code expired. Please refresh your code.' });
+       }
+    }
 
     // Must be organizer or admin to check people in
     const event = await Event.findById(eventId);
@@ -257,7 +282,7 @@ export const checkInRsvp = async (req: AuthRequest, res: Response) => {
       return res.status(403).json({ error: 'Not authorized to operate check-ins' });
     }
 
-    const rsvp = await RSVP.findOne({ user: userId, event: eventId });
+    const rsvp = await RSVP.findOne({ user: targetUserId, event: eventId });
     if (!rsvp) return res.status(404).json({ error: 'User does not have an RSVP for this event' });
     
     if (rsvp.isCheckedIn) return res.status(400).json({ error: 'User is already checked in' });
@@ -266,7 +291,7 @@ export const checkInRsvp = async (req: AuthRequest, res: Response) => {
     rsvp.checkInTime = new Date();
     await rsvp.save();
 
-    res.json({ message: 'User successfully checked in', rsvp });
+    res.json({ message: 'User successfully checked in', rsvp, userId: targetUserId });
   } catch (error: any) {
     res.status(500).json({ error: 'Failed to check in user' });
   }
@@ -366,5 +391,92 @@ export const getRecommendedEvents = async (req: AuthRequest, res: Response) => {
     res.json({ events: recommendations });
   } catch (error: any) {
     res.status(500).json({ error: 'Failed to load recommendations' });
+  }
+};
+
+/**
+ * @desc    Generate ICS Calendar file
+ * @route   GET /api/v1/events/:id/calendar.ics
+ */
+import * as ics from 'ics';
+
+export const getEventIcs = async (req: Request, res: Response) => {
+  try {
+    const event = await Event.findById(req.params.id)
+      .populate('location', 'name buildingCode')
+      .populate('organizer', 'name email');
+      
+    if (!event) return res.status(404).json({ error: 'Event not found' });
+
+    // Ensure we parse the start date properly
+    const startDate = new Date(event.date);
+    const startObj: ics.DateArray = [
+      startDate.getUTCFullYear(),
+      startDate.getUTCMonth() + 1,
+      startDate.getUTCDate(),
+      startDate.getUTCHours(),
+      startDate.getUTCMinutes()
+    ];
+
+    const icsEvent: ics.EventAttributes = {
+      title: event.title,
+      description: event.description,
+      location: (event.location as any)?.name ? `${(event.location as any).name} ${(event.location as any).buildingCode || ''}` : event.locationDetails,
+      start: startObj,
+      startInputType: 'utc',
+      startOutputType: 'utc',
+      duration: { minutes: event.durationMinutes || 60 },
+      categories: [event.category, ...event.tags],
+      status: event.status === 'cancelled' ? 'CANCELLED' : 'CONFIRMED',
+      busyStatus: 'BUSY',
+      organizer: { name: (event.organizer as any)?.name, email: (event.organizer as any)?.email || 'noreply@quad.edu' },
+      url: `${process.env.FRONTEND_URL}/events/${event._id}`,
+      alarms: [{
+        action: 'display',
+        description: 'Reminder',
+        trigger: { hours: 1, minutes: 0, before: true }
+      }]
+    };
+
+    ics.createEvent(icsEvent, (error, value) => {
+      if (error) {
+        return res.status(500).json({ error: 'Calendar generation failed', details: error.message });
+      }
+      res.setHeader('Content-Type', 'text/calendar; charset=utf-8');
+      res.setHeader('Content-Disposition', `attachment; filename="event-${event._id}.ics"`);
+      res.send(value);
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to export calendar' });
+  }
+};
+
+/**
+ * @desc    Get Secure QR Code Data
+ * @route   GET /api/v1/events/:id/checkin/qr
+ */
+import * as crypto from 'crypto';
+
+export const getQrCodeData = async (req: AuthRequest, res: Response) => {
+  try {
+    const eventId = req.params.id;
+    const userId = req.user?.userId;
+
+    const rsvp = await RSVP.findOne({ user: userId, event: eventId, status: 'attending' });
+    if (!rsvp) return res.status(403).json({ error: 'You do not have an active RSVP for this event.' });
+
+    const timestamp = Date.now();
+    const payload = JSON.stringify({ userId, eventId, rsvpId: rsvp._id, timestamp });
+    
+    // Create an HMAC signature to prevent forgery
+    const secret = process.env.QR_SECRET || 'dev_fallback_secret';
+    const signature = crypto.createHmac('sha256', secret).update(payload).digest('hex');
+
+    res.json({
+      data: payload,
+      signature
+    });
+  } catch (error) {
+     res.status(500).json({ error: 'Failed to generate QR credentials' });
   }
 };
