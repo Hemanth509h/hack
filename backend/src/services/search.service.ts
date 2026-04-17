@@ -47,6 +47,8 @@ export const getAutocompleteSuggestions = async (q: string) => {
 
 export const performUnifiedSearch = async (q: string, type: string, filters: SearchFilters, page: number = 1, limit: number = 10, sortBy: string = 'relevance') => {
   const query: any = {};
+  let aggregateResults: any[] = [];
+  let totalCount = 0;
   
   if (q) {
     query.$text = { $search: q };
@@ -85,7 +87,9 @@ export const performUnifiedSearch = async (q: string, type: string, filters: Sea
     
     if (type === 'event') return { results: events, pagination: { total, page, pages: Math.ceil(total / limit) } };
     
-    // If "all", we carry on to clubs
+    // If "all", store results
+    aggregateResults.push(...events);
+    totalCount += total;
   }
 
   if (type === 'club' || type === 'all') {
@@ -98,8 +102,17 @@ export const performUnifiedSearch = async (q: string, type: string, filters: Sea
       .limit(limit);
 
     const total = await Club.countDocuments(clubQuery);
+    
+    if (type === 'club') return { results: clubs, pagination: { total, page, pages: Math.ceil(total / limit) } };
+    
+    aggregateResults.push(...clubs);
+    totalCount += total;
+  }
 
-    return { results: clubs, pagination: { total, page, pages: Math.ceil(total / limit) } };
+  if (type === 'all') {
+    // Basic array sorting by date just to interleave them nicely on the first unified page if requested
+    if (sortBy === 'date') aggregateResults.sort((a, b) => new Date(b.createdAt || b.date).getTime() - new Date(a.createdAt || a.date).getTime());
+    return { results: aggregateResults, pagination: { total: totalCount, page, pages: Math.ceil(totalCount / limit) } };
   }
 
   return { results: [], pagination: { total: 0, page, pages: 0 } };

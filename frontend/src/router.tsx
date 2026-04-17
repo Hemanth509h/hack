@@ -18,6 +18,9 @@ import ClubApprovalPage from './pages/admin/ClubApprovalPage';
 import AnalyticsPage from './pages/admin/AnalyticsPage';
 import SystemManagementPage from './pages/admin/SystemManagementPage';
 
+import NetworkPage from './pages/network/NetworkPage';
+import SearchPage from './pages/search/SearchPage';
+
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
@@ -84,6 +87,10 @@ export const router = createBrowserRouter([
           {
             path: 'map',
             element: <MapPage />,
+          },
+          {
+            path: 'search',
+            element: <SearchPage />,
           },
           {
             path: 'events',

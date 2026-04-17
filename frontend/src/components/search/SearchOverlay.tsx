@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, Calendar, Users, History, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { debounce } from 'lodash';
+import { useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
 
 interface SearchOverlayProps {
@@ -14,6 +16,8 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (isOpen) {
       inputRef.current?.focus();
@@ -23,27 +27,38 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && query.trim().length >= 2) {
+      navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+      onClose();
+    }
+  };
+
+  const debouncedFetch = React.useMemo(
+    () =>
+      debounce(async (searchQuery: string) => {
+        if (searchQuery.length < 2) {
+          setResults({ events: [], clubs: [] });
+          return;
+        }
+
+        setIsLoading(true);
+        try {
+          const { data } = await api.get(`/search/autocomplete?q=${searchQuery}`);
+          setResults(data);
+        } catch (err) {
+          console.error('Search failed', err);
+        } finally {
+          setIsLoading(false);
+        }
+      }, 300),
+    []
+  );
+
   useEffect(() => {
-    const fetchSuggestions = async () => {
-      if (query.length < 2) {
-        setResults({ events: [], clubs: [] });
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        const { data } = await api.get(`/search/autocomplete?q=${query}`);
-        setResults(data);
-      } catch (err) {
-        console.error('Search failed', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    const timeout = setTimeout(fetchSuggestions, 300);
-    return () => clearTimeout(timeout);
-  }, [query]);
+    debouncedFetch(query);
+    return () => debouncedFetch.cancel();
+  }, [query, debouncedFetch]);
 
   return (
     <AnimatePresence>
@@ -69,6 +84,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose }) => {
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
                 placeholder="Search events, clubs, projects..."
                 className="bg-transparent border-none outline-none flex-1 text-xl text-white placeholder-gray-500"
               />
