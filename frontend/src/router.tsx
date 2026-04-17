@@ -11,6 +11,13 @@ const Placeholder = ({ title }: { title: string }) => (
   </div>
 );
 
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminDashboardPage from './pages/admin/AdminDashboardPage';
+import UserManagementPage from './pages/admin/UserManagementPage';
+import ClubApprovalPage from './pages/admin/ClubApprovalPage';
+import AnalyticsPage from './pages/admin/AnalyticsPage';
+import SystemManagementPage from './pages/admin/SystemManagementPage';
+
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
@@ -117,23 +124,26 @@ export const router = createBrowserRouter([
               { path: 'edit', element: <EditProfilePage /> },
             ]
           },
-          {
-            path: 'portfolio/edit',
-            element: <PortfolioBuilderPage />,
-          },
-        ]
-      },
-      // Role-specific protected routes
-      {
-        element: <RoleGuard allowedRoles={['admin']} />,
-        children: [
-          {
-            path: 'admin',
-            element: <Placeholder title="Admin Dashboard" />,
-          }
         ]
       }
     ],
+  },
+  // Role-specific protected routes OUTSIDE the main App layout to avoid Navbar overlap
+  {
+    element: <RoleGuard allowedRoles={['admin']} />,
+    children: [
+      {
+        path: '/admin',
+        element: <AdminLayout />,
+        children: [
+          { index: true, element: <AdminDashboardPage /> },
+          { path: 'users', element: <UserManagementPage /> },
+          { path: 'clubs/pending', element: <ClubApprovalPage /> },
+          { path: 'analytics', element: <AnalyticsPage /> },
+          { path: 'system', element: <SystemManagementPage /> }
+        ]
+      }
+    ]
   },
   {
     path: '/unauthorized',

@@ -8,6 +8,8 @@ import dashboardReducer from '../features/dashboard/dashboardSlice';
 import mapReducer from '../features/map/mapSlice';
 import notificationReducer from '../features/notifications/notificationSlice';
 import profileReducer from '../features/profile/profileSlice';
+import adminReducer from '../features/admin/adminSlice';
+import chatReducer from '../features/chat/chatSlice';
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +22,8 @@ export const store = configureStore({
     map: mapReducer,
     notifications: notificationReducer,
     profile: profileReducer,
+    admin: adminReducer,
+    chat: chatReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware),

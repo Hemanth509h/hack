@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import Map, { Marker, Popup, NavigationControl, GeolocateControl, ViewStateChangeEvent } from 'react-map-gl';
+import Map, { Marker, Popup, NavigationControl, GeolocateControl, ViewStateChangeEvent } from 'react-map-gl/mapbox';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Navigation, Info, Users, X } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';

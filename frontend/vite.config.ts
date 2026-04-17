@@ -4,6 +4,9 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  optimizeDeps: {
+    include: ['mapbox-gl'],
+  },
   server: {
     host: true, // Needed for docker
     port: 5173,
@@ -19,3 +22,4 @@ export default defineConfig({
     }
   }
 });
+

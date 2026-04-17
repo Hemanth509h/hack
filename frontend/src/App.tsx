@@ -4,6 +4,7 @@ import Navbar from './components/layout/Navbar'
 import SearchOverlay from './components/search/SearchOverlay'
 import { SocketProvider } from './context/SocketContext'
 import { motion, AnimatePresence } from 'framer-motion'
+import { ChatWidget } from './components/chat/ChatWidget'
 
 function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -78,6 +79,8 @@ function App() {
         <footer className="py-12 border-t border-white/5 text-center text-gray-600 text-sm">
           <p>© 2026 The Quad • Engineered for Student Excellence</p>
         </footer>
+
+        <ChatWidget />
       </div>
     </SocketProvider>
   )
