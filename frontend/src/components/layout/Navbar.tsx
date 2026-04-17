@@ -29,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchClick }) => {
         </Link>
 
         {/* Nav Links */}
-        <div className="flex items-center space-x-1">
+        <div className="hidden md:flex items-center space-x-1">
           <NavLink to="/discover" icon={<Home size={20} />} label="Home" active={location.pathname === '/discover'} />
           <NavLink to="/events" icon={<Calendar size={20} />} label="Events" active={location.pathname.startsWith('/events')} />
           <NavLink to="/clubs" icon={<Users size={20} />} label="Clubs" active={location.pathname === '/clubs'} />

@@ -46,6 +46,14 @@ export const profileApi = api.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.userId }],
     }),
+    updateLocation: builder.mutation<{ message: string, homeLocation: any }, { userId: string; latitude: number; longitude: number }>({
+      query: ({ userId, latitude, longitude }) => ({
+        url: `/users/${userId}/location`,
+        method: 'POST',
+        body: { latitude, longitude },
+      }),
+      invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.userId }],
+    }),
   }),
   overrideExisting: false,
 });
@@ -57,4 +65,5 @@ export const {
   useUploadAvatarMutation,
   useAddSkillMutation,
   useRemoveSkillMutation,
+  useUpdateLocationMutation,
 } = profileApi;

@@ -12,7 +12,8 @@ import {
   getUserEvents,
   getUserClubs,
   uploadAvatar,
-  getPortfolio
+  getPortfolio,
+  updateLocation
 } from '../controllers/user.controller';
 
 const router = Router();
@@ -24,6 +25,7 @@ router.get('/:id/portfolio', getPortfolio); // Portfolio is always public
 // ---- Profile Mutations (Owner only enforced in controller) ----
 router.put('/:id/profile', requireAuth, validateRequest(updateProfileSchema), updateProfile);
 router.put('/:id/interests', requireAuth, validateRequest(updateInterestsSchema), updateInterests);
+router.post('/:id/location', requireAuth, updateLocation);
 
 // ---- Skills management ----
 router.post('/:id/skills', requireAuth, validateRequest(addSkillSchema), addSkill);

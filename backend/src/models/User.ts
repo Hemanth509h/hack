@@ -28,6 +28,12 @@ export interface IUser extends Document {
     inApp: boolean;
   };
 
+  // Geolocation
+  homeLocation?: {
+    type: 'Point';
+    coordinates: [number, number]; // [longitude, latitude]
+  };
+
   // Auth fields
   providers: {
     googleId?: string;
@@ -72,12 +78,25 @@ const UserSchema = new Schema<IUser>({
     inApp: { type: Boolean, default: true },
   },
 
+  homeLocation: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      default: 'Point'
+    },
+    coordinates: {
+      type: [Number] // [longitude, latitude]
+    }
+  },
+
   providers: { googleId: String, microsoftId: String },
   isEmailVerified: { type: Boolean, default: false },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   deviceTokens: [{ type: String }],
 }, { timestamps: true });
+
+UserSchema.index({ homeLocation: '2dsphere' });
 
 UserSchema.pre<IUser>('save', async function (next) {
   if (!this.isModified('password') || !this.password) return next();

@@ -241,3 +241,38 @@ export const getPortfolio = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Failed to fetch portfolio' });
   }
 };
+
+/**
+ * @desc    Update user home location
+ * @route   POST /api/v1/users/:id/location
+ */
+export const updateLocation = async (req: AuthRequest, res: Response) => {
+  try {
+    if (req.user?.userId !== req.params.id && req.user?.role !== 'admin') {
+      return res.status(403).json({ error: 'Cannot update another user\'s location' });
+    }
+
+    const { latitude, longitude } = req.body;
+    
+    if (typeof latitude !== 'number' || typeof longitude !== 'number') {
+       return res.status(400).json({ error: 'Invalid coordinates provided.' });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { 
+        $set: { 
+          homeLocation: {
+            type: 'Point',
+            coordinates: [longitude, latitude] // GeoJSON expects [lng, lat]
+          } 
+        } 
+      },
+      { new: true }
+    ).select('-password');
+
+    res.json({ message: 'Location updated', homeLocation: user?.homeLocation });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update location' });
+  }
+};

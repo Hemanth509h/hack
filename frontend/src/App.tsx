@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import Navbar from './components/layout/Navbar'
+import BottomNav from './components/layout/BottomNav'
 import SearchOverlay from './components/search/SearchOverlay'
 import { SocketProvider } from './context/SocketContext'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -84,9 +85,11 @@ function App() {
           isOpen={isSearchOpen} 
           onClose={() => setIsSearchOpen(false)} 
         />
+        
+        <BottomNav />
 
         {/* Footer */}
-        <footer className="py-12 border-t border-white/5 text-center text-gray-600 text-sm">
+        <footer className="py-12 pb-24 md:pb-12 border-t border-white/5 text-center text-gray-600 text-sm">
           <p>© 2026 The Quad • Engineered for Student Excellence</p>
         </footer>
 

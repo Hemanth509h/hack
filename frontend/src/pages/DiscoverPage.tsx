@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Sparkles, TrendingUp, Filter, RefreshCw } from 'lucide-react';
 import api from '../lib/api';
 import EventCard from '../components/discovery/EventCard';
+import NearbyEvents from '../components/events/NearbyEvents';
 
 const DiscoverPage: React.FC = () => {
   const [trending, setTrending] = useState([]);
@@ -68,6 +69,9 @@ const DiscoverPage: React.FC = () => {
           ))}
         </div>
       </section>
+
+      {/* Nearby Events Section */}
+      <NearbyEvents />
 
       {/* Recommended Section */}
       <section>

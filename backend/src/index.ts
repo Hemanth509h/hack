@@ -19,6 +19,7 @@ import aiRoutes from './routes/ai.routes';
 import uploadRoutes from './routes/upload.routes';
 import emailRoutes from './routes/email.routes';
 import analyticsRoutes from './routes/analytics.routes';
+import locationRoutes from './routes/location.routes';
 
 import { connectRedis } from './config/redis';
 import passport from './config/passport';
@@ -59,6 +60,7 @@ app.use('/api/v1/ai', aiRoutes);
 app.use('/api/v1/upload', uploadRoutes);
 app.use('/api/v1/emails', emailRoutes);
 app.use('/api/v1/analytics', analyticsRoutes);
+app.use('/api/v1/locations', locationRoutes);
 
 // Connect to Database and start server
 const startServer = async () => {
