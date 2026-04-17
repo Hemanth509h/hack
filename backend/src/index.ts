@@ -17,6 +17,8 @@ import discoveryRoutes from './routes/discovery.routes';
 import adminRoutes from './routes/admin.routes';
 import aiRoutes from './routes/ai.routes';
 import uploadRoutes from './routes/upload.routes';
+import emailRoutes from './routes/email.routes';
+import analyticsRoutes from './routes/analytics.routes';
 
 import { connectRedis } from './config/redis';
 import passport from './config/passport';
@@ -55,6 +57,8 @@ app.use('/api/v1/discovery', discoveryRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/ai', aiRoutes);
 app.use('/api/v1/upload', uploadRoutes);
+app.use('/api/v1/emails', emailRoutes);
+app.use('/api/v1/analytics', analyticsRoutes);
 
 // Connect to Database and start server
 const startServer = async () => {

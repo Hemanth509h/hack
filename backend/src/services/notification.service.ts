@@ -5,6 +5,7 @@ import { notificationQueue } from '../config/queue';
 import { sendEmail } from '../utils/email.utils';
 import { emitToUser } from '../config/socket';
 import { sendBatchPushNotifications } from './push.service';
+import { renderEmailHtml } from './email-renderer.service';
 import mongoose from 'mongoose';
 
 /** ----------------------------------------------------------------
@@ -139,12 +140,26 @@ export const processNotificationJob = async (payload: NotificationPayload): Prom
   // Channel 2: Email
   if (prefs.email && (user as any).email) {
     const unsubscribeUrl = `${process.env.FRONTEND_URL}/settings/notifications`;
-    const html = compileTemplate(payload.type, {
+    
+    // Attempt file-based juice-inlined templates. If it fails or template doesn't exist, fallback to raw DB text.
+    let html = renderEmailHtml(payload.type, {
       title: payload.title,
       message: payload.message,
       ctaUrl: payload.ctaUrl,
+      name: (user as any).name || 'Student',
       unsubscribeUrl,
+      ...(payload.dataPayload as Record<string, string> ?? {})
     });
+
+    if (!html) {
+      html = compileTemplate(payload.type, {
+        title: payload.title,
+        message: payload.message,
+        ctaUrl: payload.ctaUrl,
+        unsubscribeUrl,
+      });
+    }
+
     await sendEmail({
       to: (user as any).email,
       subject: payload.title,

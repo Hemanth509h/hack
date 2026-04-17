@@ -5,6 +5,8 @@ import SearchOverlay from './components/search/SearchOverlay'
 import { SocketProvider } from './context/SocketContext'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChatWidget } from './components/chat/ChatWidget'
+import { initAnalytics, trackPageView } from './lib/analytics'
+import CookieBanner from './components/shared/CookieBanner'
 
 function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -26,6 +28,14 @@ function App() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  useEffect(() => {
+    // Check if GDPR cookie consent is dropped
+    const hasConsented = document.cookie.includes('quad_tracking_consent=true');
+    if (hasConsented) initAnalytics(true);
+    
+    trackPageView(location.pathname + location.search);
+  }, [location.pathname, location.search]);
 
   return (
     <SocketProvider>
@@ -81,6 +91,7 @@ function App() {
         </footer>
 
         <ChatWidget />
+        <CookieBanner />
       </div>
     </SocketProvider>
   )
