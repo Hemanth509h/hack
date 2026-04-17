@@ -46,15 +46,21 @@ import NotificationPreferences from './pages/notifications/NotificationPreferenc
 // Profile
 import ProfilePage from './pages/profile/ProfilePage';
 import EditProfilePage from './pages/profile/EditProfilePage';
-// PortfolioBuilderPage reserved for future use
+import DiscoverPage from './pages/DiscoverPage';
+import TeamsPage from './pages/teams/TeamsPage';
+import SettingsPage from './pages/settings/SettingsPage';
+import RootErrorPage from './components/RootErrorPage';
+
 export const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+    errorElement: <RootErrorPage />,
   },
   {
     path: '/register',
     element: <RegisterPage />,
+    errorElement: <RootErrorPage />,
   },
   {
     path: '/forgot-password',
@@ -71,15 +77,20 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <App />, // App contains the Navbar and Global layouts
+    errorElement: <RootErrorPage />,
     children: [
       {
         index: true,
-        loader: () => redirect('/dashboard'),
+        loader: () => redirect('/discover'),
       },
       // Protected Routes for all authenticated students
       {
         element: <ProtectedRoute />,
         children: [
+          {
+            path: 'discover',
+            element: <DiscoverPage />,
+          },
           {
             path: 'dashboard',
             element: <DashboardPage />,
@@ -113,15 +124,18 @@ export const router = createBrowserRouter([
           },
           {
             path: 'teams',
-            element: <Placeholder title="Team Projects" />,
+            element: <TeamsPage />,
           },
           {
             path: 'notifications',
             element: <NotificationsPage />,
           },
           {
-            path: 'settings/notifications',
-            element: <NotificationPreferences />,
+            path: 'settings',
+            children: [
+              { index: true, element: <SettingsPage /> },
+              { path: 'notifications', element: <NotificationPreferences /> },
+            ]
           },
           {
             path: 'profile',
@@ -160,4 +174,8 @@ export const router = createBrowserRouter([
       </div>
     )
   }
-]);
+], {
+  future: {
+    v7_startTransition: true,
+  },
+});

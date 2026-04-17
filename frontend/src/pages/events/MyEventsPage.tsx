@@ -42,7 +42,7 @@ const MyEventsPage: React.FC = () => {
   const filteredEvents = getFilteredEvents();
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-6 max-w-7xl mx-auto">
+    <div className="min-h-screen pt-24 pb-16 px-6 max-w-full md:px-12 lg:px-20 mx-auto">
       <div className="mb-10">
         <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 flex items-center">
           <TicketPercent className="mr-3 text-indigo-400 w-8 h-8" /> My RSVPs

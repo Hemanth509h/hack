@@ -67,14 +67,13 @@ const UserSchema = new mongoose_1.Schema({
         type: {
             type: String,
             enum: ['Point'],
-            default: 'Point'
         },
         coordinates: {
             type: [Number] // [longitude, latitude]
         }
     },
     providers: { googleId: String, microsoftId: String },
-    isEmailVerified: { type: Boolean, default: false },
+    isEmailVerified: { type: Boolean, default: true },
     resetPasswordToken: String,
     resetPasswordExpires: Date,
 }, { timestamps: true });

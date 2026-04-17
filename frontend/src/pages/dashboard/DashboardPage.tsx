@@ -15,11 +15,11 @@ import { EventCard } from '../../components/events/EventCard';
 import { ClubCard } from '../../components/clubs/ClubCard';
 import { clearFilters } from '../../features/events/eventSlice';
 import { Link } from 'react-router-dom';
+import PageContainer from '../../components/layout/PageContainer';
 
 const DashboardPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
-  // activeCarouselIndex: wire up when carousel is implemented
   
   const { data: trendingData, isLoading: trendingLoading } = useGetTrendingEventsQuery();
   const { data: recommendedEventsData, isLoading: recEventsLoading } = useGetEventRecommendationsQuery();
@@ -28,7 +28,6 @@ const DashboardPage: React.FC = () => {
   const { data: rsvpCount } = useGetUpcomingRsvpsCountQuery(user?.id ?? '', { skip: !user?.id });
   const { data: reqCount } = useGetIncomingTeamRequestsCountQuery();
 
-  // Reset any global search filters explicitly when landing on dashboard
   useEffect(() => {
     dispatch(clearFilters());
   }, [dispatch]);
@@ -38,7 +37,7 @@ const DashboardPage: React.FC = () => {
   const trendingClubs = trendingClubsData?.trending || [];
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-4 md:px-8 max-w-screen-2xl mx-auto overflow-hidden">
+    <PageContainer className="overflow-hidden">
       <NotificationPanel />
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
@@ -202,7 +201,7 @@ const DashboardPage: React.FC = () => {
 
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 };
 

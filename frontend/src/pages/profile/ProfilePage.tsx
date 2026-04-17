@@ -9,12 +9,12 @@ import { BadgeGrid } from '../../components/profile/BadgeGrid';
 import { ClubMemberships } from '../../components/profile/ClubMemberships';
 import { EventHistory } from '../../components/profile/EventHistory';
 import { Github, Linkedin, Globe } from 'lucide-react';
+import PageContainer from '../../components/layout/PageContainer';
 
 const ProfilePage: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const currentUser = useSelector((state: RootState) => state.auth.user);
   
-  // If no userId in URL, assume viewing own profile
   const targetId = userId || currentUser?.id;
 
   const { data: profile, isLoading, isError } = useGetProfileQuery(targetId as string, {
@@ -32,10 +32,10 @@ const ProfilePage: React.FC = () => {
   const isOwner = currentUser?.id === profile._id || currentUser?.id === (profile as any).id;
 
   return (
-    <div className="pb-16 max-w-6xl mx-auto">
+    <PageContainer>
       <ProfileHeader profile={profile} isOwner={isOwner} />
 
-      <div className="px-6 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* Sidebar */}
         <div className="space-y-8">
@@ -106,7 +106,7 @@ const ProfilePage: React.FC = () => {
 
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 };
 

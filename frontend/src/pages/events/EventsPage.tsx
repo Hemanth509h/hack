@@ -7,6 +7,7 @@ import { Loader2, Plus, CalendarX } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { EventFilter, IEvent } from '../../types/event';
 import { RootState } from '../../store';
+import PageContainer from '../../components/layout/PageContainer';
 
 const EventsPage: React.FC = () => {
   const { searchQuery, selectedCategory } = useAppSelector((state: RootState) => state.events);
@@ -25,7 +26,7 @@ const EventsPage: React.FC = () => {
   const canCreateEvent = user?.role === 'admin' || user?.role === 'club_leader';
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-6 max-w-7xl mx-auto">
+    <PageContainer>
       {/* Hero Section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
         <div>
@@ -82,7 +83,7 @@ const EventsPage: React.FC = () => {
           ))}
         </div>
       )}
-    </div>
+    </PageContainer>
   );
 };
 

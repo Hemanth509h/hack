@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { ClubCard } from '../../components/clubs/ClubCard';
 import { ClubFilters } from '../../components/clubs/ClubFilters';
-
 import { Sparkles, Trophy, Plus, Compass } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import PageContainer from '../../components/layout/PageContainer';
 
 export const ClubsPage: React.FC = () => {
   const filters = useSelector((state: RootState) => state.clubs.filters);
@@ -14,7 +14,7 @@ export const ClubsPage: React.FC = () => {
   const { data: clubsData, isLoading } = useFetchClubsQuery(filters);
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-6 max-w-7xl mx-auto">
+    <PageContainer className="pb-20">
       {/* Hero Section */}
       <div className="relative mb-16 rounded-3xl overflow-hidden bg-indigo-600 p-8 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-900 to-transparent opacity-80" />
@@ -116,7 +116,7 @@ export const ClubsPage: React.FC = () => {
           )}
         </>
       )}
-    </div>
+    </PageContainer>
   );
 };
 

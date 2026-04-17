@@ -21,9 +21,9 @@ export const registerUser = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'User already exists' });
     }
 
-    const verificationToken = crypto.randomBytes(20).toString('hex');
+    // const verificationToken = crypto.randomBytes(20).toString('hex');
     
-    // Create unverified user
+    // Create pre-verified user
     // Normalize interests and ensure graduationYear is not NaN
     const user = await User.create({
       name,
@@ -32,19 +32,13 @@ export const registerUser = async (req: Request, res: Response) => {
       major,
       graduationYear: (graduationYear && !isNaN(Number(graduationYear))) ? Number(graduationYear) : undefined,
       interests: Array.isArray(interests) ? interests : [],
-      resetPasswordToken: verificationToken, // Reusing field for email verify token initially
-      resetPasswordExpires: Date.now() + 24 * 3600000, // 24 hours
+      isEmailVerified: true, // Force verify
     });
 
-    // Send welcome / verification email
-    const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}&email=${user.email}`;
-    await sendEmail({
-      to: user.email,
-      subject: 'Welcome to The Quad! Please Verify Your Email.',
-      text: `Hello ${user.name},\n\nPlease verify your account by clicking the link: \n${verifyUrl}\n\nThanks,\nThe Quad Team`,
+    res.status(201).json({ 
+      message: 'Registration successful. You can now log in.',
+      user: { id: user._id, name: user.name, email: user.email, role: user.role }
     });
-
-    res.status(201).json({ message: 'Registration successful. Please check your email to verify your account.' });
   } catch (error: any) {
     console.error('[auth]: Registration error:', error);
     res.status(500).json({ 
@@ -90,9 +84,9 @@ export const loginUser = async (req: Request, res: Response) => {
   try {
     const user = req.user as any; // Attached by Passport local strategy
 
-    if (!user.isEmailVerified) {
-      return res.status(403).json({ error: 'Please verify your email before logging in.' });
-    }
+    // if (!user.isEmailVerified) {
+    //   return res.status(403).json({ error: 'Please verify your email before logging in.' });
+    // }
 
     const tokens = await generateTokens({ userId: user._id, role: user.role });
     res.json({

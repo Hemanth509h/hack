@@ -3,6 +3,7 @@ import { Sparkles, TrendingUp, Filter, RefreshCw } from 'lucide-react';
 import api from '../lib/api';
 import EventCard from '../components/discovery/EventCard';
 import NearbyEvents from '../components/events/NearbyEvents';
+import PageContainer from '../components/layout/PageContainer';
 
 const DiscoverPage: React.FC = () => {
   const [trending, setTrending] = useState([]);
@@ -39,7 +40,7 @@ const DiscoverPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 pb-24 space-y-16">
+    <PageContainer className="space-y-16">
       {/* Featured / Trending Section */}
       <section>
         <div className="flex items-center justify-between mb-8 px-2">
@@ -107,7 +108,7 @@ const DiscoverPage: React.FC = () => {
           )}
         </div>
       </section>
-    </div>
+    </PageContainer>
   );
 };
 

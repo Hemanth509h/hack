@@ -79,7 +79,6 @@ const UserSchema = new Schema<IUser>({
     type: {
       type: String,
       enum: ['Point'],
-      default: 'Point'
     },
     coordinates: {
       type: [Number] // [longitude, latitude]
@@ -87,7 +86,7 @@ const UserSchema = new Schema<IUser>({
   },
 
   providers: { googleId: String, microsoftId: String },
-  isEmailVerified: { type: Boolean, default: false },
+  isEmailVerified: { type: Boolean, default: true },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
 

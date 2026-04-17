@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import Navbar from './components/layout/Navbar'
 import BottomNav from './components/layout/BottomNav'
+import Sidebar from './components/layout/Sidebar'
 import SearchOverlay from './components/search/SearchOverlay'
 import { SocketProvider } from './context/SocketContext'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -47,34 +48,40 @@ function App() {
           <div className="absolute bottom-[10%] right-[-5%] w-[35%] h-[35%] bg-purple-900/15 blur-[100px] rounded-full" />
         </div>
 
-        <Navbar onSearchClick={() => setIsSearchOpen(true)} />
+        <div className="md:hidden">
+          <Navbar onSearchClick={() => setIsSearchOpen(true)} />
+        </div>
         
-        <main className="pt-32 min-h-screen">
+        <Sidebar onSearchClick={() => setIsSearchOpen(true)} />
+        
+        <main className="pt-24 md:pt-0 md:pl-64 min-h-screen">
           {/* Hero / Header Section - Only show on Home/Discover page */}
           <AnimatePresence>
             {isHome && (
-              <motion.div 
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="max-w-7xl mx-auto px-4 mb-12 text-center"
-              >
-                 <motion.h1 
-                   initial={{ opacity: 0, y: 20 }}
-                   animate={{ opacity: 1, y: 0 }}
-                   className="text-5xl md:text-7xl font-black mb-6 tracking-tighter"
-                 >
-                   Explore Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">Campus.</span>
-                 </motion.h1>
-                 <motion.p 
-                   initial={{ opacity: 0, y: 20 }}
-                   animate={{ opacity: 1, y: 0 }}
-                   transition={{ delay: 0.1 }}
-                   className="text-gray-400 text-lg max-w-2xl mx-auto"
-                 >
-                   The unified platform for events, clubs, and collaborative projects at The Quad. Stay connected with real-time updates.
-                 </motion.p>
-              </motion.div>
+              <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-16 pt-12 md:pt-20">
+                <motion.div 
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mb-8 text-center md:text-left"
+                >
+                  <motion.h1 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tighter leading-tight"
+                  >
+                    Explore Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">Campus.</span>
+                  </motion.h1>
+                  <motion.p 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="text-gray-400 text-base sm:text-lg md:text-xl max-w-2xl md:mx-0 mx-auto"
+                  >
+                    The unified platform for events, clubs, and collaborative projects at The Quad. Stay connected with real-time updates.
+                  </motion.p>
+                </motion.div>
+              </div>
             )}
           </AnimatePresence>
 

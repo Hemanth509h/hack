@@ -47,7 +47,7 @@ export const ClubDetailPage: React.FC = () => {
         isPresident={isPresident} 
       />
 
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div className="max-w-full md:px-12 lg:px-20 mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-12">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-12">
           {/* About Section */}

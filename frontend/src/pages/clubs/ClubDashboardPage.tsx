@@ -24,7 +24,7 @@ export const ClubDashboardPage: React.FC = () => {
   if (!detailData) return null;
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-6 max-w-7xl mx-auto">
+    <div className="min-h-screen pt-24 pb-20 px-6 max-w-full md:px-12 lg:px-20 mx-auto">
       {/* Dashboard Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <div className="flex items-center gap-4">

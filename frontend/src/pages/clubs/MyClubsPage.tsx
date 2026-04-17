@@ -26,7 +26,7 @@ export const MyClubsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-6 max-w-7xl mx-auto">
+    <div className="min-h-screen pt-24 pb-20 px-6 max-w-full md:px-12 lg:px-20 mx-auto">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-gray-800 pb-8">
         <div>
           <h1 className="text-4xl font-extrabold text-white mb-2">My Clubs</h1>
