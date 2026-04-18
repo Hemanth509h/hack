@@ -7,8 +7,7 @@ import {
   Briefcase, 
   Clock, 
   ChevronRight,
-  Filter,
-  CheckCircle2
+  Filter
 } from 'lucide-react';
 import { 
   useGetMatchesQuery, 

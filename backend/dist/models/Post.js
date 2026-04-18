@@ -33,28 +33,23 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RSVP = void 0;
+exports.Post = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const Event_1 = require("./Event");
-const RSVPSchema = new mongoose_1.Schema({
-    user: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User', required: true },
-    event: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Event', required: true },
-    status: { type: String, enum: ['pending', 'attending', 'waitlisted', 'cancelled'], default: 'pending' },
-    isCheckedIn: { type: Boolean, default: false },
-    checkInTime: Date,
-    guestsCount: { type: Number, default: 0 }
+const PostSchema = new mongoose_1.Schema({
+    author: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User', required: true },
+    content: { type: String, required: true, maxlength: 2000 },
+    attachments: [{ type: String }],
+    likes: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'User' }],
+    comments: [{
+            author: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User', required: true },
+            content: { type: String, required: true },
+            createdAt: { type: Date, default: Date.now }
+        }],
+    category: {
+        type: String,
+        enum: ['general', 'club_update', 'event_hype', 'academic'],
+        default: 'general'
+    },
+    clubContext: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Club' }
 }, { timestamps: true });
-// Prevent double RSVPs
-RSVPSchema.index({ user: 1, event: 1 }, { unique: true });
-// Update denormalized event counters
-RSVPSchema.post('save', async function (doc) {
-    if (doc.status === 'attending') {
-        await Event_1.Event.findByIdAndUpdate(doc.event, { $inc: { rsvpCount: 1 } }).exec();
-    }
-});
-RSVPSchema.post('findOneAndDelete', async function (doc) {
-    if (doc && doc.status === 'attending') {
-        await Event_1.Event.findByIdAndUpdate(doc.event, { $inc: { rsvpCount: -1 } }).exec();
-    }
-});
-exports.RSVP = mongoose_1.default.model('RSVP', RSVPSchema);
+exports.Post = mongoose_1.default.model('Post', PostSchema);

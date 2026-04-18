@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetPassword = exports.forgotPassword = exports.logoutUser = exports.refreshToken = exports.loginUser = exports.verifyEmail = exports.registerUser = void 0;
+exports.getMe = exports.resetPassword = exports.forgotPassword = exports.logoutUser = exports.refreshToken = exports.loginUser = exports.verifyEmail = exports.registerUser = void 0;
 const User_1 = require("../models/User");
 const jwt_utils_1 = require("../utils/jwt.utils");
 const email_utils_1 = require("../utils/email.utils");
@@ -220,3 +220,33 @@ const resetPassword = async (req, res) => {
     }
 };
 exports.resetPassword = resetPassword;
+/**
+ * @desc    Get Current User
+ * @route   GET /api/auth/me
+ */
+const getMe = async (req, res) => {
+    try {
+        const userId = req.user?.userId;
+        if (!userId) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+        const user = await User_1.User.findById(userId).select('name email role avatar');
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.json({
+            message: 'You have access',
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                avatar: user.avatar
+            }
+        });
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Server error fetching user' });
+    }
+};
+exports.getMe = getMe;

@@ -15,7 +15,7 @@ router.get('/:id', event_controller_1.getEventById);
 router.get('/:id/calendar.ics', event_controller_1.getEventIcs);
 // ---- Event Lifecycle Management ----
 // Creating requires an explicitly verified club leader or admin and valid body structure
-router.post('/', auth_middleware_1.requireAuth, (0, auth_middleware_1.requireRole)(['club_leader', 'admin']), (0, validate_middleware_1.validateRequest)(event_validation_1.createEventSchema), event_controller_1.createEvent);
+router.post('/', auth_middleware_1.requireAuth, (0, auth_middleware_1.requireRole)(['admin']), (0, validate_middleware_1.validateRequest)(event_validation_1.createEventSchema), event_controller_1.createEvent);
 router.put('/:id', auth_middleware_1.requireAuth, (0, auth_middleware_1.requireRole)(['club_leader', 'admin']), (0, validate_middleware_1.validateRequest)(event_validation_1.updateEventSchema), event_controller_1.updateEvent);
 router.delete('/:id', auth_middleware_1.requireAuth, (0, auth_middleware_1.requireRole)(['club_leader', 'admin']), event_controller_1.deleteEvent);
 // ---- RSVP & Attendees Engine ----
@@ -23,6 +23,9 @@ router.post('/:id/rsvp', auth_middleware_1.requireAuth, event_controller_1.rsvpT
 router.delete('/:id/rsvp', auth_middleware_1.requireAuth, event_controller_1.cancelRsvp);
 // Organizers check attendee list
 router.get('/:id/attendees', auth_middleware_1.requireAuth, event_controller_1.getEventAttendees);
+// Approval workflows
+router.post('/:id/rsvp/:userId/approve', auth_middleware_1.requireAuth, event_controller_1.approveRSVP);
+router.post('/:id/rsvp/:userId/reject', auth_middleware_1.requireAuth, event_controller_1.rejectRSVP);
 // QR Code generation route
 router.get('/:id/checkin/qr', auth_middleware_1.requireAuth, event_controller_1.getQrCodeData);
 // QR Checking route. Must be organizer/admin

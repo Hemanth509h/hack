@@ -36,7 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Message = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const MessageSchema = new mongoose_1.Schema({
-    roomType: { type: String, enum: ['event', 'club', 'project'], required: true },
+    roomType: { type: String, enum: ['event', 'club', 'project', 'direct'], required: true },
     roomId: { type: mongoose_1.Schema.Types.ObjectId, required: true, index: true },
     sender: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User', required: true },
     content: { type: String, required: true, trim: true, maxlength: 2000 },

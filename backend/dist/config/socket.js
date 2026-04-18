@@ -9,6 +9,7 @@ const redis_adapter_1 = require("@socket.io/redis-adapter");
 const redis_1 = require("redis");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const Message_1 = require("../models/Message");
+const Conversation_1 = require("../models/Conversation");
 const User_1 = require("../models/User");
 const mongoose_1 = __importDefault(require("mongoose"));
 let io;
@@ -126,6 +127,13 @@ const initializeSocket = async (httpServer) => {
                     sender,
                     createdAt: message.createdAt,
                 });
+                // Update conversation if it's a direct message
+                if (payload.roomType === 'direct') {
+                    await Conversation_1.Conversation.findByIdAndUpdate(payload.roomId, {
+                        lastMessage: message._id,
+                        updatedAt: new Date()
+                    });
+                }
             }
             catch (err) {
                 socket.emit('error', { code: 'CHAT_FAILED', message: 'Message delivery failed' });
@@ -189,7 +197,7 @@ const emitToUser = (userId, event, data) => {
     io.to((0, exports.roomId)('user', userId)).emit(event, data);
 };
 exports.emitToUser = emitToUser;
-/** Broadcast to a shared room (event/club/project) */
+/** Broadcast to a shared room (event/club/project/direct) */
 const emitToRoom = (type, id, event, data) => {
     if (!io)
         return;

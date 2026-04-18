@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Lock, Shield, Loader2, ArrowLeft } from 'lucide-react';
+import { Lock, Shield, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PageContainer from '../../components/layout/PageContainer';
 

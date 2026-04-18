@@ -21,7 +21,8 @@ exports.createEventSchema = joi_1.default.object({
         majors: joi_1.default.array().items(joi_1.default.string()).default([]),
         years: joi_1.default.array().items(joi_1.default.number().integer()).default([])
     }).default({ majors: [], years: [] }),
-    status: joi_1.default.string().valid('draft', 'published').default('published')
+    status: joi_1.default.string().valid('draft', 'published').default('published'),
+    organizerId: joi_1.default.string().required()
 });
 exports.updateEventSchema = joi_1.default.object({
     title: joi_1.default.string().trim().min(5).max(100),

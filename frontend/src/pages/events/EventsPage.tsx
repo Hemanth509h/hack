@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useAppSelector } from '../../store/hooks';
 import { EventFilters } from '../../components/events/EventFilters';
 import { EventCard } from '../../components/events/EventCard';
-import { Loader2, Plus, CalendarX } from 'lucide-react';
+import { Plus, CalendarX } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { EventFilter, IEvent } from '../../types/event';
 import { RootState } from '../../store';

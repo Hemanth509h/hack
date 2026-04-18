@@ -44,7 +44,5 @@ router.get('/microsoft/callback', passport_1.default.authenticate('microsoft', {
     }
 });
 // --- Protected Test Route ---
-router.get('/me', auth_middleware_1.requireAuth, (req, res) => {
-    res.json({ message: 'You have access', user: req.user });
-});
+router.get('/me', auth_middleware_1.requireAuth, auth_controller_1.getMe);
 exports.default = router;

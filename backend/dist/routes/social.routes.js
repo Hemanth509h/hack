@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const social_controller_1 = require("../controllers/social.controller");
+const auth_middleware_1 = require("../middleware/auth.middleware");
+const router = (0, express_1.Router)();
+router.use(auth_middleware_1.requireAuth);
+router.post('/', social_controller_1.createPost);
+router.get('/', social_controller_1.getSocialFeed);
+router.post('/:id/like', social_controller_1.likePost);
+router.post('/:id/comment', social_controller_1.addComment);
+exports.default = router;

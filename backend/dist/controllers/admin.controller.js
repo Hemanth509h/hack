@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clearCache = exports.broadcastAnnouncement = exports.getAuditLogs = exports.handleClubWorkflow = exports.deleteUser = exports.updateUserRole = exports.getUsers = void 0;
+exports.clearCache = exports.broadcastAnnouncement = exports.getAuditLogs = exports.handleClubWorkflow = exports.getPendingClubs = exports.deleteUser = exports.updateUserRole = exports.getUsers = void 0;
 const User_1 = require("../models/User");
 const Club_1 = require("../models/Club");
 const AuditLog_1 = require("../models/AuditLog");
@@ -100,6 +100,31 @@ const deleteUser = async (req, res) => {
     }
 };
 exports.deleteUser = deleteUser;
+/**
+ * @desc    Get pending club applications
+ * @route   GET /api/v1/admin/clubs/pending
+ */
+const getPendingClubs = async (req, res) => {
+    try {
+        const pendingClubs = await Club_1.Club.find({ status: 'pending' })
+            .sort({ createdAt: -1 });
+        // Format the response to match the frontend PendingClubDTO
+        const formattedClubs = pendingClubs.map(club => ({
+            id: club._id,
+            name: club.name,
+            category: club.category,
+            description: club.description,
+            proposedLeaders: [], // Assuming we don't fetch users here for simplicity, or we can fetch the president from ClubMembership
+            expectedMembership: 0,
+            applicationDate: club.createdAt
+        }));
+        res.json(formattedClubs);
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Failed to fetch pending clubs' });
+    }
+};
+exports.getPendingClubs = getPendingClubs;
 /**
  * @desc    Approve/Reject club application
  * @route   PUT /api/v1/admin/clubs/:id/:action

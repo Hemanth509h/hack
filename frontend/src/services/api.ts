@@ -53,7 +53,7 @@ const baseQueryWithReauth: BaseQueryFn<
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['User', 'Event', 'Club', 'Team', 'Notification', 'Location'],
+  tagTypes: ['User', 'Event', 'Club', 'Team', 'Notification', 'Location', 'Post'],
   endpoints: (builder) => ({
     getHealth: builder.query<{ status: string; message: string }, void>({
       query: () => '/health',

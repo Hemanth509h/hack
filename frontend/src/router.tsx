@@ -5,12 +5,6 @@ import DashboardPage from './pages/dashboard/DashboardPage';
 import { ProtectedRoute, RoleGuard } from './components/auth/ProtectedRoute';
 
 
-// Empty placeholder components for unimplemented routes
-const Placeholder = ({ title }: { title: string }) => (
-  <div className="flex items-center justify-center min-h-[50vh]">
-    <h2 className="text-2xl font-bold text-gray-500">{title} Area Under Construction 🚧</h2>
-  </div>
-);
 
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
@@ -193,13 +187,4 @@ export const router = createBrowserRouter([
       </div>
     )
   }
-], {
-  future: {
-    v7_startTransition: true,
-    v7_relativeSplatPath: true,
-    v7_fetcherPersist: true,
-    v7_normalizeFormMethod: true,
-    v7_partialHydration: true,
-    v7_skipActionErrorRevalidation: true,
-  },
-});
+]);

@@ -76,6 +76,13 @@ const UserSchema = new mongoose_1.Schema({
     isEmailVerified: { type: Boolean, default: true },
     resetPasswordToken: String,
     resetPasswordExpires: Date,
+    // Gamification
+    points: { type: Number, default: 0 },
+    badges: [{
+            name: { type: String, required: true },
+            icon: { type: String, required: true },
+            unlockedAt: { type: Date, default: Date.now }
+        }],
 }, { timestamps: true });
 UserSchema.index({ homeLocation: '2dsphere' });
 UserSchema.pre('save', async function (next) {

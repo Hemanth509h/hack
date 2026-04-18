@@ -3,8 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteMessage = exports.getMessageHistory = void 0;
+exports.getOrCreateConversation = exports.getConversations = exports.deleteMessage = exports.getMessageHistory = void 0;
 const Message_1 = require("../models/Message");
+const Conversation_1 = require("../models/Conversation");
 const mongoose_1 = __importDefault(require("mongoose"));
 /**
  * @desc    Get message history for a room
@@ -15,8 +16,8 @@ const getMessageHistory = async (req, res) => {
         const { roomType, roomId } = req.params;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 50;
-        if (!['event', 'club', 'project'].includes(roomType)) {
-            return res.status(400).json({ error: 'Invalid room type. Must be event, club, or project.' });
+        if (!['event', 'club', 'project', 'direct'].includes(roomType)) {
+            return res.status(400).json({ error: 'Invalid room type. Must be event, club, project, or direct.' });
         }
         const messages = await Message_1.Message.find({
             roomType,
@@ -54,3 +55,53 @@ const deleteMessage = async (req, res) => {
     }
 };
 exports.deleteMessage = deleteMessage;
+/**
+ * @desc    Get all conversations for the user
+ * @route   GET /api/v1/chat/conversations
+ */
+const getConversations = async (req, res) => {
+    try {
+        const userId = new mongoose_1.default.Types.ObjectId(req.user.userId);
+        const conversations = await Conversation_1.Conversation.find({ participants: userId })
+            .populate('participants', 'name avatar major')
+            .populate({
+            path: 'lastMessage',
+            populate: { path: 'sender', select: 'name' }
+        })
+            .sort({ updatedAt: -1 });
+        res.json({ conversations });
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Failed to fetch conversations', details: error.message });
+    }
+};
+exports.getConversations = getConversations;
+/**
+ * @desc    Find or create a conversation between two users
+ * @route   POST /api/v1/chat/conversations
+ */
+const getOrCreateConversation = async (req, res) => {
+    try {
+        const { participantId } = req.body;
+        const userId = new mongoose_1.default.Types.ObjectId(req.user.userId);
+        const otherId = new mongoose_1.default.Types.ObjectId(participantId);
+        if (userId.equals(otherId)) {
+            return res.status(400).json({ error: 'Cannot start conversation with yourself' });
+        }
+        // Find existing conversation
+        let conversation = await Conversation_1.Conversation.findOne({
+            participants: { $all: [userId, otherId], $size: 2 }
+        }).populate('participants', 'name avatar major');
+        if (!conversation) {
+            conversation = await Conversation_1.Conversation.create({
+                participants: [userId, otherId]
+            });
+            await conversation.populate('participants', 'name avatar major');
+        }
+        res.json({ conversation });
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Failed to handle conversation', details: error.message });
+    }
+};
+exports.getOrCreateConversation = getOrCreateConversation;

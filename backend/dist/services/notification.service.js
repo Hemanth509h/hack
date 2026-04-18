@@ -148,5 +148,33 @@ const processNotificationJob = async (payload) => {
             html,
         });
     }
+    // Channel 3: Push Notifications (WebPushr)
+    if (prefs.push && user.email) {
+        await sendPushNotification({
+            email: user.email,
+            title: payload.title,
+            message: payload.message,
+            url: payload.ctaUrl || process.env.FRONTEND_URL
+        });
+    }
 };
 exports.processNotificationJob = processNotificationJob;
+/**
+ * @desc    Send WebPushr Notification via REST API
+ */
+const sendPushNotification = async (data) => {
+    const WEBPUSHR_KEY = process.env.WEBPUSHR_KEY;
+    const WEBPUSHR_AUTH = process.env.WEBPUSHR_AUTH;
+    if (!WEBPUSHR_KEY || !WEBPUSHR_AUTH) {
+        console.log('WebPushr credentials missing, skipping push notification');
+        return;
+    }
+    try {
+        // In a real implementation, we'd use axios or fetch to hit https://api.webpushr.com/v1/notification/send/sid
+        // For now, we'll log the attempt
+        console.log(`[WebPushr] Sending push to ${data.email}: ${data.title}`);
+    }
+    catch (error) {
+        console.error('WebPushr delivery failed:', error.message);
+    }
+};

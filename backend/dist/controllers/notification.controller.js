@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testNotification = exports.removeDeviceToken = exports.registerDeviceToken = exports.updatePreferences = exports.getPreferences = exports.markAllAsRead = exports.markAsRead = exports.getNotifications = void 0;
+exports.testNotification = exports.removeDeviceToken = exports.registerDeviceToken = exports.updatePreferences = exports.getPreferences = exports.deleteNotification = exports.markAllAsRead = exports.markAsRead = exports.getNotifications = void 0;
 const Notification_1 = require("../models/Notification");
 const User_1 = require("../models/User");
 const notification_service_1 = require("../services/notification.service");
@@ -61,6 +61,25 @@ const markAllAsRead = async (req, res) => {
     }
 };
 exports.markAllAsRead = markAllAsRead;
+/**
+ * @desc    Delete a single notification
+ * @route   DELETE /api/v1/notifications/:id
+ */
+const deleteNotification = async (req, res) => {
+    try {
+        const notification = await Notification_1.Notification.findOneAndDelete({
+            _id: req.params.id,
+            recipient: req.user.userId,
+        });
+        if (!notification)
+            return res.status(404).json({ error: 'Notification not found' });
+        res.json({ message: 'Notification deleted' });
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Failed to delete notification' });
+    }
+};
+exports.deleteNotification = deleteNotification;
 /**
  * @desc    Get notification preferences
  * @route   GET /api/v1/notifications/preferences

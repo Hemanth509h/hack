@@ -9,15 +9,16 @@ exports.createClubSchema = joi_1.default.object({
     name: joi_1.default.string().required().trim().min(3).max(100),
     description: joi_1.default.string().required().trim().min(20),
     category: joi_1.default.string().required().valid('Tech', 'Arts', 'Debate', 'Sports', 'Music', 'Volley', 'Other'),
-    logo: joi_1.default.string().uri().optional(),
-    coverImage: joi_1.default.string().uri().optional(),
+    logo: joi_1.default.string().uri().allow('').optional(),
+    coverImage: joi_1.default.string().uri().allow('').optional(),
     socialLinks: joi_1.default.object({
-        website: joi_1.default.string().uri().optional(),
-        instagram: joi_1.default.string().uri().optional(),
-        discord: joi_1.default.string().uri().optional()
+        website: joi_1.default.string().uri().allow('').optional(),
+        instagram: joi_1.default.string().allow('').optional(),
+        discord: joi_1.default.string().allow('').optional()
     }).optional(),
-    meetingSchedule: joi_1.default.string().max(100).optional(),
-    tags: joi_1.default.array().items(joi_1.default.string().trim().lowercase()).max(5).default([])
+    meetingSchedule: joi_1.default.string().max(100).allow('').optional(),
+    tags: joi_1.default.array().items(joi_1.default.string().trim().lowercase()).max(5).default([]),
+    headId: joi_1.default.string().required()
 });
 exports.updateClubSchema = joi_1.default.object({
     name: joi_1.default.string().trim().min(3).max(100),
@@ -27,8 +28,8 @@ exports.updateClubSchema = joi_1.default.object({
     coverImage: joi_1.default.string().uri(),
     socialLinks: joi_1.default.object({
         website: joi_1.default.string().uri(),
-        instagram: joi_1.default.string().uri(),
-        discord: joi_1.default.string().uri()
+        instagram: joi_1.default.string(),
+        discord: joi_1.default.string()
     }),
     meetingSchedule: joi_1.default.string().max(100),
     tags: joi_1.default.array().items(joi_1.default.string().trim().lowercase()).max(5),

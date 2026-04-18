@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useFetchClubByIdQuery, useFetchClubMembersQuery, useFetchClubAnalyticsQuery } from '../../services/clubApi';
 import { StatCards } from '../../components/clubs/dashboard/StatCards';
 import { MemberManagementTable } from '../../components/clubs/dashboard/MemberManagementTable';
-import { Loader2, LayoutDashboard, Calendar, Bell, Users, Settings, Plus, ArrowLeft, BarChart3, TrendingUp, Shield, Sparkles } from 'lucide-react';
+import { Calendar, Bell, Users, Settings, Plus, ArrowLeft, BarChart3, TrendingUp, Shield, Sparkles } from 'lucide-react';
 import PageContainer from '../../components/layout/PageContainer';
 
 export const ClubDashboardPage: React.FC = () => {

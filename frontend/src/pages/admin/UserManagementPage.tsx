@@ -11,7 +11,7 @@ const UserManagementPage = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   
   // Real endpoint hook
-  const { data, isLoading } = useGetUsersQuery({ 
+  const { data } = useGetUsersQuery({ 
     page, 
     search: searchTerm, 
     role: roleFilter === 'All' ? undefined : roleFilter.toLowerCase() 

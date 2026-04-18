@@ -33,28 +33,12 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RSVP = void 0;
+exports.Conversation = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const Event_1 = require("./Event");
-const RSVPSchema = new mongoose_1.Schema({
-    user: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User', required: true },
-    event: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Event', required: true },
-    status: { type: String, enum: ['pending', 'attending', 'waitlisted', 'cancelled'], default: 'pending' },
-    isCheckedIn: { type: Boolean, default: false },
-    checkInTime: Date,
-    guestsCount: { type: Number, default: 0 }
+const ConversationSchema = new mongoose_1.Schema({
+    participants: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'User', required: true }],
+    lastMessage: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Message' },
 }, { timestamps: true });
-// Prevent double RSVPs
-RSVPSchema.index({ user: 1, event: 1 }, { unique: true });
-// Update denormalized event counters
-RSVPSchema.post('save', async function (doc) {
-    if (doc.status === 'attending') {
-        await Event_1.Event.findByIdAndUpdate(doc.event, { $inc: { rsvpCount: 1 } }).exec();
-    }
-});
-RSVPSchema.post('findOneAndDelete', async function (doc) {
-    if (doc && doc.status === 'attending') {
-        await Event_1.Event.findByIdAndUpdate(doc.event, { $inc: { rsvpCount: -1 } }).exec();
-    }
-});
-exports.RSVP = mongoose_1.default.model('RSVP', RSVPSchema);
+// Ensure participants are unique and sorted for indexing
+ConversationSchema.index({ participants: 1 });
+exports.Conversation = mongoose_1.default.model('Conversation', ConversationSchema);

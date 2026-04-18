@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getClubAnalytics = exports.sendClubAnnouncement = exports.updateMemberRole = exports.getClubMembers = exports.leaveClub = exports.joinClub = exports.deactivateClub = exports.updateClub = exports.getClubById = exports.createClub = exports.getFeaturedClubs = exports.getAllClubs = void 0;
+exports.getClubAnalytics = exports.sendClubAnnouncement = exports.rejectMember = exports.approveMember = exports.updateMemberRole = exports.getClubMembers = exports.leaveClub = exports.joinClub = exports.deactivateClub = exports.updateClub = exports.getClubById = exports.createClub = exports.getFeaturedClubs = exports.getAllClubs = void 0;
 const Club_1 = require("../models/Club");
 const ClubMembership_1 = require("../models/ClubMembership");
+const User_1 = require("../models/User");
 const Notification_1 = require("../models/Notification");
 const Event_1 = require("../models/Event");
 const socket_1 = require("../config/socket");
@@ -59,27 +60,44 @@ const getFeaturedClubs = async (req, res) => {
 };
 exports.getFeaturedClubs = getFeaturedClubs;
 /**
- * @desc    Create new club (requires admin approval later)
+ * @desc    Create new club (Admin only, assigns student head)
  * @route   POST /api/v1/clubs
  */
 const createClub = async (req, res) => {
     try {
-        // Generate Club with Status 'pending'
+        if (req.user?.role !== 'admin') {
+            return res.status(403).json({ error: 'Only administrators can initialize new clubs.' });
+        }
+        const { headId, ...clubData } = req.body;
+        if (!headId) {
+            return res.status(400).json({ error: 'A student head must be assigned to the club.' });
+        }
+        // Verify head user exists
+        const headUser = await User_1.User.findById(headId);
+        if (!headUser) {
+            return res.status(404).json({ error: 'Assigned student head not found.' });
+        }
+        // Create Club with Status 'active'
         const club = await Club_1.Club.create({
-            ...req.body,
-            status: 'pending' // Enforcing admin approval
+            ...clubData,
+            status: 'active'
         });
-        // Make the creator the president instantly
+        // Make the assigned student the president
         await ClubMembership_1.ClubMembership.create({
-            user: req.user?.userId,
+            user: headId,
             club: club._id,
             role: 'president',
-            status: 'approved' // Automatically bypass pending step for creators
+            status: 'approved'
         });
-        res.status(201).json({ message: 'Club application submitted pending approval', club });
+        // Update user role to club_leader if they are currently a student
+        if (headUser.role === 'student') {
+            headUser.role = 'club_leader';
+            await headUser.save();
+        }
+        res.status(201).json({ message: 'Club created and head assigned successfully', club });
     }
     catch (error) {
-        res.status(500).json({ error: 'Failed to submit club application', details: error.message });
+        res.status(500).json({ error: 'Failed to create club', details: error.message });
     }
 };
 exports.createClub = createClub;
@@ -213,7 +231,7 @@ const getClubMembers = async (req, res) => {
 };
 exports.getClubMembers = getClubMembers;
 /**
- * @desc    Update role (e.g. approve join request or demote)
+ * @desc    Update role (e.g. demote or promote)
  * @route   PUT /api/v1/clubs/:id/members/:userId/role
  */
 const updateMemberRole = async (req, res) => {
@@ -226,25 +244,77 @@ const updateMemberRole = async (req, res) => {
             status: 'approved'
         });
         if (!commander && req.user?.role !== 'admin') {
-            return res.status(403).json({ error: 'Only club presidents can modify member structures' });
+            return res.status(403).json({ error: 'Only club heads can modify member structures' });
         }
-        const { role, status } = req.body;
+        const { role } = req.body;
         // Find and update
         const targetMember = await ClubMembership_1.ClubMembership.findOne({ user: req.params.userId, club: req.params.id });
         if (!targetMember)
             return res.status(404).json({ error: 'Member not found in context' });
         if (role)
             targetMember.role = role;
-        if (status)
-            targetMember.status = status;
         await targetMember.save();
-        res.json({ message: 'Member successfully updated', membership: targetMember });
+        res.json({ message: 'Member role successfully updated', membership: targetMember });
     }
     catch (error) {
         res.status(500).json({ error: 'Failed to process member update' });
     }
 };
 exports.updateMemberRole = updateMemberRole;
+/**
+ * @desc    Approve join request
+ * @route   POST /api/v1/clubs/:id/members/:userId/approve
+ */
+const approveMember = async (req, res) => {
+    try {
+        const isHead = await ClubMembership_1.ClubMembership.findOne({
+            user: req.user?.userId,
+            club: req.params.id,
+            role: 'president',
+            status: 'approved'
+        });
+        if (!isHead && req.user?.role !== 'admin') {
+            return res.status(403).json({ error: 'Only the club head can approve members.' });
+        }
+        const membership = await ClubMembership_1.ClubMembership.findOne({ user: req.params.userId, club: req.params.id });
+        if (!membership)
+            return res.status(404).json({ error: 'Membership request not found.' });
+        membership.status = 'approved';
+        await membership.save();
+        res.json({ message: 'Member approved successfully', membership });
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Failed to approve member' });
+    }
+};
+exports.approveMember = approveMember;
+/**
+ * @desc    Reject join request
+ * @route   POST /api/v1/clubs/:id/members/:userId/reject
+ */
+const rejectMember = async (req, res) => {
+    try {
+        const isHead = await ClubMembership_1.ClubMembership.findOne({
+            user: req.user?.userId,
+            club: req.params.id,
+            role: 'president',
+            status: 'approved'
+        });
+        if (!isHead && req.user?.role !== 'admin') {
+            return res.status(403).json({ error: 'Only the club head can reject members.' });
+        }
+        const membership = await ClubMembership_1.ClubMembership.findOne({ user: req.params.userId, club: req.params.id });
+        if (!membership)
+            return res.status(404).json({ error: 'Membership request not found.' });
+        membership.status = 'rejected';
+        await membership.save();
+        res.json({ message: 'Member request rejected', membership });
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Failed to reject member' });
+    }
+};
+exports.rejectMember = rejectMember;
 /**
  * @desc    Send announcement
  * @route   POST /api/v1/clubs/:id/announcements

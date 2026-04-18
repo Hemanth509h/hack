@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Calendar, PlusCircle, Search, MoreVertical, MapPin, Clock, Users } from 'lucide-react';
+import { PlusCircle, Search, MoreVertical, MapPin, Clock, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useGetEventsQuery } from '../../services/eventApi';
 

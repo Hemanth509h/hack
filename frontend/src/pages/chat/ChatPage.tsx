@@ -6,7 +6,6 @@ import { useSocket } from '../../hooks/useSocket';
 import { ConversationList } from '../../components/chat/ConversationList';
 import { MessageWindow } from '../../components/chat/MessageWindow';
 import { IMessage } from '../../types/chat';
-import PageContainer from '../../components/layout/PageContainer';
 import { Loader2, MessageSquare } from 'lucide-react';
 
 const ChatPage: React.FC = () => {
@@ -14,9 +13,9 @@ const ChatPage: React.FC = () => {
   const { data: convData, isLoading: convLoading, refetch: refetchConvs } = useGetConversationsQuery();
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const { socket, isConnected } = useSocket();
+  const { socket } = useSocket();
 
-  const { data: historyData, isLoading: historyLoading } = useGetMessageHistoryQuery(
+  const { data: historyData } = useGetMessageHistoryQuery(
     { roomType: 'direct', roomId: activeConvId! },
     { skip: !activeConvId }
   );

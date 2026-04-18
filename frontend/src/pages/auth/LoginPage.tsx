@@ -120,7 +120,7 @@ export default function LoginPage() {
             />
             <span className="text-gray-600 dark:text-gray-400">Remember me</span>
           </label>
-          <Link to="/forgot-password" disabled={isLoading} className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
+          <Link to="/forgot-password" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
             Forgot password?
           </Link>
         </div>

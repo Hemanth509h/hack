@@ -10,6 +10,7 @@ router.use(auth_middleware_1.requireAuth);
 router.get('/', notification_controller_1.getNotifications);
 router.put('/read-all', notification_controller_1.markAllAsRead);
 router.put('/:id/read', notification_controller_1.markAsRead);
+router.delete('/:id', notification_controller_1.deleteNotification);
 // ---- Preferences ----
 router.get('/preferences', notification_controller_1.getPreferences);
 router.post('/preferences', notification_controller_1.updatePreferences);

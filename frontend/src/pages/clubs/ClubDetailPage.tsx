@@ -8,7 +8,7 @@ import { ClubDetailHeader } from '../../components/clubs/detail/ClubDetailHeader
 import { LeadershipSection } from '../../components/clubs/detail/LeadershipSection';
 import { MemberList } from '../../components/clubs/detail/MemberList';
 import { ClubAnnouncements } from '../../components/clubs/detail/ClubAnnouncements';
-import { Loader2, ChevronLeft, MapPin, Calendar, Info, Trophy } from 'lucide-react';
+import { Loader2, ChevronLeft, MapPin, Calendar, Trophy } from 'lucide-react';
 
 export const ClubDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
