@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouteError, isRouteErrorResponse, useNavigate } from 'react-router-dom';
 import { AlertTriangle, Home, RotateCcw, ShieldAlert } from 'lucide-react';
-import PageContainer from './layout/PageContainer';
+
 
 const RootErrorPage: React.FC = () => {
   const error = useRouteError();

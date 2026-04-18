@@ -156,7 +156,7 @@ const AdminDashboardPage = () => {
                    </linearGradient>
                  </defs>
                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-                 <XAxis dataKey="day" stroke="rgba(255,255,255,0.3)" tickLine={false} axisLine={false} tick={{fontSize: 10, fontWeight: 900, textTransform: 'uppercase'}} dy={15} />
+                 <XAxis dataKey="day" stroke="rgba(255,255,255,0.3)" tickLine={false} axisLine={false} tick={{fontSize: 10, fontWeight: 900}} dy={15} />
                  <YAxis stroke="rgba(255,255,255,0.3)" tickLine={false} axisLine={false} tick={{fontSize: 10, fontWeight: 900}} />
                  <Tooltip 
                    cursor={{fill: 'rgba(255,255,255,0.03)'}}

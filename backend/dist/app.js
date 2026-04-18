@@ -26,7 +26,8 @@ const feed_routes_1 = __importDefault(require("./routes/feed.routes"));
 const social_routes_1 = __importDefault(require("./routes/social.routes"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
-app.use(express_1.default.json());
+app.use(express_1.default.json({ limit: '10mb' }));
+app.use(express_1.default.urlencoded({ limit: '10mb', extended: true }));
 app.use(passport_1.default.initialize());
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', message: 'Backend is running!' });

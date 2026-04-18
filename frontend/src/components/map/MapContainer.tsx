@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import Map, { Marker, Popup, NavigationControl, GeolocateControl, ViewStateChangeEvent } from 'react-map-gl/mapbox';
 
-import { MapPin, Info, Users, X, Library, Coffee, Utensils, BookOpen } from 'lucide-react';
+import { MapPin, Info, Users, X, Library, Coffee } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setViewport, setSelectedLocationId } from '../../features/map/mapSlice';
 import { useGetEventsQuery } from '../../services/eventApi';

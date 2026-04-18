@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, X, Calendar, Users, History, ArrowRight } from 'lucide-react';
+import { Search, X, Calendar, Users, User, History, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { debounce } from 'lodash';
 import { useNavigate } from 'react-router-dom';

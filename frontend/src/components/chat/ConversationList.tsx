@@ -1,6 +1,6 @@
 import React from 'react';
 import { IConversation } from '../../types/chat';
-import { Search, MoreVertical } from 'lucide-react';
+import { Search } from 'lucide-react';
 
 interface ConversationListProps {
   conversations: IConversation[];

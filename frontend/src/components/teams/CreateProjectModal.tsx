@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { X, Loader2, Sparkles, Target, Users } from 'lucide-react';
+import { X, Loader2, Sparkles, Target } from 'lucide-react';
 import { useCreateProjectMutation } from '../../services/teamApi';
 
 const projectSchema = z.object({

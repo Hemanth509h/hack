@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   useGetSocialFeedQuery, 
@@ -8,7 +8,7 @@ import {
 } from '../services/socialApi';
 import { 
   MessageSquare, Heart, Share2, Send, Plus, 
-  Image as ImageIcon, Sparkles, Trophy, Flame
+  Image as ImageIcon, Sparkles, Flame
 } from 'lucide-react';
 import PageContainer from '../components/layout/PageContainer';
 
