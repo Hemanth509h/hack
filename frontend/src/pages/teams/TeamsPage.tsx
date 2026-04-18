@@ -33,15 +33,15 @@ const TeamsPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
         <div>
-          <h1 className="text-4xl md:text-5xl font-black text-white mb-2 tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">
             Team <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">Projects</span>
           </h1>
-          <p className="text-gray-400 text-lg">Collaborate on hackathons, research, and campus initiatives.</p>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">Collaborate on hackathons, research, and campus initiatives.</p>
         </div>
         
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all shadow-lg shadow-blue-500/20 group"
+          className="flex items-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-gray-900 dark:text-white font-bold rounded-2xl transition-all shadow-lg shadow-blue-500/20 group"
         >
           <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
           <span>Post a Project</span>
@@ -49,7 +49,7 @@ const TeamsPage: React.FC = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex space-x-1 p-1 bg-white/5 rounded-2xl mb-8 w-fit">
+      <div className="flex space-x-1 p-1 bg-black/5 dark:bg-white/5 rounded-2xl mb-8 w-fit">
         <TabButton 
           active={activeTab === 'browse'} 
           onClick={() => setActiveTab('browse')}
@@ -80,17 +80,17 @@ const TeamsPage: React.FC = () => {
                 <input 
                   type="text" 
                   placeholder="Search by project name, tech stack, or event..." 
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+                  className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
                 />
               </div>
-              <button className="p-3.5 bg-white/5 border border-white/10 rounded-2xl text-gray-400 hover:text-white hover:bg-white/10 transition-all">
+              <button className="p-3.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 transition-all">
                 <Filter size={20} />
               </button>
             </div>
 
             {browseLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[1, 2, 3, 4].map(i => <div key={i} className="h-64 bg-white/5 animate-pulse rounded-3xl border border-white/5" />)}
+                {[1, 2, 3, 4].map(i => <div key={i} className="h-64 bg-black/5 dark:bg-white/5 animate-pulse rounded-3xl border border-black/5 dark:border-white/5" />)}
               </div>
             ) : browseData?.projects && browseData.projects.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -112,7 +112,7 @@ const TeamsPage: React.FC = () => {
           <div className="space-y-8">
             <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-3xl p-8 mb-8 relative overflow-hidden">
                <div className="relative z-10">
-                  <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                     <Sparkles className="text-yellow-400" size={24} />
                     AI-Powered Team Matcher
                   </h2>
@@ -125,7 +125,7 @@ const TeamsPage: React.FC = () => {
 
             {matchesLoading ? (
                <div className="space-y-4">
-                  {[1, 2, 3].map(i => <div key={i} className="h-24 bg-white/5 animate-pulse rounded-2xl border border-white/5" />)}
+                  {[1, 2, 3].map(i => <div key={i} className="h-24 bg-black/5 dark:bg-white/5 animate-pulse rounded-2xl border border-black/5 dark:border-white/5" />)}
                </div>
             ) : matchesData?.matches && matchesData.matches.length > 0 ? (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -151,20 +151,20 @@ const TeamsPage: React.FC = () => {
                   <Link 
                     to={`/teams/projects/${project._id}`} 
                     key={project._id}
-                    className="flex items-center justify-between p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all group"
+                    className="flex items-center justify-between p-6 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl hover:bg-black/10 dark:hover:bg-white/10 transition-all group"
                   >
                     <div className="flex items-center space-x-4">
                        <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400">
                           <Briefcase size={24} />
                        </div>
                        <div>
-                          <h3 className="font-bold text-white group-hover:text-blue-400 transition-colors">{project.title}</h3>
+                          <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-blue-400 transition-colors">{project.title}</h3>
                           <p className="text-sm text-gray-500">
                              {project.status === 'open' ? '🟢 Open for members' : '🔴 Team full'} • {project.members.length} members
                           </p>
                        </div>
                     </div>
-                    <ChevronRight className="text-gray-600 group-hover:text-white transition-colors" />
+                    <ChevronRight className="text-gray-600 group-hover:text-gray-900 dark:text-white transition-colors" />
                   </Link>
                 ))}
               </div>
@@ -191,7 +191,7 @@ const TabButton: React.FC<{ active: boolean; onClick: () => void; label: string;
   <button 
     onClick={onClick}
     className={`flex items-center space-x-2 px-6 py-2.5 rounded-xl font-bold text-sm transition-all ${
-      active ? 'bg-white/10 text-white shadow-sm' : 'text-gray-500 hover:text-gray-300'
+      active ? 'bg-black/10 dark:bg-white/10 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-gray-300'
     }`}
   >
     {icon}
@@ -202,7 +202,7 @@ const TabButton: React.FC<{ active: boolean; onClick: () => void; label: string;
 const ProjectCard: React.FC<{ project: any }> = ({ project }) => (
   <motion.div 
     whileHover={{ y: -4 }}
-    className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 hover:bg-white/10 transition-all flex flex-col h-full"
+    className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-[2.5rem] p-8 hover:bg-black/10 dark:hover:bg-white/10 transition-all flex flex-col h-full"
   >
     <div className="flex justify-between items-start mb-6">
       <div className="flex -space-x-3">
@@ -215,7 +215,7 @@ const ProjectCard: React.FC<{ project: any }> = ({ project }) => (
           />
         ))}
         {project.members.length > 3 && (
-          <div className="w-10 h-10 rounded-full border-2 border-gray-950 bg-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-400">
+          <div className="w-10 h-10 rounded-full border-2 border-gray-950 bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-600 dark:text-gray-400">
             +{project.members.length - 3}
           </div>
         )}
@@ -227,13 +227,13 @@ const ProjectCard: React.FC<{ project: any }> = ({ project }) => (
       </div>
     </div>
 
-    <h3 className="text-xl font-bold text-white mb-3 leading-tight">{project.title}</h3>
-    <p className="text-gray-400 text-sm mb-6 line-clamp-2 flex-grow">{project.description}</p>
+    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">{project.title}</h3>
+    <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 line-clamp-2 flex-grow">{project.description}</p>
 
-    <div className="space-y-4 pt-6 border-t border-white/5">
+    <div className="space-y-4 pt-6 border-t border-black/5 dark:border-white/5">
       <div className="flex flex-wrap gap-2">
         {project.requiredSkills.slice(0, 3).map((s: any, i: number) => (
-          <span key={i} className="text-[10px] bg-white/5 text-gray-400 px-2 py-1 rounded-lg border border-white/5">
+          <span key={i} className="text-[10px] bg-black/5 dark:bg-white/5 text-gray-600 dark:text-gray-400 px-2 py-1 rounded-lg border border-black/5 dark:border-white/5">
             {s.skill.name}
           </span>
         ))}
@@ -252,7 +252,7 @@ const ProjectCard: React.FC<{ project: any }> = ({ project }) => (
 );
 
 const MatchCard: React.FC<{ match: any }> = ({ match }) => (
-  <div className="p-6 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all">
+  <div className="p-6 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl hover:bg-black/10 dark:hover:bg-white/10 transition-all">
     <div className="flex items-center space-x-4 mb-6">
       <img 
         src={match.user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${match.user.name}`} 
@@ -261,7 +261,7 @@ const MatchCard: React.FC<{ match: any }> = ({ match }) => (
       />
       <div className="flex-1">
         <div className="flex items-center justify-between">
-           <h3 className="font-bold text-white text-lg">{match.user.name}</h3>
+           <h3 className="font-bold text-gray-900 dark:text-white text-lg">{match.user.name}</h3>
            <div className="flex items-center space-x-1 px-2.5 py-1 bg-yellow-500/10 text-yellow-500 rounded-full text-xs font-bold">
               <Sparkles size={12} />
               <span>{Math.round(match.matchScore)}% Match</span>
@@ -272,15 +272,15 @@ const MatchCard: React.FC<{ match: any }> = ({ match }) => (
     </div>
 
     <div className="grid grid-cols-2 gap-4 mb-6">
-       <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+       <div className="p-3 bg-black/5 dark:bg-white/5 rounded-xl border border-black/5 dark:border-white/5">
           <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">Skill Overlap</p>
-          <div className="h-1.5 w-full bg-gray-800 rounded-full overflow-hidden">
+          <div className="h-1.5 w-full bg-gray-50 dark:bg-gray-800 rounded-full overflow-hidden">
              <div className="h-full bg-blue-500" style={{ width: `${match.breakdown.skillOverlap}%` }} />
           </div>
        </div>
-       <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+       <div className="p-3 bg-black/5 dark:bg-white/5 rounded-xl border border-black/5 dark:border-white/5">
           <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">Interest alignment</p>
-          <div className="h-1.5 w-full bg-gray-800 rounded-full overflow-hidden">
+          <div className="h-1.5 w-full bg-gray-50 dark:bg-gray-800 rounded-full overflow-hidden">
              <div className="h-full bg-purple-500" style={{ width: `${match.breakdown.interestAlignment}%` }} />
           </div>
        </div>
@@ -294,7 +294,7 @@ const MatchCard: React.FC<{ match: any }> = ({ match }) => (
             </span>
           ))}
        </div>
-       <button className="text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-xl transition-all">
+       <button className="text-sm font-bold text-gray-900 dark:text-white bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-xl transition-all">
           Connect
        </button>
     </div>
@@ -302,11 +302,11 @@ const MatchCard: React.FC<{ match: any }> = ({ match }) => (
 );
 
 const EmptyState: React.FC<{ title: string; description: string; icon: React.ReactNode }> = ({ title, description, icon }) => (
-  <div className="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-white/5 rounded-[3rem]">
-    <div className="mb-6 p-6 bg-white/5 rounded-full">
+  <div className="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-black/5 dark:border-white/5 rounded-[3rem]">
+    <div className="mb-6 p-6 bg-black/5 dark:bg-white/5 rounded-full">
       {icon}
     </div>
-    <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
+    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{title}</h3>
     <p className="text-gray-500 max-w-sm">{description}</p>
   </div>
 );

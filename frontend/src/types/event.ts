@@ -27,6 +27,7 @@ export interface IEvent {
   tags: string[];
   targetAudience: TargetAudience;
   status: 'draft' | 'published' | 'cancelled' | 'completed';
+  organizerId?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -53,7 +54,7 @@ export interface RSVPResponse {
   _id: string;
   user: string;
   event: IEvent;
-  status: 'attending' | 'waitlisted' | 'cancelled';
+  status: 'pending' | 'attending' | 'waitlisted' | 'cancelled';
   isCheckedIn: boolean;
   createdAt: string;
 }

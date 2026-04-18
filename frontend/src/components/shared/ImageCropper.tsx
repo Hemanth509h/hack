@@ -74,7 +74,7 @@ const ImageCropper = ({ imageSrc, onCropComplete, onCancel, aspectRatio = 1 }: I
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex flex-col bg-gray-950/95 backdrop-blur-md">
+    <div className="fixed inset-0 z-[200] flex flex-col bg-gray-100 dark:bg-gray-950/95 backdrop-blur-md">
       <div className="relative flex-1">
         <Cropper
           image={imageSrc}
@@ -87,8 +87,8 @@ const ImageCropper = ({ imageSrc, onCropComplete, onCancel, aspectRatio = 1 }: I
         />
       </div>
       
-      <div className="h-24 bg-gray-900 border-t border-gray-800 flex items-center justify-between px-6 z-10 w-full max-w-4xl mx-auto shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
-         <button onClick={onCancel} className="text-gray-400 hover:text-white px-4 py-2 font-medium">
+      <div className="h-24 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between px-6 z-10 w-full max-w-4xl mx-auto shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+         <button onClick={onCancel} className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white px-4 py-2 font-medium">
              Cancel
          </button>
          
@@ -106,7 +106,7 @@ const ImageCropper = ({ imageSrc, onCropComplete, onCancel, aspectRatio = 1 }: I
              />
          </div>
 
-         <button onClick={handleCropSave} className="bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-bold py-2 px-6 rounded-xl transition">
+         <button onClick={handleCropSave} className="bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-gray-900 dark:text-white font-bold py-2 px-6 rounded-xl transition">
              Apply Crop
          </button>
       </div>

@@ -68,12 +68,12 @@ export default function ResetPasswordPage() {
           <div className="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle size={32} />
           </div>
-          <p className="text-gray-300">
+          <p className="text-gray-700 dark:text-gray-300">
             You can now sign in with your new password.
           </p>
           <Link
             to="/login"
-            className="block w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+            className="block w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-gray-900 dark:text-white font-medium rounded-lg transition-colors"
           >
             Sign In
           </Link>
@@ -97,7 +97,7 @@ export default function ResetPasswordPage() {
         )}
 
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1">New Password</label>
+          <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">New Password</label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
               <Lock size={18} />
@@ -105,7 +105,7 @@ export default function ResetPasswordPage() {
             <input
               type="password"
               {...register('password')}
-              className="block w-full pl-10 pr-3 py-2.5 bg-gray-900 border border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-100"
+              className="block w-full pl-10 pr-3 py-2.5 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 dark:text-gray-100"
               placeholder="••••••••"
             />
           </div>
@@ -113,7 +113,7 @@ export default function ResetPasswordPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1">Confirm New Password</label>
+          <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Confirm New Password</label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
               <Lock size={18} />
@@ -121,7 +121,7 @@ export default function ResetPasswordPage() {
             <input
               type="password"
               {...register('confirmPassword')}
-              className="block w-full pl-10 pr-3 py-2.5 bg-gray-900 border border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-100"
+              className="block w-full pl-10 pr-3 py-2.5 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 dark:text-gray-100"
               placeholder="••••••••"
             />
           </div>
@@ -131,7 +131,7 @@ export default function ResetPasswordPage() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center disabled:opacity-50"
+          className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-gray-900 dark:text-white font-medium rounded-lg transition-colors flex items-center justify-center disabled:opacity-50"
         >
           {isLoading ? <Loader2 className="animate-spin" size={20} /> : <span>Reset Password</span>}
         </button>

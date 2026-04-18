@@ -42,7 +42,7 @@ export default function OAuthCallbackPage() {
     <AuthLayout title="Authenticating" subtitle="Please wait while we log you in...">
       <div className="flex flex-col items-center justify-center p-8 space-y-4">
         <Loader2 className="animate-spin text-blue-500" size={48} />
-        <p className="text-gray-400">Verifying your credentials...</p>
+        <p className="text-gray-600 dark:text-gray-400">Verifying your credentials...</p>
       </div>
     </AuthLayout>
   );

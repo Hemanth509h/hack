@@ -13,6 +13,8 @@ export interface ITeamProject extends Document {
   associatedEvent?: mongoose.Types.ObjectId; // e.g., created for a specific hackathon
   deadline?: Date;
   status: 'open' | 'full' | 'completed';
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const TeamProjectSchema = new Schema<ITeamProject>({

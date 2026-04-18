@@ -23,7 +23,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full flex flex-col space-y-1.5">
         {label && (
-          <label htmlFor={inputId} className="text-sm font-medium text-gray-300">
+          <label htmlFor={inputId} className="text-sm font-medium text-gray-700 dark:text-gray-300">
             {label}
             {props.required && <span className="text-red-500 ml-1">*</span>}
           </label>
@@ -40,7 +40,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             ref={ref}
             className={cn(
-              "flex h-11 w-full rounded-xl border bg-surface px-4 py-2 text-sm text-white transition-all",
+              "flex h-11 w-full rounded-xl border bg-surface px-4 py-2 text-sm text-gray-900 dark:text-white transition-all",
               "file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500",
               "focus:outline-none focus:ring-2 focus:ring-primary-500/50 disabled:cursor-not-allowed disabled:opacity-50",
               error ? "border-red-500 focus:border-red-500 focus:ring-red-500/50" : "border-border hover:border-gray-600 focus:border-primary-500",

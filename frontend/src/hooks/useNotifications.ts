@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { useUpdateNotificationPreferencesMutation } from '../services/notificationApi';
+import { useUpdatePreferencesMutation } from '../services/notificationApi';
 
 export const useNotifications = () => {
-  const [updatePrefs] = useUpdateNotificationPreferencesMutation();
+  const [updatePrefs] = useUpdatePreferencesMutation();
 
   const requestPermission = async () => {
     if (!('Notification' in window)) return;

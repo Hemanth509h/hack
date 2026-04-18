@@ -28,7 +28,7 @@ const MapPage: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div className="flex h-screen w-full bg-gray-950 overflow-hidden pt-16">
+    <div className="flex h-screen w-full bg-gray-100 dark:bg-gray-950 overflow-hidden pt-16">
       <div className="w-full md:w-[400px] h-full shrink-0 relative z-20">
         <EventsNearbyPanel />
       </div>

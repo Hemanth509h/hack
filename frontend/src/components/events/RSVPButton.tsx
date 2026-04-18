@@ -44,8 +44,8 @@ export const RSVPButton: React.FC<RSVPButtonProps> = ({ eventId, initialIsRsvpd,
       disabled={isLoading}
       className={`relative overflow-hidden group font-semibold rounded-xl flex items-center justify-center transition-all duration-300 ${
         isRsvpd
-          ? 'bg-gray-800 hover:bg-red-500/10 text-white border border-gray-700 hover:border-red-500/50'
-          : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_20px_rgba(79,70,229,0.3)]'
+          ? 'bg-gray-50 dark:bg-gray-800 hover:bg-red-500/10 text-gray-900 dark:text-white border border-gray-700 hover:border-red-500/50'
+          : 'bg-indigo-600 hover:bg-indigo-500 text-gray-900 dark:text-white shadow-[0_0_20px_rgba(79,70,229,0.3)]'
       } ${className}`}
     >
       <AnimatePresence mode="wait">

@@ -48,33 +48,33 @@ export const MatchDetailModal: React.FC<MatchDetailModalProps> = ({ match, onClo
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.92, y: 24 }}
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          className="bg-gray-900/95 border border-white/10 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+          className="bg-white dark:bg-gray-900/95 border border-black/10 dark:border-white/10 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
           onClick={e => e.stopPropagation()}
         >
           {/* Header */}
           <div className="relative p-8 pb-0">
             <button
               onClick={onClose}
-              className="absolute top-6 right-6 w-9 h-9 flex items-center justify-center rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-all"
+              className="absolute top-6 right-6 w-9 h-9 flex items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-800 hover:bg-gray-700 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white transition-all"
             >
               <X className="w-4 h-4" />
             </button>
 
             <div className="flex items-start gap-5 mb-6">
-              <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${avatarColors[0]} flex items-center justify-center text-white font-bold text-2xl shrink-0 shadow-xl`}>
+              <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${avatarColors[0]} flex items-center justify-center text-gray-900 dark:text-white font-bold text-2xl shrink-0 shadow-xl`}>
                 {match.user.avatar
                   ? <img src={match.user.avatar} alt={match.user.name} className="w-full h-full object-cover rounded-2xl" />
                   : initials
                 }
               </div>
               <div>
-                <h2 className="text-2xl font-black text-white">{match.user.name}</h2>
-                <p className="text-gray-400 mt-1">
+                <h2 className="text-2xl font-black text-gray-900 dark:text-white">{match.user.name}</h2>
+                <p className="text-gray-600 dark:text-gray-400 mt-1">
                   {match.user.major || 'Computer Science'}
                   {match.user.graduationYear && ` · Class of ${match.user.graduationYear}`}
                 </p>
                 <div className="flex items-center gap-2 mt-2">
-                  <span className="inline-flex items-center gap-1.5 bg-gradient-to-r from-emerald-500 to-teal-400 text-white text-xs font-black px-3 py-1 rounded-lg">
+                  <span className="inline-flex items-center gap-1.5 bg-gradient-to-r from-emerald-500 to-teal-400 text-gray-900 dark:text-white text-xs font-black px-3 py-1 rounded-lg">
                     <Star className="w-3 h-3" /> {pct}% Match
                   </span>
                   {match.breakdown.isAvailable && (
@@ -87,7 +87,7 @@ export const MatchDetailModal: React.FC<MatchDetailModalProps> = ({ match, onClo
             </div>
 
             {match.user.bio && (
-              <p className="text-gray-300 text-sm leading-relaxed mb-6 bg-white/3 rounded-xl p-4 border border-white/5">
+              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-6 bg-white/3 rounded-xl p-4 border border-black/5 dark:border-white/5">
                 {match.user.bio}
               </p>
             )}
@@ -95,8 +95,8 @@ export const MatchDetailModal: React.FC<MatchDetailModalProps> = ({ match, onClo
 
           <div className="p-8 pt-4 space-y-6">
             {/* Match Breakdown */}
-            <div className="bg-white/3 rounded-2xl p-5 border border-white/5">
-              <h3 className="text-white font-bold text-sm mb-4 flex items-center gap-2">
+            <div className="bg-white/3 rounded-2xl p-5 border border-black/5 dark:border-white/5">
+              <h3 className="text-gray-900 dark:text-white font-bold text-sm mb-4 flex items-center gap-2">
                 <Brain className="w-4 h-4 text-violet-400" /> AI Match Breakdown
               </h3>
               <div className="space-y-3">
@@ -106,11 +106,11 @@ export const MatchDetailModal: React.FC<MatchDetailModalProps> = ({ match, onClo
                   { label: 'Collaboration History', value: match.breakdown.collaborationHistory, color: 'from-amber-500 to-orange-500' },
                 ].map(item => (
                   <div key={item.label}>
-                    <div className="flex justify-between text-xs text-gray-400 mb-1.5">
+                    <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-1.5">
                       <span>{item.label}</span>
-                      <span className="font-bold text-white">{item.value}%</span>
+                      <span className="font-bold text-gray-900 dark:text-white">{item.value}%</span>
                     </div>
-                    <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                    <div className="h-2 bg-gray-50 dark:bg-gray-800 rounded-full overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${item.value}%` }}
@@ -126,7 +126,7 @@ export const MatchDetailModal: React.FC<MatchDetailModalProps> = ({ match, onClo
             {/* Skills */}
             {match.user.skills.length > 0 && (
               <div>
-                <h3 className="text-white font-bold text-sm mb-3 flex items-center gap-2">
+                <h3 className="text-gray-900 dark:text-white font-bold text-sm mb-3 flex items-center gap-2">
                   <Code className="w-4 h-4 text-indigo-400" /> Skills & Expertise
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -146,7 +146,7 @@ export const MatchDetailModal: React.FC<MatchDetailModalProps> = ({ match, onClo
             {/* Common Interests */}
             {match.user.interests.length > 0 && (
               <div>
-                <h3 className="text-white font-bold text-sm mb-3 flex items-center gap-2">
+                <h3 className="text-gray-900 dark:text-white font-bold text-sm mb-3 flex items-center gap-2">
                   <Star className="w-4 h-4 text-amber-400" /> Interests
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -162,13 +162,13 @@ export const MatchDetailModal: React.FC<MatchDetailModalProps> = ({ match, onClo
             {/* Send Request */}
             {!sent ? (
               <div className="bg-indigo-500/5 border border-indigo-500/20 rounded-2xl p-5">
-                <h3 className="text-white font-bold text-sm mb-4 flex items-center gap-2">
+                <h3 className="text-gray-900 dark:text-white font-bold text-sm mb-4 flex items-center gap-2">
                   <Send className="w-4 h-4 text-indigo-400" /> Invite to Your Project
                 </h3>
                 <select
                   value={selectedProject}
                   onChange={e => setSelectedProject(e.target.value)}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white mb-3 focus:outline-none focus:border-indigo-500 transition-colors"
+                  className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white mb-3 focus:outline-none focus:border-indigo-500 transition-colors"
                 >
                   <option value="">Select your project…</option>
                   {projectsData?.projects.map(p => (
@@ -180,12 +180,12 @@ export const MatchDetailModal: React.FC<MatchDetailModalProps> = ({ match, onClo
                   onChange={e => setMessage(e.target.value)}
                   placeholder="Add an optional message… (e.g. 'Your React skills would be perfect for our dashboard feature!')"
                   rows={3}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-indigo-500 transition-colors mb-3"
+                  className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-500 resize-none focus:outline-none focus:border-indigo-500 transition-colors mb-3"
                 />
                 <button
                   onClick={handleSend}
                   disabled={isLoading || !selectedProject}
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-500/20"
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 disabled:opacity-40 disabled:cursor-not-allowed text-gray-900 dark:text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-500/20"
                 >
                   <Send className="w-4 h-4" />
                   {isLoading ? 'Sending…' : 'Send Request'}
@@ -198,8 +198,8 @@ export const MatchDetailModal: React.FC<MatchDetailModalProps> = ({ match, onClo
                 className="flex flex-col items-center py-8 text-center"
               >
                 <CheckCircle className="w-14 h-14 text-emerald-400 mb-3" />
-                <h3 className="text-white font-bold text-lg">Request Sent!</h3>
-                <p className="text-gray-400 text-sm mt-1">Your team invite has been delivered to {match.user.name}.</p>
+                <h3 className="text-gray-900 dark:text-white font-bold text-lg">Request Sent!</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">Your team invite has been delivered to {match.user.name}.</p>
               </motion.div>
             )}
 

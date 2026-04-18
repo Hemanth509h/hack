@@ -19,6 +19,8 @@ export interface IEvent extends Document {
     years: number[];
   };
   status: 'draft' | 'published' | 'cancelled' | 'completed';
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const EventSchema = new Schema<IEvent>({

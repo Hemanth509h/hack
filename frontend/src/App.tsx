@@ -43,7 +43,7 @@ function App() {
 
   return (
     <SocketProvider>
-      <div className="min-h-screen bg-[#030303] text-gray-100 font-sans selection:bg-indigo-500/30 w-full overflow-x-hidden">
+      <div className="min-h-screen bg-gray-50 dark:bg-[#030303] text-gray-900 dark:text-gray-100 font-sans selection:bg-indigo-500/30 w-full overflow-x-hidden transition-colors duration-300">
         {/* Advanced Background Gradients */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-indigo-900/10 blur-[150px] rounded-full animate-float" />
@@ -78,7 +78,7 @@ function App() {
                     Campus Intelligence Platform
                   </motion.div>
                   <motion.h1 
-                    className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tighter leading-[0.9] text-white"
+                    className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tighter leading-[0.9] text-gray-900 dark:text-white"
                   >
                     Explore Your <br />
                     <span className="text-gradient">Campus.</span>
@@ -87,7 +87,7 @@ function App() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="text-gray-400 text-lg sm:text-xl md:text-2xl max-w-2xl md:mx-0 mx-auto font-light leading-relaxed"
+                    className="text-gray-600 dark:text-gray-400 text-lg sm:text-xl md:text-2xl max-w-2xl md:mx-0 mx-auto font-light leading-relaxed"
                   >
                     The unified ecosystem for events, clubs, and collaborative projects. Stay ahead with real-time campus pulse.
                   </motion.p>
@@ -117,7 +117,7 @@ function App() {
         <BottomNav />
 
         {/* Footer */}
-        <footer className="py-12 pb-24 md:pb-12 border-t border-white/5 text-center text-gray-600 text-sm">
+        <footer className="py-12 pb-24 md:pb-12 border-t border-black/5 dark:border-white/5 text-center text-gray-600 text-sm">
           <p>© 2026 The Quad • Engineered for Student Excellence</p>
         </footer>
 

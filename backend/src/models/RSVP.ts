@@ -4,7 +4,7 @@ import { Event } from './Event';
 export interface IRSVP extends Document {
   user: mongoose.Types.ObjectId;
   event: mongoose.Types.ObjectId;
-  status: 'attending' | 'waitlisted' | 'cancelled';
+  status: 'pending' | 'attending' | 'waitlisted' | 'cancelled';
   isCheckedIn: boolean;
   checkInTime?: Date;
   guestsCount: number;
@@ -13,7 +13,7 @@ export interface IRSVP extends Document {
 const RSVPSchema = new Schema<IRSVP>({
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   event: { type: Schema.Types.ObjectId, ref: 'Event', required: true },
-  status: { type: String, enum: ['attending', 'waitlisted', 'cancelled'], default: 'attending' },
+  status: { type: String, enum: ['pending', 'attending', 'waitlisted', 'cancelled'], default: 'pending' },
   isCheckedIn: { type: Boolean, default: false },
   checkInTime: Date,
   guestsCount: { type: Number, default: 0 }

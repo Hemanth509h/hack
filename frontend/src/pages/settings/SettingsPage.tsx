@@ -64,11 +64,11 @@ const SettingsPage: React.FC = () => {
   return (
     <PageContainer>
       <div className="mb-10">
-        <h1 className="text-4xl md:text-5xl font-black text-white mb-2 tracking-tight flex items-center gap-4">
+        <h1 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-2 tracking-tight flex items-center gap-4">
           <Settings className="text-gray-500" size={40} />
           Settings
         </h1>
-        <p className="text-gray-400 text-lg">Manage your account preferences and application settings.</p>
+        <p className="text-gray-600 dark:text-gray-400 text-lg">Manage your account preferences and application settings.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -95,25 +95,25 @@ const SettingsPage: React.FC = () => {
           {sections.map((section, idx) => (
             <div key={idx} className="space-y-4">
               <h2 className="text-xs font-bold text-gray-500 uppercase tracking-widest px-4">{section.title}</h2>
-              <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden">
+              <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl overflow-hidden">
                 {section.items.map((item, i) => (
                   <Link 
                     key={item.id} 
                     to={item.path}
-                    className={`flex items-center justify-between p-6 hover:bg-white/5 transition-all group ${
-                      i !== section.items.length - 1 ? 'border-b border-white/5' : ''
+                    className={`flex items-center justify-between p-6 hover:bg-black/5 dark:hover:bg-white/5 transition-all group ${
+                      i !== section.items.length - 1 ? 'border-b border-black/5 dark:border-white/5' : ''
                     }`}
                   >
                     <div className="flex items-center gap-5">
-                      <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <div className="w-12 h-12 rounded-2xl bg-black/5 dark:bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
                         {item.icon}
                       </div>
                       <div>
-                        <h3 className="font-bold text-white group-hover:text-blue-400 transition-colors">{item.title}</h3>
+                        <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-blue-400 transition-colors">{item.title}</h3>
                         <p className="text-sm text-gray-500">{item.desc}</p>
                       </div>
                     </div>
-                    <ChevronRight className="text-gray-600 group-hover:text-white transition-colors" />
+                    <ChevronRight className="text-gray-600 group-hover:text-gray-900 dark:text-white transition-colors" />
                   </Link>
                 ))}
               </div>
@@ -138,7 +138,7 @@ const SettingsPage: React.FC = () => {
         </div>
 
         <div className="space-y-6">
-           <div className="bg-gradient-to-br from-blue-600 to-purple-700 rounded-[2.5rem] p-8 text-white shadow-2xl shadow-blue-500/20">
+           <div className="bg-gradient-to-br from-blue-600 to-purple-700 rounded-[2.5rem] p-8 text-gray-900 dark:text-white shadow-2xl shadow-blue-500/20">
               <h3 className="text-xl font-black mb-4">The Quad Pro</h3>
               <p className="text-blue-100 text-sm mb-6 leading-relaxed">
                 Get early access to events, premium club badges, and unlimited team matchmaking requests.
@@ -148,15 +148,15 @@ const SettingsPage: React.FC = () => {
               </button>
            </div>
 
-           <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8">
-              <h4 className="font-bold text-white mb-4">Support</h4>
+           <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-[2.5rem] p-8">
+              <h4 className="font-bold text-gray-900 dark:text-white mb-4">Support</h4>
               <nav className="space-y-3">
-                 <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Help Center</a>
-                 <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
-                 <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Terms of Service</a>
-                 <a href="#" className="block text-sm text-gray-400 hover:text-white transition-colors">Contact Us</a>
+                 <a href="#" className="block text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white transition-colors">Help Center</a>
+                 <a href="#" className="block text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white transition-colors">Privacy Policy</a>
+                 <a href="#" className="block text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white transition-colors">Terms of Service</a>
+                 <a href="#" className="block text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white transition-colors">Contact Us</a>
               </nav>
-              <div className="mt-8 pt-8 border-t border-white/5 text-[10px] text-gray-600 uppercase font-bold tracking-widest">
+              <div className="mt-8 pt-8 border-t border-black/5 dark:border-white/5 text-[10px] text-gray-600 uppercase font-bold tracking-widest">
                  Version 1.4.2-stable
               </div>
            </div>

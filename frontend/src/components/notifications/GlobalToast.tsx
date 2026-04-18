@@ -49,10 +49,10 @@ const ToastItem = ({ toast, onClose }: any) => {
         {icons[toast.type as keyof typeof icons]}
       </div>
       <div className="ml-3 flex-1">
-        {toast.title && <h3 className="text-sm font-semibold text-white">{toast.title}</h3>}
-        <p className="text-sm text-gray-300 mt-0.5">{toast.message}</p>
+        {toast.title && <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{toast.title}</h3>}
+        <p className="text-sm text-gray-700 dark:text-gray-300 mt-0.5">{toast.message}</p>
       </div>
-      <button onClick={onClose} className="ml-4 text-gray-400 hover:text-white transition-colors">
+      <button onClick={onClose} className="ml-4 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white transition-colors">
         <X className="w-4 h-4" />
       </button>
     </div>

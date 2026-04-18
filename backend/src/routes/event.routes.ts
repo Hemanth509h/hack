@@ -12,6 +12,8 @@ import {
   cancelRsvp,
   checkInRsvp,
   getEventAttendees,
+  approveRSVP,
+  rejectRSVP,
   getNearbyEvents,
   getRecommendedEvents,
   getEventIcs,
@@ -33,7 +35,7 @@ router.get('/:id/calendar.ics', getEventIcs);
 router.post(
   '/', 
   requireAuth, 
-  requireRole(['club_leader', 'admin']), 
+  requireRole(['admin']), 
   validateRequest(createEventSchema), 
   createEvent
 );
@@ -54,6 +56,10 @@ router.delete('/:id/rsvp', requireAuth, cancelRsvp);
 
 // Organizers check attendee list
 router.get('/:id/attendees', requireAuth, getEventAttendees);
+
+// Approval workflows
+router.post('/:id/rsvp/:userId/approve', requireAuth, approveRSVP);
+router.post('/:id/rsvp/:userId/reject', requireAuth, rejectRSVP);
 
 // QR Code generation route
 router.get('/:id/checkin/qr', requireAuth, getQrCodeData);

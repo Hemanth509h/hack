@@ -74,7 +74,7 @@ export default function LoginPage() {
 
         {/* Email Input */}
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1">Email</label>
+          <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Email</label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
               <Mail size={18} />
@@ -82,7 +82,7 @@ export default function LoginPage() {
             <input
               type="email"
               {...register('email')}
-              className="block w-full pl-10 pr-3 py-2.5 bg-gray-900 border border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-100 transition-colors"
+              className="block w-full pl-10 pr-3 py-2.5 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 dark:text-gray-100 transition-colors"
               placeholder="you@university.edu"
             />
           </div>
@@ -93,7 +93,7 @@ export default function LoginPage() {
 
         {/* Password Input */}
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1">Password</label>
+          <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Password</label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
               <Lock size={18} />
@@ -101,7 +101,7 @@ export default function LoginPage() {
             <input
               type="password"
               {...register('password')}
-              className="block w-full pl-10 pr-3 py-2.5 bg-gray-900 border border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-100 transition-colors"
+              className="block w-full pl-10 pr-3 py-2.5 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 dark:text-gray-100 transition-colors"
               placeholder="••••••••"
             />
           </div>
@@ -116,11 +116,11 @@ export default function LoginPage() {
             <input
               type="checkbox"
               {...register('rememberMe')}
-              className="rounded border-gray-700 bg-gray-900 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900"
+              className="rounded border-gray-700 bg-white dark:bg-gray-900 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900"
             />
-            <span className="text-gray-400">Remember me</span>
+            <span className="text-gray-600 dark:text-gray-400">Remember me</span>
           </label>
-          <Link to="/forgot-password" className="text-blue-400 hover:text-blue-300 transition-colors">
+          <Link to="/forgot-password" disabled={isLoading} className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
             Forgot password?
           </Link>
         </div>
@@ -129,7 +129,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/20"
         >
           {isLoading ? <Loader2 className="animate-spin" size={20} /> : <span>Sign In</span>}
         </button>
@@ -137,9 +137,9 @@ export default function LoginPage() {
 
       {/* OAuth Separator */}
       <div className="mt-6 flex items-center">
-        <div className="flex-1 border-t border-white/10"></div>
+        <div className="flex-1 border-t border-black/10 dark:border-white/10"></div>
         <span className="px-3 text-gray-500 text-sm">Or continue with</span>
-        <div className="flex-1 border-t border-white/10"></div>
+        <div className="flex-1 border-t border-black/10 dark:border-white/10"></div>
       </div>
 
       {/* OAuth Buttons */}
@@ -147,7 +147,7 @@ export default function LoginPage() {
         <button
           type="button"
           onClick={() => handleOAuthLogin('google')}
-          className="flex items-center justify-center space-x-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-colors text-white text-sm font-medium"
+          className="flex items-center justify-center space-x-2 py-2.5 px-4 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 rounded-lg transition-colors text-gray-900 dark:text-white text-sm font-medium"
         >
           <Chrome size={18} />
           <span>Google</span>
@@ -155,7 +155,7 @@ export default function LoginPage() {
         <button
           type="button"
           onClick={() => handleOAuthLogin('microsoft')}
-          className="flex items-center justify-center space-x-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-colors text-white text-sm font-medium"
+          className="flex items-center justify-center space-x-2 py-2.5 px-4 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 rounded-lg transition-colors text-gray-900 dark:text-white text-sm font-medium"
         >
           <Github size={18} /> {/* Note: A Microsoft logo isn't standard in lucide, using generic or Github placeholder for now */}
           <span>Microsoft</span>
@@ -163,9 +163,9 @@ export default function LoginPage() {
       </div>
 
       {/* Bottom Text */}
-      <p className="mt-8 text-center text-sm text-gray-400">
+      <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
         Don't have an account?{' '}
-        <Link to="/register" className="text-blue-400 hover:text-blue-300 transition-colors font-medium">
+        <Link to="/register" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors font-medium">
           Create one now
         </Link>
       </p>

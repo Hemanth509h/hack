@@ -15,6 +15,8 @@ export interface IClub extends Document {
   meetingSchedule?: string;
   tags: string[];
   memberCount: number; // Denormalized counter
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const ClubSchema = new Schema<IClub>({

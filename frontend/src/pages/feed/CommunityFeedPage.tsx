@@ -18,15 +18,15 @@ const CommunityFeedPage: React.FC = () => {
             <div className="p-2 bg-indigo-500/10 rounded-xl text-indigo-400">
               <Sparkles size={24} />
             </div>
-            <h1 className="text-4xl font-black text-white tracking-tight">Campus Pulse</h1>
+            <h1 className="text-4xl font-black text-gray-900 dark:text-white tracking-tight">Campus Pulse</h1>
           </div>
-          <p className="text-gray-400 text-lg">Real-time updates from clubs, events, and projects across campus.</p>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">Real-time updates from clubs, events, and projects across campus.</p>
         </div>
 
         {isLoading ? (
           <div className="space-y-6">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-48 bg-gray-900/50 border border-gray-800 rounded-3xl animate-pulse" />
+              <div key={i} className="h-48 bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-3xl animate-pulse" />
             ))}
           </div>
         ) : (
@@ -56,7 +56,7 @@ const FeedCard: React.FC<{ item: FeedItem; index: number }> = ({ item, index }) 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="group bg-gray-900 border border-gray-800 rounded-3xl overflow-hidden hover:border-gray-700 transition-all"
+      className="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl overflow-hidden hover:border-gray-700 transition-all"
     >
       <div className="p-6 md:p-8 flex flex-col md:flex-row gap-6">
         {item.image && (
@@ -76,17 +76,17 @@ const FeedCard: React.FC<{ item: FeedItem; index: number }> = ({ item, index }) 
             </span>
           </div>
 
-          <h2 className="text-2xl font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-indigo-400 transition-colors">
             {item.title}
           </h2>
           
-          <p className="text-gray-400 text-sm line-clamp-2 mb-6 leading-relaxed">
+          <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2 mb-6 leading-relaxed">
             {item.description}
           </p>
 
           <Link 
             to={linkPath}
-            className="inline-flex items-center gap-2 text-sm font-bold text-white hover:text-indigo-400 transition-colors group/btn"
+            className="inline-flex items-center gap-2 text-sm font-bold text-gray-900 dark:text-white hover:text-indigo-400 transition-colors group/btn"
           >
             Explore More <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
           </Link>

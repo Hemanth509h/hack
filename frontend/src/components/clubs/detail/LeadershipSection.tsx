@@ -8,20 +8,20 @@ interface LeadershipSectionProps {
 
 export const LeadershipSection: React.FC<LeadershipSectionProps> = ({ leadership }) => {
   return (
-    <div className="bg-gray-900/50 border border-gray-800 rounded-3xl p-8 mb-12">
-      <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+    <div className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-3xl p-8 mb-12">
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 flex items-center gap-3">
         <Shield className="h-6 w-6 text-indigo-400" />
         Club Leadership
       </h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {leadership.map((member) => (
-          <div key={member._id} className="bg-gray-800/40 border border-gray-700/50 p-6 rounded-2xl flex items-center gap-4 hover:border-indigo-500/30 transition-all group">
+          <div key={member._id} className="bg-gray-50 dark:bg-gray-800/40 border border-gray-700/50 p-6 rounded-2xl flex items-center gap-4 hover:border-indigo-500/30 transition-all group">
             <div className="h-16 w-16 rounded-full overflow-hidden border-2 border-indigo-500/20 group-hover:border-indigo-500 transition-colors">
               {member.user.avatar ? (
                 <img src={member.user.avatar} alt={member.user.name} className="h-full w-full object-cover" />
               ) : (
-                <div className="h-full w-full bg-gray-700 flex items-center justify-center text-gray-400">
+                <div className="h-full w-full bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-400">
                   <User className="h-8 w-8" />
                 </div>
               )}
@@ -36,7 +36,7 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({ leadership
                   {member.role}
                 </span>
               </div>
-              <h3 className="font-bold text-white group-hover:text-indigo-400 transition-colors">{member.user.name}</h3>
+              <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-indigo-400 transition-colors">{member.user.name}</h3>
               <p className="text-xs text-gray-500">{member.user.major || 'Student'}</p>
             </div>
           </div>

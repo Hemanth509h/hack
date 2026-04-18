@@ -13,7 +13,7 @@ const BottomNav: React.FC = () => {
   const location = useLocation();
 
   return (
-    <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] z-50 glass rounded-[2rem] px-4 py-3 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-white/10">
+    <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] z-50 glass rounded-[2rem] px-4 py-3 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-black/10 dark:border-white/10">
       <div className="flex items-center justify-around h-12">
         <NavItem to="/discover" icon={<Home size={22} />} active={location.pathname === '/discover'} />
         <NavItem to="/events" icon={<Calendar size={22} />} active={location.pathname.startsWith('/events')} />
@@ -28,7 +28,7 @@ const BottomNav: React.FC = () => {
 const NavItem: React.FC<{ to: string; icon: React.ReactNode; active?: boolean }> = ({ to, icon, active }) => (
   <Link to={to} className={cn(
     "relative flex flex-col items-center justify-center w-12 h-12 rounded-2xl transition-all duration-300",
-    active ? "bg-indigo-500/10 text-indigo-400" : "text-gray-500 hover:text-white"
+    active ? "bg-indigo-500/10 text-indigo-400" : "text-gray-500 hover:text-gray-900 dark:text-white"
   )}>
     <div className={cn(
       "transition-transform duration-300",

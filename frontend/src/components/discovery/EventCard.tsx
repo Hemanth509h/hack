@@ -34,7 +34,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, featured }) => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-80" />
         <div className="absolute top-6 left-6">
-          <span className="px-4 py-1.5 premium-gradient rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-2xl">
+          <span className="px-4 py-1.5 premium-gradient rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-gray-900 dark:text-white shadow-2xl">
             {event.category}
           </span>
         </div>
@@ -54,13 +54,13 @@ const EventCard: React.FC<EventCardProps> = ({ event, featured }) => {
           </div>
           
           <h3 className={cn(
-            "text-white font-display font-black mb-4 line-clamp-2 leading-[1.1] tracking-tighter",
+            "text-gray-900 dark:text-white font-display font-black mb-4 line-clamp-2 leading-[1.1] tracking-tighter",
             featured ? "text-4xl md:text-5xl" : "text-2xl"
           )}>
             {event.title}
           </h3>
           
-          <p className="text-gray-400 text-base line-clamp-2 mb-8 font-light leading-relaxed">
+          <p className="text-gray-600 dark:text-gray-400 text-base line-clamp-2 mb-8 font-light leading-relaxed">
             {event.description}
           </p>
         </div>
@@ -71,14 +71,14 @@ const EventCard: React.FC<EventCardProps> = ({ event, featured }) => {
               <MapPin size={16} className="text-gray-600" />
               <span className="truncate max-w-[150px]">{event.location?.name || 'Main Campus'}</span>
             </div>
-            <div className="flex items-center space-x-2 bg-white/5 px-4 py-2 rounded-2xl border border-white/5 shadow-inner">
+            <div className="flex items-center space-x-2 bg-black/5 dark:bg-white/5 px-4 py-2 rounded-2xl border border-black/5 dark:border-white/5 shadow-inner">
               <Users size={16} className="text-indigo-500" />
-              <span className="text-white font-black text-sm">{event.rsvpCount || 0}</span>
+              <span className="text-gray-900 dark:text-white font-black text-sm">{event.rsvpCount || 0}</span>
               <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(99,102,241,0.8)]" />
             </div>
           </div>
 
-          <button className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-white transition-all duration-500 group-hover:bg-indigo-600 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] group-hover:rotate-45">
+          <button className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-gray-900 dark:text-white transition-all duration-500 group-hover:bg-indigo-600 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] group-hover:rotate-45">
             <ArrowUpRight size={24} className="group-hover:-rotate-45 transition-transform duration-500" />
           </button>
         </div>

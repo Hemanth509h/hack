@@ -11,13 +11,14 @@ import PageContainer from '../../components/layout/PageContainer';
 
 export const ClubsPage: React.FC = () => {
   const filters = useSelector((state: RootState) => state.clubs.filters);
+  const { user } = useSelector((state: RootState) => state.auth);
   const { data: featuredData } = useFetchFeaturedClubsQuery();
   const { data: clubsData, isLoading } = useFetchClubsQuery(filters);
 
   return (
     <PageContainer className="pb-24 pt-10">
       {/* Premium Hero Section */}
-      <div className="relative mb-24 rounded-[3rem] overflow-hidden glass p-10 md:p-20 flex flex-col md:flex-row items-center justify-between gap-12 border-white/5 shadow-[0_40px_100px_rgba(0,0,0,0.4)]">
+      <div className="relative mb-24 rounded-[3rem] overflow-hidden glass p-10 md:p-20 flex flex-col md:flex-row items-center justify-between gap-12 border-black/5 dark:border-white/5 shadow-[0_40px_100px_rgba(0,0,0,0.4)]">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-500/10 blur-[120px] rounded-full -mr-40 -mt-40" />
         <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-purple-500/10 blur-[100px] rounded-full -ml-40 -mb-40" />
         
@@ -30,18 +31,20 @@ export const ClubsPage: React.FC = () => {
             <Sparkles className="h-4 w-4" />
             Vibrant Community
           </motion.div>
-          <h1 className="text-5xl md:text-7xl font-display font-black text-white mb-8 leading-[0.9] tracking-tighter">
+          <h1 className="text-5xl md:text-7xl font-display font-black text-gray-900 dark:text-white mb-8 leading-[0.9] tracking-tighter">
             Discover Your <br />
             <span className="text-gradient">Tribe.</span>
           </h1>
-          <p className="text-gray-400 text-xl mb-10 leading-relaxed font-light max-w-lg">
+          <p className="text-gray-600 dark:text-gray-400 text-xl mb-10 leading-relaxed font-light max-w-lg">
             Find the perfect group that shares your passion and elevates your campus experience through shared excellence.
           </p>
           <div className="flex flex-wrap items-center gap-5 justify-center md:justify-start">
-            <Link to="/clubs/create" className="btn-primary shadow-indigo-500/40 px-10">
-              <Plus className="h-5 w-5 inline-block mr-2" /> Start a Club
-            </Link>
-            <Link to="/clubs/my-clubs" className="btn-glass px-10 border-white/10">
+            {user?.role === 'admin' && (
+              <Link to="/clubs/create" className="btn-primary shadow-indigo-500/40 px-10">
+                <Plus className="h-5 w-5 inline-block mr-2" /> Start a Club
+              </Link>
+            )}
+            <Link to="/clubs/my-clubs" className="btn-glass px-10 border-black/10 dark:border-white/10">
               My Clubs
             </Link>
           </div>
@@ -50,12 +53,12 @@ export const ClubsPage: React.FC = () => {
         <div className="relative z-10 hidden lg:block">
           <motion.div 
             whileHover={{ rotate: 5, scale: 1.05 }}
-            className="glass rounded-[2.5rem] p-10 shadow-[0_30px_60px_rgba(0,0,0,0.4)] border-white/10 max-w-[300px] text-center"
+            className="glass rounded-[2.5rem] p-10 shadow-[0_30px_60px_rgba(0,0,0,0.4)] border-black/10 dark:border-white/10 max-w-[300px] text-center"
           >
              <div className="w-20 h-20 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Trophy className="h-10 w-10 text-amber-500" />
              </div>
-             <div className="text-white font-display font-black text-2xl mb-2 tracking-tighter">Impact Award</div>
+             <div className="text-gray-900 dark:text-white font-display font-black text-2xl mb-2 tracking-tighter">Impact Award</div>
              <p className="text-gray-500 text-sm font-medium leading-relaxed">Honoring the club that drives the most campus engagement this semester.</p>
           </motion.div>
         </div>
@@ -66,7 +69,7 @@ export const ClubsPage: React.FC = () => {
         <div className="mb-24">
           <div className="flex items-center gap-4 mb-12">
              <div className="w-1.5 h-10 bg-indigo-500 rounded-full" />
-             <h2 className="text-4xl font-display font-black text-white tracking-tighter">
+             <h2 className="text-4xl font-display font-black text-gray-900 dark:text-white tracking-tighter">
                Hall of Fame
              </h2>
           </div>
@@ -89,7 +92,7 @@ export const ClubsPage: React.FC = () => {
       {/* Directory Section */}
       <div className="mb-12 flex flex-col md:flex-row items-end justify-between gap-6 px-4">
         <div>
-          <h2 className="text-4xl font-display font-black text-white tracking-tighter flex items-center gap-4">
+          <h2 className="text-4xl font-display font-black text-gray-900 dark:text-white tracking-tighter flex items-center gap-4">
             <Compass className="h-10 w-10 text-indigo-500" />
             Explore Directory
           </h2>
@@ -121,7 +124,7 @@ export const ClubsPage: React.FC = () => {
           </div>
           
           {clubsData?.clubs.length === 0 && (
-            <div className="text-center py-32 glass rounded-[4rem] border-dashed border-white/10">
+            <div className="text-center py-32 glass rounded-[4rem] border-dashed border-black/10 dark:border-white/10">
               <Compass className="h-16 w-16 text-gray-700 mx-auto mb-8 opacity-50" />
               <h3 className="text-3xl font-display font-black text-gray-500 tracking-tighter">No Clubs Found</h3>
               <p className="text-gray-600 mt-4 text-lg">Try refining your search or filter parameters.</p>
@@ -137,8 +140,8 @@ export const ClubsPage: React.FC = () => {
                   key={i}
                   className={`w-14 h-14 rounded-2xl font-black text-lg transition-all duration-300 ${
                     clubsData.pagination.page === i + 1
-                      ? 'bg-indigo-600 text-white shadow-[0_0_20px_rgba(79,70,229,0.4)] scale-110'
-                      : 'glass text-gray-500 hover:text-white hover:bg-white/10'
+                      ? 'bg-indigo-600 text-gray-900 dark:text-white shadow-[0_0_20px_rgba(79,70,229,0.4)] scale-110'
+                      : 'glass text-gray-500 hover:text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10'
                   }`}
                 >
                   {i + 1}

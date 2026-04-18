@@ -1,4 +1,5 @@
 import { createBrowserRouter, redirect } from 'react-router-dom';
+// System Update: 2026-04-18T14:15:00Z - Triggering reload for governance features
 import App from './App';
 import DashboardPage from './pages/dashboard/DashboardPage';
 import { ProtectedRoute, RoleGuard } from './components/auth/ProtectedRoute';
@@ -17,6 +18,8 @@ import UserManagementPage from './pages/admin/UserManagementPage';
 import ClubApprovalPage from './pages/admin/ClubApprovalPage';
 import AnalyticsPage from './pages/admin/AnalyticsPage';
 import SystemManagementPage from './pages/admin/SystemManagementPage';
+import BroadcastPage from './pages/admin/BroadcastPage';
+import EventManagementPage from './pages/admin/EventManagementPage';
 
 // NetworkPage not yet implemented — using Placeholder
 import SearchPage from './pages/search/SearchPage';
@@ -52,7 +55,7 @@ import SettingsPage from './pages/settings/SettingsPage';
 import ChatPage from './pages/chat/ChatPage';
 import PrivacySettingsPage from './pages/settings/PrivacySettingsPage';
 import SecuritySettingsPage from './pages/settings/SecuritySettingsPage';
-import CommunityFeedPage from './pages/feed/CommunityFeedPage';
+import PulsePage from './pages/PulsePage';
 import RootErrorPage from './components/RootErrorPage';
 
 export const router = createBrowserRouter([
@@ -109,7 +112,7 @@ export const router = createBrowserRouter([
           },
           {
             path: 'feed',
-            element: <CommunityFeedPage />,
+            element: <PulsePage />,
           },
           {
             path: 'events',
@@ -174,6 +177,8 @@ export const router = createBrowserRouter([
           { index: true, element: <AdminDashboardPage /> },
           { path: 'users', element: <UserManagementPage /> },
           { path: 'clubs/pending', element: <ClubApprovalPage /> },
+          { path: 'events', element: <EventManagementPage /> },
+          { path: 'broadcast', element: <BroadcastPage /> },
           { path: 'analytics', element: <AnalyticsPage /> },
           { path: 'system', element: <SystemManagementPage /> }
         ]
@@ -183,7 +188,7 @@ export const router = createBrowserRouter([
   {
     path: '/unauthorized',
     element: (
-      <div className="flex items-center justify-center min-h-screen bg-gray-950 text-red-500">
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-950 text-red-500">
         <h1 className="text-4xl font-bold">403: Unauthorized Access</h1>
       </div>
     )
@@ -191,5 +196,10 @@ export const router = createBrowserRouter([
 ], {
   future: {
     v7_startTransition: true,
+    v7_relativeSplatPath: true,
+    v7_fetcherPersist: true,
+    v7_normalizeFormMethod: true,
+    v7_partialHydration: true,
+    v7_skipActionErrorRevalidation: true,
   },
 });

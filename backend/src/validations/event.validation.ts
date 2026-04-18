@@ -16,7 +16,8 @@ export const createEventSchema = Joi.object({
     majors: Joi.array().items(Joi.string()).default([]),
     years: Joi.array().items(Joi.number().integer()).default([])
   }).default({ majors: [], years: [] }),
-  status: Joi.string().valid('draft', 'published').default('published')
+  status: Joi.string().valid('draft', 'published').default('published'),
+  organizerId: Joi.string().required()
 });
 
 export const updateEventSchema = Joi.object({

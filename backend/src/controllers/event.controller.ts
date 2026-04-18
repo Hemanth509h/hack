@@ -62,23 +62,30 @@ export const getAllEvents = async (req: Request, res: Response) => {
 };
 
 /**
- * @desc    Create new event
+ * @desc    Create new event (Admin only, assigns student organizer)
  * @route   POST /api/v1/events
  */
 export const createEvent = async (req: AuthRequest, res: Response) => {
   try {
-    const eventData = req.body;
-    
-    // Check if user is club leader or admin. In a strict system, this check might exist in route middleware.
-    if (req.user?.role === 'student' && !eventData.club) {
-        // Technically pure students shouldn't organize official campus events without a club context generally, 
-        // but we allow it if they are just standard users per the simplified PRD, or limit to club_leader+
-        return res.status(403).json({ error: 'Must be an official club leader to broadcast events.' });
+    if (req.user?.role !== 'admin') {
+      return res.status(403).json({ error: 'Only administrators can initialize official campus events.' });
+    }
+
+    const { organizerId, ...eventData } = req.body;
+
+    if (!organizerId) {
+      return res.status(400).json({ error: 'An event organizer must be assigned.' });
+    }
+
+    // Verify organizer exists
+    const organizerUser = await User.findById(organizerId);
+    if (!organizerUser) {
+      return res.status(404).json({ error: 'Assigned organizer not found.' });
     }
 
     const newEvent = await Event.create({
       ...eventData,
-      organizer: req.user?.userId,
+      organizer: organizerId,
     });
 
     // Notify users with matching interests or majors
@@ -210,11 +217,8 @@ export const rsvpToEvent = async (req: AuthRequest, res: Response) => {
       return res.status(400).json({ error: 'You are already registered for this event' });
     }
 
-    const newRsvp = await RSVP.create({ user: userId, event: eventId, status: 'attending' });
-    // Fetch updated count and emit to event room for real-time badge update
-    const updatedEvent = await Event.findById(eventId).select('rsvpCount');
-    emitRsvpUpdate(eventId, updatedEvent?.rsvpCount ?? 0, 'added');
-    res.status(201).json({ message: 'RSVP confirmed', rsvp: newRsvp });
+    const newRsvp = await RSVP.create({ user: userId, event: eventId, status: 'pending' });
+    res.status(201).json({ message: 'RSVP request sent. Awaiting organizer approval.', rsvp: newRsvp });
   } catch (error: any) {
     res.status(500).json({ error: 'Failed to process RSVP' });
   }
@@ -312,13 +316,71 @@ export const getEventAttendees = async (req: AuthRequest, res: Response) => {
       return res.status(403).json({ error: 'Not authorized to view attendee list' });
     }
 
-    const rsvps = await RSVP.find({ event: eventId, status: 'attending' })
+    // Determine which statuses to show
+    const isAuthorized = event.organizer.toString() === req.user?.userId || req.user?.role === 'admin';
+    const statuses = isAuthorized ? ['attending', 'pending'] : ['attending'];
+
+    const rsvps = await RSVP.find({ event: eventId, status: { $in: statuses } })
       .populate('user', 'name avatar major graduationYear email')
-      .sort({ createdAt: 1 });
+      .sort({ status: -1, createdAt: 1 });
 
     res.json({ attendees: rsvps });
   } catch (error) {
     res.status(500).json({ error: 'Failed to load attendees' });
+  }
+};
+
+/**
+ * @desc    Approve RSVP
+ * @route   POST /api/v1/events/:id/rsvp/:userId/approve
+ */
+export const approveRSVP = async (req: AuthRequest, res: Response) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ error: 'Event not found' });
+
+    if (event.organizer.toString() !== req.user?.userId && req.user?.role !== 'admin') {
+      return res.status(403).json({ error: 'Only the event organizer can approve RSVPs.' });
+    }
+
+    const rsvp = await RSVP.findOne({ user: req.params.userId, event: req.params.id });
+    if (!rsvp) return res.status(404).json({ error: 'RSVP not found' });
+
+    rsvp.status = 'attending';
+    await rsvp.save();
+
+    // Fetch updated count and emit to event room for real-time badge update
+    const updatedEvent = await Event.findById(req.params.id).select('rsvpCount');
+    emitRsvpUpdate(req.params.id, updatedEvent?.rsvpCount ?? 0, 'added');
+
+    res.json({ message: 'RSVP approved successfully', rsvp });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to approve RSVP' });
+  }
+};
+
+/**
+ * @desc    Reject RSVP
+ * @route   POST /api/v1/events/:id/rsvp/:userId/reject
+ */
+export const rejectRSVP = async (req: AuthRequest, res: Response) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ error: 'Event not found' });
+
+    if (event.organizer.toString() !== req.user?.userId && req.user?.role !== 'admin') {
+      return res.status(403).json({ error: 'Only the event organizer can reject RSVPs.' });
+    }
+
+    const rsvp = await RSVP.findOne({ user: req.params.userId, event: req.params.id });
+    if (!rsvp) return res.status(404).json({ error: 'RSVP not found' });
+
+    rsvp.status = 'cancelled'; // Or 'rejected' if we had that status
+    await rsvp.save();
+
+    res.json({ message: 'RSVP request rejected', rsvp });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to reject RSVP' });
   }
 };
 

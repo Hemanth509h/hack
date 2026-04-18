@@ -51,7 +51,7 @@ export const adminApi = api.injectEndpoints({
       }
     }),
     
-    getUsers: builder.query<{ users: UserDTO[]; total: number }, { page: number; search?: string; role?: string; status?: string }>({
+    getUsers: builder.query<{ users: UserDTO[]; total: number }, { page: number; limit?: number; search?: string; role?: string; status?: string }>({
       query: (params) => ({
         url: '/admin/users',
         params,

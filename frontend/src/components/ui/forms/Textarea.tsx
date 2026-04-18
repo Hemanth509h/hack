@@ -24,7 +24,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       <div className="w-full flex flex-col space-y-1.5">
         <div className="flex justify-between items-center">
           {label && (
-            <label htmlFor={inputId} className="text-sm font-medium text-gray-300">
+            <label htmlFor={inputId} className="text-sm font-medium text-gray-700 dark:text-gray-300">
               {label}
               {props.required && <span className="text-red-500 ml-1">*</span>}
             </label>
@@ -44,7 +44,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             maxLength={maxLength}
             className={twMerge(
               clsx(
-                "flex min-h-[100px] w-full rounded-xl border bg-surface px-4 py-3 text-sm text-white resize-y transition-all",
+                "flex min-h-[100px] w-full rounded-xl border bg-surface px-4 py-3 text-sm text-gray-900 dark:text-white resize-y transition-all",
                 "placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50",
                 "disabled:cursor-not-allowed disabled:opacity-50",
                 error ? "border-red-500 focus:border-red-500 focus:ring-red-500/50" : "border-border hover:border-gray-600 focus:border-primary-500",

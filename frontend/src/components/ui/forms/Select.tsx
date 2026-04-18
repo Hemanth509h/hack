@@ -22,7 +22,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div className="w-full flex flex-col space-y-1.5">
         {label && (
-          <label htmlFor={selectId} className="text-sm font-medium text-gray-300">
+          <label htmlFor={selectId} className="text-sm font-medium text-gray-700 dark:text-gray-300">
             {label}
             {props.required && <span className="text-red-500 ml-1">*</span>}
           </label>
@@ -34,7 +34,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             ref={ref}
             className={twMerge(
               clsx(
-                "flex h-11 w-full appearance-none rounded-xl border bg-surface pl-4 pr-10 py-2 text-sm text-white transition-all",
+                "flex h-11 w-full appearance-none rounded-xl border bg-surface pl-4 pr-10 py-2 text-sm text-gray-900 dark:text-white transition-all",
                 "focus:outline-none focus:ring-2 focus:ring-primary-500/50 disabled:cursor-not-allowed disabled:opacity-50",
                 error ? "border-red-500 focus:border-red-500 focus:ring-red-500/50" : "border-border hover:border-gray-600 focus:border-primary-500",
                 className

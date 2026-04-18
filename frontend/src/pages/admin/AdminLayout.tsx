@@ -8,7 +8,9 @@ import {
   ServerCrash,
   ChevronLeft,
   ChevronRight,
-  LogOut
+  LogOut,
+  Calendar,
+  Megaphone
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleSidebar } from '../../features/admin/adminSlice';
@@ -37,28 +39,30 @@ const AdminLayout = () => {
   const navItems = [
     { name: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={20} />, exact: true },
     { name: 'Users', path: '/admin/users', icon: <Users size={20} /> },
-    { name: 'Club Approvals', path: '/admin/clubs/pending', icon: <ShieldCheck size={20} /> },
+    { name: 'Manage Clubs', path: '/admin/clubs/pending', icon: <ShieldCheck size={20} /> },
+    { name: 'Manage Events', path: '/admin/events', icon: <Calendar size={20} /> },
+    { name: 'Broadcast', path: '/admin/broadcast', icon: <Megaphone size={20} /> },
     { name: 'Analytics', path: '/admin/analytics', icon: <BarChart3 size={20} /> },
     { name: 'System', path: '/admin/system', icon: <ServerCrash size={20} /> },
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-950 text-gray-100">
+    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-950 text-gray-800 dark:text-gray-100">
       {/* Sidebar */}
       <motion.aside 
         initial={false}
         animate={{ width: isSidebarOpen ? 260 : 80 }}
-        className="fixed top-0 left-0 h-screen z-50 bg-gray-900 border-r border-gray-800 flex flex-col transition-all duration-300"
+        className="fixed top-0 left-0 h-screen z-50 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col transition-all duration-300"
       >
-        <div className="flex items-center justify-between p-4 border-b border-gray-800 h-16">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800 h-16">
           {isSidebarOpen && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
-              Nexus<span className="text-white">Admin</span>
+              Nexus<span className="text-gray-900 dark:text-white">Admin</span>
             </motion.div>
           )}
           <button 
             onClick={() => dispatch(toggleSidebar())}
-            className="p-1.5 rounded-lg bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 transition"
+            className="p-1.5 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white hover:bg-gray-700 transition"
           >
             {isSidebarOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
           </button>
@@ -73,8 +77,8 @@ const AdminLayout = () => {
               className={({ isActive }) => `
                 flex items-center px-3 py-3 rounded-xl transition-all group
                 ${isActive 
-                  ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 text-white border border-blue-500/30' 
-                  : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}
+                  ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 text-gray-900 dark:text-white border border-blue-500/30' 
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white hover:bg-gray-800/50'}
               `}
               title={!isSidebarOpen ? item.name : undefined}
             >
@@ -92,7 +96,7 @@ const AdminLayout = () => {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-gray-800">
+        <div className="p-4 border-t border-gray-200 dark:border-gray-800">
            <button 
              onClick={handleLogout}
              className="flex items-center w-full px-3 py-3 text-red-400 hover:text-red-300 hover:bg-red-950/30 rounded-xl transition-all"

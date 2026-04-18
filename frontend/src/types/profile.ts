@@ -25,4 +25,5 @@ export interface IProfile extends Omit<User, 'skills' | 'id'> {
   skillsList?: ISkill[]; // Fully populated skills objects from backend
   interests?: string[];
   badges?: IBadge[]; 
+  points?: number;
 }

@@ -93,9 +93,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ roomType, roomId, title 
   };
 
   return (
-    <div className="flex flex-col h-full min-h-[500px] w-full bg-gray-950 border border-gray-800 shadow-2xl rounded-xl overflow-hidden relative">
-      <div className="p-4 border-b border-gray-800 bg-gray-900 flex justify-between items-center z-10 shadow-sm">
-        <h3 className="text-lg font-semibold text-white">{title} Chat</h3>
+    <div className="flex flex-col h-full min-h-[500px] w-full bg-gray-100 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 shadow-2xl rounded-xl overflow-hidden relative">
+      <div className="p-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex justify-between items-center z-10 shadow-sm">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{title} Chat</h3>
         <div className="flex items-center gap-2">
            <span className={cn(
              "w-2.5 h-2.5 rounded-full",
@@ -113,7 +113,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ roomType, roomId, title 
           )}
           
           {isTyping && (
-             <div className="text-xs text-gray-400 italic mt-2 ml-2 transition-all">
+             <div className="text-xs text-gray-600 dark:text-gray-400 italic mt-2 ml-2 transition-all">
                {isTyping.name} is typing...
              </div>
           )}
@@ -121,9 +121,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ roomType, roomId, title 
         </div>
       </div>
 
-      <div className="p-3 bg-gray-900 border-t border-gray-800">
+      <div className="p-3 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
         <form onSubmit={handleSend} className="flex items-center gap-2">
-           <button type="button" className="p-2 text-gray-400 hover:text-gray-300 transition-colors">
+           <button type="button" className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300 transition-colors">
              <Smile className="w-5 h-5" />
            </button>
            <input
@@ -131,12 +131,12 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ roomType, roomId, title 
              value={inputText}
              onChange={handleTyping}
              placeholder="Type a message..."
-             className="flex-1 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-full py-2 px-4 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-all text-sm"
+             className="flex-1 bg-gray-50 dark:bg-gray-800 border border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 rounded-full py-2 px-4 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-all text-sm"
            />
            <button
              type="submit"
              disabled={!inputText.trim()}
-             className="p-2 bg-primary-600 hover:bg-primary-500 text-white rounded-full disabled:opacity-50 transition-colors shadow-lg"
+             className="p-2 bg-primary-600 hover:bg-primary-500 text-gray-900 dark:text-white rounded-full disabled:opacity-50 transition-colors shadow-lg"
            >
              <Send className="w-4 h-4" />
            </button>

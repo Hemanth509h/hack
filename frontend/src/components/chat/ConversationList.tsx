@@ -16,15 +16,15 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   currentUserId
 }) => {
   return (
-    <div className="flex flex-col h-full bg-gray-900 border-r border-gray-800">
-      <div className="p-4 border-b border-gray-800">
-        <h2 className="text-xl font-bold text-white mb-4">Messages</h2>
+    <div className="flex flex-col h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800">
+      <div className="p-4 border-b border-gray-200 dark:border-gray-800">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Messages</h2>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4" />
           <input 
             type="text" 
             placeholder="Search conversations..." 
-            className="w-full bg-gray-950 border border-gray-800 rounded-xl py-2 pl-10 pr-4 text-sm text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
+            className="w-full bg-gray-100 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl py-2 pl-10 pr-4 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
           />
         </div>
       </div>
@@ -43,7 +43,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
               <button 
                 key={conv._id}
                 onClick={() => onSelect(conv._id)}
-                className={`w-full flex items-center gap-3 p-4 hover:bg-gray-800/50 transition-all border-b border-gray-800/50 ${
+                className={`w-full flex items-center gap-3 p-4 hover:bg-gray-800/50 transition-all border-b border-gray-200 dark:border-gray-800/50 ${
                   isActive ? 'bg-indigo-600/10 border-r-2 border-r-indigo-500' : ''
                 }`}
               >
@@ -58,7 +58,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                 
                 <div className="flex-1 text-left min-w-0">
                   <div className="flex justify-between items-baseline mb-0.5">
-                    <h3 className={`font-bold text-sm truncate ${isActive ? 'text-indigo-400' : 'text-white'}`}>
+                    <h3 className={`font-bold text-sm truncate ${isActive ? 'text-indigo-400' : 'text-gray-900 dark:text-white'}`}>
                       {otherUser?.name}
                     </h3>
                     <span className="text-[10px] text-gray-500 shrink-0">

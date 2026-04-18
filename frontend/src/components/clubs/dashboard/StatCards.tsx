@@ -50,7 +50,7 @@ export const StatCards: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: idx * 0.1 }}
-          className="bg-gray-900 border border-gray-800 rounded-3xl p-6 hover:border-gray-700 transition-all group"
+          className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl p-6 hover:border-gray-700 transition-all group"
         >
           <div className="flex items-center justify-between mb-4">
             <div className={`p-3 rounded-2xl bg-${stat.color}-500/10 text-${stat.color}-400 group-hover:scale-110 transition-transform`}>
@@ -64,7 +64,7 @@ export const StatCards: React.FC = () => {
           </div>
           <div>
             <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-1">{stat.label}</p>
-            <h3 className="text-3xl font-bold text-white tracking-tight">{stat.value}</h3>
+            <h3 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{stat.value}</h3>
           </div>
         </motion.div>
       ))}

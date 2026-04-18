@@ -10,7 +10,7 @@ const PrivacySettingsPage: React.FC = () => {
     <PageContainer>
       <button 
         onClick={() => navigate('/settings')}
-        className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors mb-8 font-bold"
+        className="flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-white transition-colors mb-8 font-bold"
       >
         <ArrowLeft size={18} /> Back to Settings
       </button>
@@ -21,13 +21,13 @@ const PrivacySettingsPage: React.FC = () => {
             <Eye size={24} />
           </div>
           <div>
-            <h1 className="text-3xl font-black text-white">Privacy</h1>
+            <h1 className="text-3xl font-black text-gray-900 dark:text-white">Privacy</h1>
             <p className="text-gray-500">Control your visibility and data sharing.</p>
           </div>
         </div>
 
         <div className="space-y-6">
-          <div className="bg-gray-900 border border-gray-800 rounded-3xl overflow-hidden">
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl overflow-hidden">
             <PrivacyToggle 
               icon={<Globe size={20} className="text-blue-400" />}
               title="Public Profile"
@@ -53,7 +53,7 @@ const PrivacySettingsPage: React.FC = () => {
                 <Info size={16} /> Data Export
              </h4>
              <p className="text-sm text-gray-500 mb-4">You can request a copy of all your data associated with The Quad at any time.</p>
-             <button className="text-xs font-bold text-white bg-white/5 hover:bg-white/10 px-4 py-2 rounded-xl transition-all border border-white/5">
+             <button className="text-xs font-bold text-gray-900 dark:text-white bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 px-4 py-2 rounded-xl transition-all border border-black/5 dark:border-white/5">
                 Download My Data (.JSON)
              </button>
           </div>
@@ -69,19 +69,19 @@ const PrivacyToggle: React.FC<{ icon: React.ReactNode; title: string; descriptio
   const [checked, setChecked] = React.useState(defaultChecked);
   
   return (
-    <div className="flex items-center justify-between p-6 hover:bg-white/5 transition-all border-b border-white/5 last:border-0">
+    <div className="flex items-center justify-between p-6 hover:bg-black/5 dark:hover:bg-white/5 transition-all border-b border-black/5 dark:border-white/5 last:border-0">
       <div className="flex items-center gap-4">
-        <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-xl bg-black/5 dark:bg-white/5 flex items-center justify-center">
           {icon}
         </div>
         <div>
-          <h3 className="font-bold text-white text-sm">{title}</h3>
+          <h3 className="font-bold text-gray-900 dark:text-white text-sm">{title}</h3>
           <p className="text-xs text-gray-500">{description}</p>
         </div>
       </div>
       <button 
         onClick={() => setChecked(!checked)}
-        className={`w-12 h-6 rounded-full transition-all relative ${checked ? 'bg-indigo-600' : 'bg-gray-800'}`}
+        className={`w-12 h-6 rounded-full transition-all relative ${checked ? 'bg-indigo-600' : 'bg-gray-50 dark:bg-gray-800'}`}
       >
         <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${checked ? 'left-7' : 'left-1'}`} />
       </button>

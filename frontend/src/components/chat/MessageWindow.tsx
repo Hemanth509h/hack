@@ -47,9 +47,9 @@ export const MessageWindow: React.FC<MessageWindowProps> = ({
   const displayAvatar = avatar || otherUser?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayTitle)}`;
 
   return (
-    <div className="flex flex-col h-full bg-gray-950">
+    <div className="flex flex-col h-full bg-gray-100 dark:bg-gray-950">
       {/* Header */}
-      <div className="p-4 border-b border-gray-800 bg-gray-900/50 flex items-center justify-between">
+      <div className="p-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/50 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img 
             src={displayAvatar} 
@@ -57,22 +57,22 @@ export const MessageWindow: React.FC<MessageWindowProps> = ({
             className="w-10 h-10 rounded-full object-cover border border-gray-700"
           />
           <div>
-            <h3 className="font-bold text-white text-sm">{displayTitle}</h3>
+            <h3 className="font-bold text-gray-900 dark:text-white text-sm">{displayTitle}</h3>
             <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">{displaySubtitle}</p>
           </div>
         </div>
         
         <div className="flex items-center gap-2">
-          <button className="p-2 text-gray-500 hover:text-white transition-colors">
+          <button className="p-2 text-gray-500 hover:text-gray-900 dark:text-white transition-colors">
             <Phone size={18} />
           </button>
-          <button className="p-2 text-gray-500 hover:text-white transition-colors">
+          <button className="p-2 text-gray-500 hover:text-gray-900 dark:text-white transition-colors">
             <Video size={18} />
           </button>
-          <button className="p-2 text-gray-500 hover:text-white transition-colors">
+          <button className="p-2 text-gray-500 hover:text-gray-900 dark:text-white transition-colors">
             <Info size={18} />
           </button>
-          <button className="p-2 text-gray-500 hover:text-white transition-colors">
+          <button className="p-2 text-gray-500 hover:text-gray-900 dark:text-white transition-colors">
             <MoreVertical size={18} />
           </button>
         </div>
@@ -82,10 +82,10 @@ export const MessageWindow: React.FC<MessageWindowProps> = ({
       <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
         {messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center">
-             <div className="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center mb-4 border border-gray-800">
+             <div className="w-16 h-16 bg-white dark:bg-gray-900 rounded-full flex items-center justify-center mb-4 border border-gray-200 dark:border-gray-800">
                 <Smile className="text-gray-600" size={32} />
              </div>
-             <h4 className="text-white font-bold">No messages here yet</h4>
+             <h4 className="text-gray-900 dark:text-white font-bold">No messages here yet</h4>
              <p className="text-gray-500 text-sm max-w-xs">Start the conversation by sending a friendly "Hello!"</p>
           </div>
         ) : (
@@ -101,7 +101,7 @@ export const MessageWindow: React.FC<MessageWindowProps> = ({
                       <img 
                         src={msg.sender.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(msg.sender.name)}`} 
                         alt={msg.sender.name}
-                        className="w-8 h-8 rounded-full object-cover border border-gray-800"
+                        className="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-800"
                       />
                     )}
                   </div>
@@ -116,8 +116,8 @@ export const MessageWindow: React.FC<MessageWindowProps> = ({
                   <div className={`
                     px-4 py-2.5 rounded-2xl text-sm leading-relaxed
                     ${isMe 
-                      ? 'bg-indigo-600 text-white rounded-tr-none shadow-lg shadow-indigo-600/10' 
-                      : 'bg-gray-800 text-gray-200 rounded-tl-none border border-gray-700'}
+                      ? 'bg-indigo-600 text-gray-900 dark:text-white rounded-tr-none shadow-lg shadow-indigo-600/10' 
+                      : 'bg-gray-50 dark:bg-gray-800 text-gray-200 rounded-tl-none border border-gray-700'}
                   `}>
                     {msg.content}
                   </div>
@@ -130,9 +130,9 @@ export const MessageWindow: React.FC<MessageWindowProps> = ({
       </div>
 
       {/* Input area */}
-      <div className="p-4 bg-gray-900/50 border-t border-gray-800">
+      <div className="p-4 bg-white dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-800">
         <form onSubmit={handleSubmit} className="flex items-center gap-3">
-          <button type="button" className="p-2 text-gray-500 hover:text-white transition-colors">
+          <button type="button" className="p-2 text-gray-500 hover:text-gray-900 dark:text-white transition-colors">
             <Paperclip size={20} />
           </button>
           
@@ -142,9 +142,9 @@ export const MessageWindow: React.FC<MessageWindowProps> = ({
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Type your message..." 
-              className="w-full bg-gray-950 border border-gray-800 rounded-2xl py-3 px-5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all shadow-inner"
+              className="w-full bg-gray-100 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl py-3 px-5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all shadow-inner"
             />
-            <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors">
+            <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-900 dark:text-white transition-colors">
               <Smile size={20} />
             </button>
           </div>
@@ -152,7 +152,7 @@ export const MessageWindow: React.FC<MessageWindowProps> = ({
           <button 
             type="submit" 
             disabled={!inputValue.trim()}
-            className="p-3 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/20 disabled:opacity-50 disabled:shadow-none"
+            className="p-3 bg-indigo-600 text-gray-900 dark:text-white rounded-2xl hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/20 disabled:opacity-50 disabled:shadow-none"
           >
             <Send size={20} />
           </button>

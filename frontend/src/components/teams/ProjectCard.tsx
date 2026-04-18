@@ -13,7 +13,7 @@ interface ProjectCardProps {
 const statusConfig = {
   open: { label: 'Open', color: 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20' },
   full: { label: 'Full', color: 'text-amber-400 bg-amber-400/10 border-amber-400/20' },
-  completed: { label: 'Completed', color: 'text-gray-400 bg-gray-400/10 border-gray-400/20' },
+  completed: { label: 'Completed', color: 'text-gray-600 dark:text-gray-400 bg-gray-400/10 border-gray-400/20' },
 };
 
 const avatarColors = [
@@ -33,11 +33,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, isLeader, ind
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06 }}
-      className="bg-gray-900/70 backdrop-blur-xl border border-white/8 rounded-2xl p-6 hover:border-indigo-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/10 group"
+      className="bg-white dark:bg-gray-900/70 backdrop-blur-xl border border-white/8 rounded-2xl p-6 hover:border-indigo-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/10 group"
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-3 gap-3">
-        <h3 className="text-white font-bold text-base leading-tight group-hover:text-indigo-300 transition-colors">
+        <h3 className="text-gray-900 dark:text-white font-bold text-base leading-tight group-hover:text-indigo-300 transition-colors">
           {project.title}
         </h3>
         <div className="flex items-center gap-2 shrink-0">
@@ -53,7 +53,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, isLeader, ind
       </div>
 
       {/* Description */}
-      <p className="text-gray-400 text-sm line-clamp-2 mb-4 leading-relaxed">
+      <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2 mb-4 leading-relaxed">
         {project.description}
       </p>
 
@@ -67,7 +67,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, isLeader, ind
             </span>
           ))}
           {project.requiredSkills.length > 4 && (
-            <span className="text-[11px] text-gray-500 bg-gray-800 px-2.5 py-0.5 rounded-lg">+{project.requiredSkills.length - 4}</span>
+            <span className="text-[11px] text-gray-500 bg-gray-50 dark:bg-gray-800 px-2.5 py-0.5 rounded-lg">+{project.requiredSkills.length - 4}</span>
           )}
         </div>
       )}
@@ -99,7 +99,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, isLeader, ind
             <div
               key={member._id}
               title={member.name}
-              className={`w-8 h-8 rounded-full border-2 border-gray-900 bg-gradient-to-br ${avatarColors[i % avatarColors.length]} flex items-center justify-center text-[10px] font-bold text-white ring-1 ring-white/10`}
+              className={`w-8 h-8 rounded-full border-2 border-gray-900 bg-gradient-to-br ${avatarColors[i % avatarColors.length]} flex items-center justify-center text-[10px] font-bold text-gray-900 dark:text-white ring-1 ring-white/10`}
             >
               {member.avatar
                 ? <img src={member.avatar} className="w-full h-full object-cover rounded-full" alt={member.name} />
@@ -108,7 +108,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, isLeader, ind
             </div>
           ))}
           {project.members.length > 5 && (
-            <div className="w-8 h-8 rounded-full border-2 border-gray-900 bg-gray-700 flex items-center justify-center text-[10px] font-bold text-gray-300">
+            <div className="w-8 h-8 rounded-full border-2 border-gray-900 bg-gray-700 flex items-center justify-center text-[10px] font-bold text-gray-700 dark:text-gray-300">
               +{project.members.length - 5}
             </div>
           )}
@@ -119,7 +119,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, isLeader, ind
       <div className="flex gap-2">
         <Link
           to={`/teams/projects/${project._id}`}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white text-sm font-semibold rounded-xl transition-all"
+          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-gray-50 dark:bg-gray-800 hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:text-white text-sm font-semibold rounded-xl transition-all"
         >
           <Eye className="w-4 h-4" /> View
         </Link>

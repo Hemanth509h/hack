@@ -5,11 +5,11 @@ import {
   likePost, 
   addComment 
 } from '../controllers/social.controller';
-import { protect } from '../middleware/auth.middleware';
+import { requireAuth } from '../middleware/auth.middleware';
 
 const router = Router();
 
-router.use(protect);
+router.use(requireAuth);
 
 router.post('/', createPost);
 router.get('/', getSocialFeed);

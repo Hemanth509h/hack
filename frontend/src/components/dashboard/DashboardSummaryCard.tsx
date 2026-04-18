@@ -36,13 +36,13 @@ export const DashboardSummaryCard: React.FC<DashboardSummaryCardProps> = ({
     >
       <Link to={href} className="block p-6">
         <div className="flex items-center justify-between mb-4">
-          <div className="p-3 bg-white/5 rounded-xl shadow-inner">
+          <div className="p-3 bg-black/5 dark:bg-white/5 rounded-xl shadow-inner">
             {icon}
           </div>
-          <span className="text-3xl font-black text-white">{count}</span>
+          <span className="text-3xl font-black text-gray-900 dark:text-white">{count}</span>
         </div>
         <div className="flex items-end justify-between">
-          <h3 className="font-semibold text-sm text-gray-300">{title}</h3>
+          <h3 className="font-semibold text-sm text-gray-700 dark:text-gray-300">{title}</h3>
           <div className="flex items-center gap-1 text-xs font-bold opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
             View <ChevronRight className="w-3 h-3" />
           </div>

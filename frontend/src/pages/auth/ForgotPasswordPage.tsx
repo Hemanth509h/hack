@@ -42,12 +42,12 @@ export default function ForgotPasswordPage() {
           <div className="w-16 h-16 bg-blue-500/20 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle size={32} />
           </div>
-          <p className="text-gray-300">
+          <p className="text-gray-700 dark:text-gray-300">
             If an account exists for <strong>{watch('email')}</strong>, you will receive a password reset link shortly.
           </p>
           <Link
             to="/login"
-            className="block w-full py-2.5 px-4 bg-white/10 hover:bg-white/20 text-white font-medium rounded-lg transition-colors"
+            className="block w-full py-2.5 px-4 bg-black/10 dark:bg-white/10 hover:bg-white/20 text-gray-900 dark:text-white font-medium rounded-lg transition-colors"
           >
             Return to Login
           </Link>
@@ -71,7 +71,7 @@ export default function ForgotPasswordPage() {
         )}
 
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1">Email</label>
+          <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Email</label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
               <Mail size={18} />
@@ -79,7 +79,7 @@ export default function ForgotPasswordPage() {
             <input
               type="email"
               {...register('email')}
-              className="block w-full pl-10 pr-3 py-2.5 bg-gray-900 border border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-100 transition-colors"
+              className="block w-full pl-10 pr-3 py-2.5 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 dark:text-gray-100 transition-colors"
               placeholder="you@university.edu"
             />
           </div>
@@ -91,13 +91,13 @@ export default function ForgotPasswordPage() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center disabled:opacity-50"
+          className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-gray-900 dark:text-white font-medium rounded-lg transition-colors flex items-center justify-center disabled:opacity-50"
         >
           {isLoading ? <Loader2 className="animate-spin" size={20} /> : <span>Send Reset Link</span>}
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-gray-400">
+      <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
         Remember your password?{' '}
         <Link to="/login" className="text-blue-400 hover:text-blue-300 transition-colors font-medium">
           Sign In

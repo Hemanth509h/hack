@@ -33,7 +33,7 @@ const SecuritySettingsPage: React.FC = () => {
     <PageContainer>
       <button 
         onClick={() => navigate('/settings')}
-        className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors mb-8 font-bold"
+        className="flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-white transition-colors mb-8 font-bold"
       >
         <ArrowLeft size={18} /> Back to Settings
       </button>
@@ -44,13 +44,13 @@ const SecuritySettingsPage: React.FC = () => {
             <Shield size={24} />
           </div>
           <div>
-            <h1 className="text-3xl font-black text-white">Security</h1>
+            <h1 className="text-3xl font-black text-gray-900 dark:text-white">Security</h1>
             <p className="text-gray-500">Manage your password and account protection.</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div className="bg-gray-900 border border-gray-800 rounded-3xl p-8 space-y-6">
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl p-8 space-y-6">
             <div className="space-y-2">
               <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Current Password</label>
               <div className="relative">
@@ -58,7 +58,7 @@ const SecuritySettingsPage: React.FC = () => {
                 <input 
                   type="password" 
                   {...register('currentPassword')}
-                  className="w-full bg-gray-950 border border-gray-800 rounded-2xl py-4 pl-12 pr-4 text-white focus:ring-2 focus:ring-red-500/50 outline-none transition-all"
+                  className="w-full bg-gray-100 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl py-4 pl-12 pr-4 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500/50 outline-none transition-all"
                 />
               </div>
               {errors.currentPassword && <p className="text-red-400 text-xs">{errors.currentPassword.message}</p>}
@@ -71,7 +71,7 @@ const SecuritySettingsPage: React.FC = () => {
                 <input 
                   type="password" 
                   {...register('newPassword')}
-                  className="w-full bg-gray-950 border border-gray-800 rounded-2xl py-4 pl-12 pr-4 text-white focus:ring-2 focus:ring-red-500/50 outline-none transition-all"
+                  className="w-full bg-gray-100 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl py-4 pl-12 pr-4 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500/50 outline-none transition-all"
                 />
               </div>
               {errors.newPassword && <p className="text-red-400 text-xs">{errors.newPassword.message}</p>}
@@ -84,7 +84,7 @@ const SecuritySettingsPage: React.FC = () => {
                 <input 
                   type="password" 
                   {...register('confirmPassword')}
-                  className="w-full bg-gray-950 border border-gray-800 rounded-2xl py-4 pl-12 pr-4 text-white focus:ring-2 focus:ring-red-500/50 outline-none transition-all"
+                  className="w-full bg-gray-100 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl py-4 pl-12 pr-4 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500/50 outline-none transition-all"
                 />
               </div>
               {errors.confirmPassword && <p className="text-red-400 text-xs">{errors.confirmPassword.message}</p>}
@@ -93,7 +93,7 @@ const SecuritySettingsPage: React.FC = () => {
 
           <button 
             type="submit" 
-            className="w-full bg-red-600 hover:bg-red-500 text-white py-4 rounded-2xl font-bold transition-all shadow-lg shadow-red-500/20"
+            className="w-full bg-red-600 hover:bg-red-500 text-gray-900 dark:text-white py-4 rounded-2xl font-bold transition-all shadow-lg shadow-red-500/20"
           >
             Update Password
           </button>

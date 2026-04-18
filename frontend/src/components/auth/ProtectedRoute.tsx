@@ -26,9 +26,9 @@ export const ProtectedRoute: React.FC = () => {
 
   if (isInitializing || isLoading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-950">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-950">
         <Loader2 className="animate-spin text-blue-500 mb-4" size={48} />
-        <p className="text-gray-400">Loading your profile...</p>
+        <p className="text-gray-600 dark:text-gray-400">Loading your profile...</p>
       </div>
     );
   }
@@ -64,7 +64,7 @@ export const RoleGuard: React.FC<RoleGuardProps> = ({ allowedRoles }) => {
 
   if (isInitializing || isLoading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-950">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-950">
         <Loader2 className="animate-spin text-blue-500 mb-4" size={48} />
       </div>
     );

@@ -39,26 +39,26 @@ const ProfilePage: React.FC = () => {
         
         {/* Sidebar */}
         <div className="space-y-8">
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-white mb-3">About Me</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">About Me</h3>
+            <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
               {profile.bio || "This user hasn't written a bio yet."}
             </p>
             
             {(profile.portfolioLinks?.github || profile.portfolioLinks?.linkedin || profile.portfolioLinks?.website) && (
               <div className="mt-6 flex flex-col gap-3">
                 {profile.portfolioLinks.github && (
-                   <a href={profile.portfolioLinks.github} target="_blank" rel="noreferrer" className="flex items-center text-sm text-gray-400 hover:text-white transition-colors">
+                   <a href={profile.portfolioLinks.github} target="_blank" rel="noreferrer" className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white transition-colors">
                      <Github className="w-4 h-4 mr-2" /> GitHub
                    </a>
                 )}
                 {profile.portfolioLinks.linkedin && (
-                   <a href={profile.portfolioLinks.linkedin} target="_blank" rel="noreferrer" className="flex items-center text-sm text-gray-400 hover:text-[#0a66c2] transition-colors">
+                   <a href={profile.portfolioLinks.linkedin} target="_blank" rel="noreferrer" className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-[#0a66c2] transition-colors">
                      <Linkedin className="w-4 h-4 mr-2" /> LinkedIn
                    </a>
                 )}
                 {profile.portfolioLinks.website && (
-                   <a href={profile.portfolioLinks.website} target="_blank" rel="noreferrer" className="flex items-center text-sm text-gray-400 hover:text-primary-400 transition-colors">
+                   <a href={profile.portfolioLinks.website} target="_blank" rel="noreferrer" className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-primary-400 transition-colors">
                      <Globe className="w-4 h-4 mr-2" /> Portfolio Website
                    </a>
                 )}
@@ -67,16 +67,16 @@ const ProfilePage: React.FC = () => {
           </div>
 
           <div>
-             <h3 className="text-lg font-semibold text-white mb-4">Team Matcher Skills</h3>
+             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Team Matcher Skills</h3>
              <SkillsList skills={profile.skillsList} />
           </div>
           
           <div>
-            <h3 className="text-lg font-semibold text-white mb-4">Interests</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Interests</h3>
              {profile.interests && profile.interests.length > 0 ? (
                <div className="flex flex-wrap gap-2">
                  {profile.interests.map((interest, i) => (
-                    <span key={i} className="px-3 py-1 bg-gray-800/50 text-gray-400 border border-gray-700/50 rounded-full text-xs">
+                    <span key={i} className="px-3 py-1 bg-gray-50 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400 border border-gray-700/50 rounded-full text-xs">
                       {interest}
                     </span>
                  ))}
@@ -90,17 +90,17 @@ const ProfilePage: React.FC = () => {
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-8">
           <div>
-            <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Digital Achievements</h3>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">Digital Achievements</h3>
             <BadgeGrid badges={profile.badges} />
           </div>
 
           <div>
-             <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">My Clubs</h3>
+             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">My Clubs</h3>
              <ClubMemberships clubs={[]} /> 
           </div>
 
           <div>
-             <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Events Dashboard</h3>
+             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">Events Dashboard</h3>
              <EventHistory events={[]} />
           </div>
 

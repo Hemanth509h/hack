@@ -33,10 +33,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles = 'inline-flex items-center justify-center rounded-xl font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:pointer-events-none active:scale-95';
 
     const variants = {
-      primary: 'bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500 shadow-[0_0_15px_rgba(59,130,246,0.3)]',
-      secondary: 'bg-white/10 text-white hover:bg-white/15 border border-white/5 focus:ring-white/20',
+      primary: 'bg-primary-500 text-gray-900 dark:text-white hover:bg-primary-600 focus:ring-primary-500 shadow-[0_0_15px_rgba(59,130,246,0.3)]',
+      secondary: 'bg-black/10 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-white/15 border border-black/5 dark:border-white/5 focus:ring-white/20',
       outline: 'border-2 border-primary-500 text-primary-500 hover:bg-primary-500/10 focus:ring-primary-500',
-      ghost: 'text-gray-300 hover:text-white hover:bg-white/10 focus:ring-white/20',
+      ghost: 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 focus:ring-white/20',
       danger: 'bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20 hover:border-red-500/50 focus:ring-red-500',
     };
 

@@ -32,7 +32,7 @@ const QRCodeDisplay = ({ eventId }: QRCodeDisplayProps) => {
     <>
       <button 
         onClick={handleOpen}
-        className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white rounded-xl font-bold shadow-lg shadow-purple-500/25 hover:scale-105 transition-all"
+        className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-gray-900 dark:text-white rounded-xl font-bold shadow-lg shadow-purple-500/25 hover:scale-105 transition-all"
       >
         <QrCode size={20} />
         Show Check-In Code
@@ -44,7 +44,7 @@ const QRCodeDisplay = ({ eventId }: QRCodeDisplayProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/90 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-100 dark:bg-gray-950/90 backdrop-blur-sm"
           >
             <motion.div
               initial={{ scale: 0.9, y: 20 }}
@@ -67,7 +67,7 @@ const QRCodeDisplay = ({ eventId }: QRCodeDisplayProps) => {
                 
                 <div className="bg-gray-100 p-4 rounded-3xl mx-auto w-fit mb-8 relative border-4 border-white shadow-inner">
                   {isLoading ? (
-                    <div className="w-56 h-56 flex items-center justify-center text-gray-400 flex-col gap-3">
+                    <div className="w-56 h-56 flex items-center justify-center text-gray-600 dark:text-gray-400 flex-col gap-3">
                        <RefreshCw className="animate-spin text-purple-500" size={32} />
                        Generating secure ticket...
                     </div>
@@ -87,7 +87,7 @@ const QRCodeDisplay = ({ eventId }: QRCodeDisplayProps) => {
                   ) : null}
                 </div>
 
-                <div className="flex items-center justify-center gap-2 text-xs text-gray-400 font-medium bg-gray-50 p-3 rounded-xl border border-gray-100">
+                <div className="flex items-center justify-center gap-2 text-xs text-gray-600 dark:text-gray-400 font-medium bg-gray-50 p-3 rounded-xl border border-gray-100">
                    <Smartphone size={16} /> 
                    Maximum brightness recommended
                 </div>

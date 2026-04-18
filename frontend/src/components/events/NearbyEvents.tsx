@@ -19,7 +19,7 @@ const NearbyEvents: React.FC = () => {
     }
   }, [coordinates, user?.id, updateLocation]);
 
-  if (loading || isLoading) return <div className="animate-pulse h-40 bg-white/5 rounded-xl"></div>;
+  if (loading || isLoading) return <div className="animate-pulse h-40 bg-black/5 dark:bg-white/5 rounded-xl"></div>;
 
   if (error || permission === 'denied') {
     return (
@@ -72,13 +72,13 @@ const NearbyEvents: React.FC = () => {
               <div key={event._id} className="min-w-[280px] md:min-w-[320px] snap-center">
                  <EventCard event={event} />
                  {event.distanceMiles !== null && (
-                    <div className="text-xs text-center text-gray-400 mt-1">{event.distanceMiles.toFixed(1)} miles away</div>
+                    <div className="text-xs text-center text-gray-600 dark:text-gray-400 mt-1">{event.distanceMiles.toFixed(1)} miles away</div>
                  )}
               </div>
            ))}
          </div>
        ) : (
-         <div className="text-center py-8 bg-white/5 border border-white/10 rounded-xl text-gray-400">
+         <div className="text-center py-8 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-gray-600 dark:text-gray-400">
             No events with location data found nearby.
          </div>
        )}

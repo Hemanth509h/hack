@@ -30,11 +30,11 @@ export const EventCard: React.FC<EventCardProps> = ({ event, isRecommended }) =>
     <motion.div
       variants={itemVariants}
       whileHover={{ y: -5 }}
-      className="group relative bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-indigo-500/50 transition-all duration-300"
+      className="group relative bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-indigo-500/50 transition-all duration-300"
     >
       <Link to={`/events/${event._id}`} className="block h-full">
         {/* Cover Image */}
-        <div className="relative h-48 w-full overflow-hidden bg-gray-800">
+        <div className="relative h-48 w-full overflow-hidden bg-gray-50 dark:bg-gray-800">
           <img
             src={event.coverImage || `https://source.unsplash.com/random/800x600/?${event.category},event`}
             alt={event.title}
@@ -44,11 +44,11 @@ export const EventCard: React.FC<EventCardProps> = ({ event, isRecommended }) =>
           
           {/* Badges */}
           <div className="absolute top-4 left-4 flex flex-col gap-2">
-            <span className="px-3 py-1 bg-gray-950/80 backdrop-blur-md text-xs font-medium text-gray-200 rounded-full border border-gray-800">
+            <span className="px-3 py-1 bg-gray-100 dark:bg-gray-950/80 backdrop-blur-md text-xs font-medium text-gray-200 rounded-full border border-gray-200 dark:border-gray-800">
               {event.category}
             </span>
             {isRecommended && (
-              <span className="px-3 py-1 bg-indigo-500/90 backdrop-blur-md text-xs font-semibold text-white rounded-full flex items-center gap-1 shadow-[0_0_15px_rgba(99,102,241,0.5)]">
+              <span className="px-3 py-1 bg-indigo-500/90 backdrop-blur-md text-xs font-semibold text-gray-900 dark:text-white rounded-full flex items-center gap-1 shadow-[0_0_15px_rgba(99,102,241,0.5)]">
                 <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
                 AI Recommended
               </span>
@@ -58,17 +58,17 @@ export const EventCard: React.FC<EventCardProps> = ({ event, isRecommended }) =>
 
         {/* Content */}
         <div className="p-5">
-          <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-indigo-400 transition-colors">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-indigo-400 transition-colors">
             {event.title}
           </h3>
           
           <div className="space-y-2 mb-4">
-            <div className="flex items-center text-sm text-gray-400">
+            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
               <Calendar className="w-4 h-4 mr-2 text-indigo-400" />
               <span>{formattedDate} • {formattedTime}</span>
             </div>
             
-            <div className="flex items-center text-sm text-gray-400">
+            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
               <MapPin className="w-4 h-4 mr-2 text-indigo-400" />
               <span className="truncate">
                 {typeof event.location === 'object' && event.location?.name
@@ -77,13 +77,13 @@ export const EventCard: React.FC<EventCardProps> = ({ event, isRecommended }) =>
               </span>
             </div>
 
-            <div className="flex items-center text-sm text-gray-400">
+            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
               <Users className="w-4 h-4 mr-2 text-indigo-400" />
               <span>{event.rsvpCount} Attending</span>
             </div>
           </div>
           
-          <div className="pt-4 border-t border-gray-800 flex justify-between items-center">
+          <div className="pt-4 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center">
             <div className="flex -space-x-2 overflow-hidden">
               {/* Placeholders for attendee avatars; in app, map over actual attendee avatars */}
               {[1, 2, 3].map((i) => (

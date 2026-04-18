@@ -31,7 +31,7 @@ export const AttendeeList: React.FC<AttendeeListProps> = ({ eventId }) => {
       {visibleAttendees.map((attendee, index) => (
         <div 
           key={attendee._id || index} 
-          className="inline-block h-12 w-12 rounded-full ring-4 ring-gray-950 bg-gray-800 relative group"
+          className="inline-block h-12 w-12 rounded-full ring-4 ring-gray-950 bg-gray-50 dark:bg-gray-800 relative group"
         >
           <img
             className="h-full w-full rounded-full object-cover"
@@ -39,14 +39,14 @@ export const AttendeeList: React.FC<AttendeeListProps> = ({ eventId }) => {
             alt={attendee.name}
           />
           {/* Tooltip on hover */}
-          <div className="absolute top-14 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-xs text-white px-2 py-1 rounded whitespace-nowrap z-10 pointer-events-none">
+          <div className="absolute top-14 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-50 dark:bg-gray-800 text-xs text-gray-900 dark:text-white px-2 py-1 rounded whitespace-nowrap z-10 pointer-events-none">
             {attendee.name}
           </div>
         </div>
       ))}
       
       {remainingCount > 0 && (
-        <div className="inline-flex h-12 w-12 items-center justify-center rounded-full ring-4 ring-gray-950 bg-gray-800 hover:bg-gray-700 transition-colors z-10 text-sm font-medium text-white cursor-help">
+        <div className="inline-flex h-12 w-12 items-center justify-center rounded-full ring-4 ring-gray-950 bg-gray-50 dark:bg-gray-800 hover:bg-gray-700 transition-colors z-10 text-sm font-medium text-gray-900 dark:text-white cursor-help">
           +{remainingCount}
         </div>
       )}

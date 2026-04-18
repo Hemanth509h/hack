@@ -4,15 +4,16 @@ export const createClubSchema = Joi.object({
   name: Joi.string().required().trim().min(3).max(100),
   description: Joi.string().required().trim().min(20),
   category: Joi.string().required().valid('Tech', 'Arts', 'Debate', 'Sports', 'Music', 'Volley', 'Other'),
-  logo: Joi.string().uri().optional(),
-  coverImage: Joi.string().uri().optional(),
+  logo: Joi.string().uri().allow('').optional(),
+  coverImage: Joi.string().uri().allow('').optional(),
   socialLinks: Joi.object({
-    website: Joi.string().uri().optional(),
-    instagram: Joi.string().uri().optional(),
-    discord: Joi.string().uri().optional()
+    website: Joi.string().uri().allow('').optional(),
+    instagram: Joi.string().allow('').optional(),
+    discord: Joi.string().allow('').optional()
   }).optional(),
-  meetingSchedule: Joi.string().max(100).optional(),
-  tags: Joi.array().items(Joi.string().trim().lowercase()).max(5).default([])
+  meetingSchedule: Joi.string().max(100).allow('').optional(),
+  tags: Joi.array().items(Joi.string().trim().lowercase()).max(5).default([]),
+  headId: Joi.string().required()
 });
 
 export const updateClubSchema = Joi.object({
@@ -23,8 +24,8 @@ export const updateClubSchema = Joi.object({
   coverImage: Joi.string().uri(),
   socialLinks: Joi.object({
     website: Joi.string().uri(),
-    instagram: Joi.string().uri(),
-    discord: Joi.string().uri()
+    instagram: Joi.string(),
+    discord: Joi.string()
   }),
   meetingSchedule: Joi.string().max(100),
   tags: Joi.array().items(Joi.string().trim().lowercase()).max(5),

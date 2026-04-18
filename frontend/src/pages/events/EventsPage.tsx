@@ -24,7 +24,7 @@ const EventsPage: React.FC = () => {
     refetchOnMountOrArgChange: true,
   });
 
-  const canCreateEvent = user?.role === 'admin' || user?.role === 'club_leader';
+  const canCreateEvent = user?.role === 'admin';
 
   return (
     <PageContainer className="pb-24 pt-10">
@@ -38,11 +38,11 @@ const EventsPage: React.FC = () => {
           >
             Live Campus Pulse
           </motion.div>
-          <h1 className="text-5xl md:text-7xl font-display font-black text-white mb-6 leading-[0.9] tracking-tighter">
+          <h1 className="text-5xl md:text-7xl font-display font-black text-gray-900 dark:text-white mb-6 leading-[0.9] tracking-tighter">
             Happening In <br />
             <span className="text-gradient">The Quad.</span>
           </h1>
-          <p className="text-gray-400 text-xl max-w-2xl font-light leading-relaxed">
+          <p className="text-gray-600 dark:text-gray-400 text-xl max-w-2xl font-light leading-relaxed">
             Discover workshops, hackathons, sports, and cultural festivals. Connect with visionaries and build your campus legacy.
           </p>
         </div>
@@ -83,11 +83,11 @@ const EventsPage: React.FC = () => {
           <button className="mt-8 btn-glass border-red-500/20 text-red-400">Retry Connection</button>
         </div>
       ) : !data?.events || data.events.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-32 text-center glass rounded-[4rem] border-dashed border-white/10">
-          <div className="w-24 h-24 bg-gray-900 rounded-[2rem] flex items-center justify-center mb-8 shadow-inner">
+        <div className="flex flex-col items-center justify-center py-32 text-center glass rounded-[4rem] border-dashed border-black/10 dark:border-white/10">
+          <div className="w-24 h-24 bg-white dark:bg-gray-900 rounded-[2rem] flex items-center justify-center mb-8 shadow-inner">
             <CalendarX className="w-12 h-12 text-gray-600" />
           </div>
-          <h3 className="text-3xl font-display font-black text-white mb-4 tracking-tighter">Quiet on the Front</h3>
+          <h3 className="text-3xl font-display font-black text-gray-900 dark:text-white mb-4 tracking-tighter">Quiet on the Front</h3>
           <p className="text-gray-500 max-w-md mx-auto text-lg leading-relaxed font-light">
             No events match your current filters. Be the pioneer and <span className="text-indigo-400 font-bold">start something new</span> today!
           </p>

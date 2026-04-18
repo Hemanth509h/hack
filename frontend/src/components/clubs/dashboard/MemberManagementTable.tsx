@@ -19,11 +19,11 @@ export const MemberManagementTable: React.FC<MemberManagementTableProps> = ({ me
   };
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-3xl overflow-hidden shadow-2xl">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl overflow-hidden shadow-2xl">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-gray-950/50 border-bottom border-gray-800">
+            <tr className="bg-gray-100 dark:bg-gray-950/50 border-bottom border-gray-200 dark:border-gray-800">
               <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Student</th>
               <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Status</th>
               <th className="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Role</th>
@@ -36,7 +36,7 @@ export const MemberManagementTable: React.FC<MemberManagementTableProps> = ({ me
               <tr key={member._id} className="hover:bg-gray-800/30 transition-colors">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-gray-800 overflow-hidden">
+                    <div className="h-10 w-10 rounded-full bg-gray-50 dark:bg-gray-800 overflow-hidden">
                       {member.user.avatar ? (
                         <img src={member.user.avatar} alt={member.user.name} className="h-full w-full object-cover" />
                       ) : (
@@ -44,7 +44,7 @@ export const MemberManagementTable: React.FC<MemberManagementTableProps> = ({ me
                       )}
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-white">{member.user.name}</div>
+                      <div className="text-sm font-bold text-gray-900 dark:text-white">{member.user.name}</div>
                       <div className="text-[10px] text-gray-500">{member.user.major}</div>
                     </div>
                   </div>
@@ -67,7 +67,7 @@ export const MemberManagementTable: React.FC<MemberManagementTableProps> = ({ me
                     ) : member.role === 'board' ? (
                       <Shield className="h-4 w-4 text-indigo-400" />
                     ) : null}
-                    <span className="text-xs text-gray-300 capitalize">{member.role}</span>
+                    <span className="text-xs text-gray-700 dark:text-gray-300 capitalize">{member.role}</span>
                   </div>
                 </td>
                 <td className="px-6 py-4 text-xs text-gray-500">
@@ -79,13 +79,13 @@ export const MemberManagementTable: React.FC<MemberManagementTableProps> = ({ me
                       <>
                         <button 
                           onClick={() => approve({ clubId, userId: member.user._id })}
-                          className="p-1.5 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500 hover:text-white transition-all"
+                          className="p-1.5 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500 hover:text-gray-900 dark:text-white transition-all"
                         >
                           <Check className="h-4 w-4" />
                         </button>
                         <button 
                           onClick={() => reject({ clubId, userId: member.user._id })}
-                          className="p-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all"
+                          className="p-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-gray-900 dark:text-white transition-all"
                         >
                           <X className="h-4 w-4" />
                         </button>
@@ -94,7 +94,7 @@ export const MemberManagementTable: React.FC<MemberManagementTableProps> = ({ me
                       member.role !== 'president' && (
                         <button 
                           onClick={() => handleRoleChange(member.user._id, member.role)}
-                          className="p-1.5 rounded-lg bg-gray-800 text-gray-400 hover:text-white transition-all"
+                          className="p-1.5 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white transition-all"
                           title="Toggle Board Member Role"
                         >
                           <MoreHorizontal className="h-4 w-4" />

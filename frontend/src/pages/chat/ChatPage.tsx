@@ -87,11 +87,11 @@ const ChatPage: React.FC = () => {
             roomType="direct"
           />
         ) : (
-          <div className="h-full flex flex-col items-center justify-center bg-gray-950 text-center p-8">
-             <div className="w-20 h-20 bg-gray-900 rounded-[2rem] flex items-center justify-center mb-6 border border-gray-800 shadow-2xl">
+          <div className="h-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-950 text-center p-8">
+             <div className="w-20 h-20 bg-white dark:bg-gray-900 rounded-[2rem] flex items-center justify-center mb-6 border border-gray-200 dark:border-gray-800 shadow-2xl">
                 <MessageSquare className="text-indigo-500" size={32} />
              </div>
-             <h2 className="text-2xl font-black text-white mb-2">Select a Conversation</h2>
+             <h2 className="text-2xl font-black text-gray-900 dark:text-white mb-2">Select a Conversation</h2>
              <p className="text-gray-500 max-w-sm">Choose someone from your list or start a new chat from their profile to begin collaborating.</p>
           </div>
         )}

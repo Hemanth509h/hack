@@ -69,7 +69,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     <>
       <div 
         onClick={() => fileInputRef.current?.click()}
-        className={`relative group cursor-pointer overflow-hidden bg-gray-900 border-2 border-dashed ${error ? 'border-red-500/50' : 'border-gray-700 hover:border-blue-500/50'} flex flex-col items-center justify-center transition-all ${className} ${circle ? 'rounded-full aspect-square' : 'rounded-2xl'}`}
+        className={`relative group cursor-pointer overflow-hidden bg-white dark:bg-gray-900 border-2 border-dashed ${error ? 'border-red-500/50' : 'border-gray-700 hover:border-blue-500/50'} flex flex-col items-center justify-center transition-all ${className} ${circle ? 'rounded-full aspect-square' : 'rounded-2xl'}`}
         style={!circle && aspectRatio !== 1 ? { aspectRatio } : {}}
       >
         <input 
@@ -84,12 +84,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           <>
             <img src={value} alt="Upload display" className="w-full h-full object-cover z-0" />
             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex flex-col items-center justify-center gap-2">
-                <Upload size={24} className="text-white" />
-                <span className="text-white text-sm font-semibold">Replace Photo</span>
+                <Upload size={24} className="text-gray-900 dark:text-white" />
+                <span className="text-gray-900 dark:text-white text-sm font-semibold">Replace Photo</span>
             </div>
             <button 
                onClick={clearImage} 
-               className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition shadow-lg z-20 hover:scale-110"
+               className="absolute top-2 right-2 p-1.5 bg-red-500 text-gray-900 dark:text-white rounded-full opacity-0 group-hover:opacity-100 transition shadow-lg z-20 hover:scale-110"
             >
                <X size={14} />
             </button>

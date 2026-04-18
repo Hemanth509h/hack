@@ -68,6 +68,24 @@ export const markAllAsRead = async (req: AuthRequest, res: Response) => {
 };
 
 /**
+ * @desc    Delete a single notification
+ * @route   DELETE /api/v1/notifications/:id
+ */
+export const deleteNotification = async (req: AuthRequest, res: Response) => {
+  try {
+    const notification = await Notification.findOneAndDelete({
+      _id: req.params.id,
+      recipient: req.user!.userId,
+    });
+
+    if (!notification) return res.status(404).json({ error: 'Notification not found' });
+    res.json({ message: 'Notification deleted' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete notification' });
+  }
+};
+
+/**
  * @desc    Get notification preferences
  * @route   GET /api/v1/notifications/preferences
  */

@@ -21,6 +21,13 @@ export const notificationApi = api.injectEndpoints({
       }),
       invalidatesTags: ['Notification'],
     }),
+    deleteNotification: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/notifications/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Notification'],
+    }),
     getPreferences: builder.query<INotificationPreferences, void>({
       query: () => '/notifications/preferences',
     }),
@@ -39,6 +46,7 @@ export const {
   useGetNotificationsQuery,
   useMarkAsReadMutation,
   useMarkAllAsReadMutation,
+  useDeleteNotificationMutation,
   useGetPreferencesQuery,
   useUpdatePreferencesMutation,
 } = notificationApi;

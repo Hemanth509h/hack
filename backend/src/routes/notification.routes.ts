@@ -9,6 +9,7 @@ import {
   registerDeviceToken,
   removeDeviceToken,
   testNotification,
+  deleteNotification,
 } from '../controllers/notification.controller';
 
 const router = Router();
@@ -20,6 +21,7 @@ router.use(requireAuth);
 router.get('/', getNotifications);
 router.put('/read-all', markAllAsRead);
 router.put('/:id/read', markAsRead);
+router.delete('/:id', deleteNotification);
 
 // ---- Preferences ----
 router.get('/preferences', getPreferences);

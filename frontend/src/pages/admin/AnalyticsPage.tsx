@@ -42,14 +42,14 @@ const AnalyticsPage = () => {
                Campus Analytics
              </span>
            </h1>
-           <p className="text-gray-400">Deep dive into platform engagement and demographics.</p>
+           <p className="text-gray-600 dark:text-gray-400">Deep dive into platform engagement and demographics.</p>
         </div>
         <div className="flex gap-3 flex-wrap">
-          <div className="flex bg-gray-900 border border-gray-800 rounded-xl overflow-hidden p-1">
-             <button className="px-3 py-1.5 bg-gray-800 text-white rounded-lg text-sm font-medium">Overview</button>
-             <button className="px-3 py-1.5 text-gray-400 hover:text-white rounded-lg text-sm font-medium transition">Demographics</button>
+          <div className="flex bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden p-1">
+             <button className="px-3 py-1.5 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg text-sm font-medium">Overview</button>
+             <button className="px-3 py-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white rounded-lg text-sm font-medium transition">Demographics</button>
           </div>
-          <button className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition font-medium text-sm shadow-lg shadow-blue-500/20">
+          <button className="bg-blue-600 hover:bg-blue-500 text-gray-900 dark:text-white px-4 py-2 rounded-xl flex items-center gap-2 transition font-medium text-sm shadow-lg shadow-blue-500/20">
              <Download size={16} /> Generate Report
           </button>
         </div>
@@ -62,7 +62,7 @@ const AnalyticsPage = () => {
           <select 
             value={dateRange}
             onChange={(e) => setDateRange(e.target.value)}
-            className="pl-9 pr-8 py-2 bg-gray-900 border border-gray-800 rounded-xl text-sm appearance-none text-gray-200 focus:border-blue-500 focus:outline-none cursor-pointer"
+            className="pl-9 pr-8 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl text-sm appearance-none text-gray-200 focus:border-blue-500 focus:outline-none cursor-pointer"
           >
             <option>Last 30 Days</option>
             <option>Last 6 Months</option>
@@ -74,7 +74,7 @@ const AnalyticsPage = () => {
           <select 
             value={campusFilter}
             onChange={(e) => setCampusFilter(e.target.value)}
-            className="pl-9 pr-8 py-2 bg-gray-900 border border-gray-800 rounded-xl text-sm appearance-none text-gray-200 focus:border-blue-500 focus:outline-none cursor-pointer"
+            className="pl-9 pr-8 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl text-sm appearance-none text-gray-200 focus:border-blue-500 focus:outline-none cursor-pointer"
           >
             <option>All Campuses</option>
             <option>North Campus</option>
@@ -85,7 +85,7 @@ const AnalyticsPage = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
          {/* Active Users Line Chart */}
-         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
             <h3 className="text-lg font-bold mb-6">Active Users Growth</h3>
             <div className="h-[280px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -104,7 +104,7 @@ const AnalyticsPage = () => {
          </div>
 
          {/* Event Categories Donut */}
-         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl relative overflow-hidden flex flex-col">
+         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-xl relative overflow-hidden flex flex-col">
             <h3 className="text-lg font-bold mb-2">Event Categories Breakdown</h3>
             <div className="h-[280px] flex-1">
               <ResponsiveContainer width="100%" height="100%">
@@ -134,7 +134,7 @@ const AnalyticsPage = () => {
          </div>
 
          {/* Top Demographics Bar Chart */}
-         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl relative overflow-hidden lg:col-span-2">
+         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-xl relative overflow-hidden lg:col-span-2">
             <h3 className="text-lg font-bold mb-6">User Demographics by Major</h3>
             <div className="h-[320px]">
               <ResponsiveContainer width="100%" height="100%">

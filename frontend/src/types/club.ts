@@ -16,6 +16,7 @@ export interface IClub {
   meetingSchedule?: string;
   tags: string[];
   memberCount: number;
+  headId?: string;
   createdAt: string;
   updatedAt: string;
 }

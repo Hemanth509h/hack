@@ -50,7 +50,7 @@ const DiscoverPage: React.FC = () => {
               <TrendingUp className="text-indigo-400" size={28} />
             </div>
             <div>
-              <h2 className="text-4xl font-black text-white tracking-tighter">Trending Now</h2>
+              <h2 className="text-4xl font-black text-gray-900 dark:text-white tracking-tighter">Trending Now</h2>
               <p className="text-gray-500 font-medium">What's igniting the campus conversation</p>
             </div>
           </div>
@@ -102,15 +102,15 @@ const DiscoverPage: React.FC = () => {
               <Sparkles className="text-purple-400" size={28} />
             </div>
             <div>
-              <h2 className="text-4xl font-black text-white tracking-tighter">Personalized For You</h2>
+              <h2 className="text-4xl font-black text-gray-900 dark:text-white tracking-tighter">Personalized For You</h2>
               <p className="text-gray-500 font-medium">Curated based on your campus fingerprint</p>
             </div>
           </div>
           <div className="flex items-center space-x-3">
-             <button className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl text-gray-400 transition-all border border-white/5 shadow-lg group">
+             <button className="p-3 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 rounded-2xl text-gray-600 dark:text-gray-400 transition-all border border-black/5 dark:border-white/5 shadow-lg group">
                 <Filter size={20} className="group-hover:rotate-180 transition-transform duration-500" />
              </button>
-             <button onClick={fetchData} className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl text-gray-400 transition-all border border-white/5 shadow-lg group">
+             <button onClick={fetchData} className="p-3 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 rounded-2xl text-gray-600 dark:text-gray-400 transition-all border border-black/5 dark:border-white/5 shadow-lg group">
                 <RefreshCw size={20} className="group-hover:rotate-180 transition-transform duration-500" />
              </button>
           </div>
@@ -130,11 +130,11 @@ const DiscoverPage: React.FC = () => {
               </motion.div>
             ))
           ) : (
-             <div className="col-span-full py-24 text-center glass rounded-[3rem] border border-dashed border-white/10 group hover:border-indigo-500/30 transition-colors">
+             <div className="col-span-full py-24 text-center glass rounded-[3rem] border border-dashed border-black/10 dark:border-white/10 group hover:border-indigo-500/30 transition-colors">
                 <div className="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                   <User className="text-indigo-400" size={32} />
                 </div>
-                <p className="text-gray-400 text-lg font-medium">Complete your profile to unlock <span className="text-indigo-400">Personalized Insights.</span></p>
+                <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">Complete your profile to unlock <span className="text-indigo-400">Personalized Insights.</span></p>
                 <button className="mt-8 btn-glass">Complete Profile</button>
              </div>
           )}

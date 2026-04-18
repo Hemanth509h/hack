@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useLogoutMutation } from '../../features/auth/authApi';
 import { logout } from '../../features/auth/authSlice';
+import { useTheme } from '../../context/ThemeContext';
 import { 
   Home, 
   Calendar, 
@@ -18,7 +19,9 @@ import {
   Search,
   ShieldCheck,
   MessageSquare,
-  Activity
+  Activity,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -33,6 +36,7 @@ const Sidebar: React.FC<{ onSearchClick: () => void }> = ({ onSearchClick }) => 
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
   const [logoutApi] = useLogoutMutation();
+  const { theme, toggleTheme } = useTheme();
 
   const handleLogout = async () => {
     try {
@@ -67,22 +71,22 @@ const Sidebar: React.FC<{ onSearchClick: () => void }> = ({ onSearchClick }) => 
   }
 
   return (
-    <aside className="hidden md:flex fixed left-0 top-0 h-screen w-64 bg-[#030303] border-r border-white/5 flex-col z-40 transition-all duration-300">
+    <aside className="hidden md:flex fixed left-0 top-0 h-screen w-64 bg-gray-50 dark:bg-[#030303] border-r border-black/5 dark:border-white/5 flex-col z-40 transition-all duration-300">
       <div className="p-10 flex items-center space-x-3">
-        <div className="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center font-bold text-xl text-white shadow-lg">
+        <div className="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center font-bold text-xl text-gray-900 dark:text-white shadow-lg">
           Q
         </div>
-        <span className="font-display font-bold text-2xl tracking-tighter text-white">The Quad</span>
+        <span className="font-display font-bold text-2xl tracking-tighter text-gray-900 dark:text-white">The Quad</span>
       </div>
 
       <div className="px-6 mb-10">
         <button
           onClick={onSearchClick}
-          className="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-white/5 hover:bg-white/10 transition-all duration-300 border border-white/5 group"
+          className="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-all duration-300 border border-black/5 dark:border-white/5 group"
         >
-          <Search size={20} className="text-gray-400 group-hover:text-white transition-colors" />
-          <span className="text-sm text-gray-400 group-hover:text-white transition-colors font-medium">Search...</span>
-          <kbd className="ml-auto hidden lg:flex items-center px-2 h-6 font-mono text-[10px] font-medium bg-white/5 border border-white/10 rounded-lg text-gray-500">
+          <Search size={20} className="text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:text-white transition-colors" />
+          <span className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:text-white transition-colors font-medium">Search...</span>
+          <kbd className="ml-auto hidden lg:flex items-center px-2 h-6 font-mono text-[10px] font-medium bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-lg text-gray-500">
             ⌘K
           </kbd>
         </button>
@@ -112,10 +116,17 @@ const Sidebar: React.FC<{ onSearchClick: () => void }> = ({ onSearchClick }) => 
         ))}
       </nav>
 
-      <div className="p-6 mt-auto">
+      <div className="p-6 mt-auto flex gap-2">
+        <button
+          onClick={toggleTheme}
+          className="flex items-center justify-center p-4 rounded-2xl text-gray-500 hover:text-gray-900 dark:hover:text-gray-900 dark:text-white bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-all duration-300 group"
+          title="Toggle Theme"
+        >
+          {theme === 'dark' ? <Sun size={22} className="group-hover:rotate-90 transition-all" /> : <Moon size={22} className="group-hover:-rotate-12 transition-all" />}
+        </button>
         <button 
           onClick={handleLogout}
-          className="flex items-center space-x-3 px-6 py-4 w-full rounded-2xl text-gray-500 hover:text-red-400 hover:bg-red-400/5 transition-all duration-300 group"
+          className="flex-1 flex items-center justify-center space-x-3 px-6 py-4 rounded-2xl text-gray-500 hover:text-red-400 hover:bg-red-400/5 transition-all duration-300 group"
         >
           <LogOut size={22} className="group-hover:-translate-x-1 transition-transform" />
           <span className="font-semibold">Logout</span>
@@ -132,12 +143,12 @@ const SidebarLink: React.FC<{ to: string; icon: React.ReactNode; label: string; 
       "flex items-center space-x-4 px-6 py-3.5 rounded-2xl transition-all duration-300 group relative overflow-hidden",
       active 
         ? "bg-indigo-500/10 text-indigo-400 shadow-[inset_0_0_20px_rgba(99,102,241,0.05)]" 
-        : "text-gray-500 hover:text-white hover:bg-white/5"
+        : "text-gray-500 hover:text-gray-900 dark:text-white hover:bg-black/5 dark:hover:bg-white/5"
     )}
   >
     <div className={cn(
       "transition-all duration-300",
-      active ? "text-indigo-400 scale-110" : "text-gray-500 group-hover:text-white group-hover:scale-110"
+      active ? "text-indigo-400 scale-110" : "text-gray-500 group-hover:text-gray-900 dark:text-white group-hover:scale-110"
     )}>
       {icon}
     </div>

@@ -13,6 +13,8 @@ import {
   leaveClub,
   getClubMembers,
   updateMemberRole,
+  approveMember,
+  rejectMember,
   sendClubAnnouncement,
   getClubAnalytics
 } from '../controllers/club.controller';
@@ -34,6 +36,8 @@ router.post('/:id/join', requireAuth, joinClub);
 router.delete('/:id/leave', requireAuth, leaveClub);
 router.get('/:id/members', requireAuth, getClubMembers);
 router.put('/:id/members/:userId/role', requireAuth, validateRequest(updateMemberRoleSchema), updateMemberRole);
+router.post('/:id/members/:userId/approve', requireAuth, approveMember);
+router.post('/:id/members/:userId/reject', requireAuth, rejectMember);
 
 // ---- Analytics & Broadcasting ----
 router.post('/:id/announcements', requireAuth, validateRequest(announcementSchema), sendClubAnnouncement);

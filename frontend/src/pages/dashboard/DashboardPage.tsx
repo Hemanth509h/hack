@@ -53,7 +53,7 @@ const DashboardPage: React.FC = () => {
               className="flex items-center gap-4 mb-8"
             >
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 p-0.5">
-                 <div className="w-full h-full rounded-2xl overflow-hidden bg-gray-900 border border-white/10">
+                 <div className="w-full h-full rounded-2xl overflow-hidden bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10">
                    {user?.avatar ? (
                      <img src={user.avatar} className="w-full h-full object-cover" alt="Profile" />
                    ) : (
@@ -64,8 +64,8 @@ const DashboardPage: React.FC = () => {
                  </div>
               </div>
               <div>
-                <h1 className="text-3xl font-black text-white">Welcome back, {user?.name?.split(' ')[0]}</h1>
-                <p className="text-gray-400">Here's what's happening around The Quad today.</p>
+                <h1 className="text-3xl font-black text-gray-900 dark:text-white">Welcome back, {user?.name?.split(' ')[0]}</h1>
+                <p className="text-gray-600 dark:text-gray-400">Here's what's happening around The Quad today.</p>
               </div>
             </motion.div>
 
@@ -110,7 +110,7 @@ const DashboardPage: React.FC = () => {
           {/* Happening Now Carousel */}
           <section>
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold flex items-center gap-2 text-white">
+              <h2 className="text-2xl font-bold flex items-center gap-2 text-gray-900 dark:text-white">
                 <span className="relative flex h-3 w-3 mr-1">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
@@ -118,17 +118,17 @@ const DashboardPage: React.FC = () => {
                 Happening Now
               </h2>
               <div className="flex gap-2">
-                <button className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center hover:bg-gray-700 transition-colors">
+                <button className="w-8 h-8 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white flex items-center justify-center hover:bg-gray-700 transition-colors">
                   <ChevronLeft className="w-4 h-4" />
                 </button>
-                <button className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center hover:bg-gray-700 transition-colors">
+                <button className="w-8 h-8 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white flex items-center justify-center hover:bg-gray-700 transition-colors">
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
 
             {trendingLoading ? (
-              <div className="h-64 rounded-2xl bg-gray-900 animate-pulse border border-gray-800"></div>
+              <div className="h-64 rounded-2xl bg-white dark:bg-gray-900 animate-pulse border border-gray-200 dark:border-gray-800"></div>
             ) : trendingEvents.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative overflow-hidden">
                 <AnimatePresence mode="popLayout">
@@ -146,8 +146,8 @@ const DashboardPage: React.FC = () => {
                 </AnimatePresence>
               </div>
             ) : (
-                <div className="py-12 text-center border overflow-hidden rounded-2xl border-gray-800 bg-gray-900/50">
-                    <p className="text-gray-400">No events currently trending.</p>
+                <div className="py-12 text-center border overflow-hidden rounded-2xl border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/50">
+                    <p className="text-gray-600 dark:text-gray-400">No events currently trending.</p>
                 </div>
             )}
           </section>
@@ -158,8 +158,8 @@ const DashboardPage: React.FC = () => {
         <div className="xl:col-span-4 space-y-10">
           
           {/* Suggested For You */}
-          <section className="bg-gray-900/40 rounded-3xl p-6 border border-white/5">
-            <h2 className="text-xl font-bold flex items-center gap-2 text-white mb-6">
+          <section className="bg-white dark:bg-gray-900/40 rounded-3xl p-6 border border-black/5 dark:border-white/5">
+            <h2 className="text-xl font-bold flex items-center gap-2 text-gray-900 dark:text-white mb-6">
               <Sparkles className="w-5 h-5 text-indigo-400" />
               Suggested for You
             </h2>
@@ -169,7 +169,7 @@ const DashboardPage: React.FC = () => {
                   <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Events Based on Interests</h3>
                   {recEventsLoading ? (
                     <div className="space-y-4">
-                       {[1,2].map(i => <div key={i} className="h-32 bg-gray-800 rounded-xl animate-pulse"></div>)}
+                       {[1,2].map(i => <div key={i} className="h-32 bg-gray-50 dark:bg-gray-800 rounded-xl animate-pulse"></div>)}
                     </div>
                   ) : recommendedEvents.length > 0 ? (
                     <div className="space-y-4">
@@ -180,7 +180,7 @@ const DashboardPage: React.FC = () => {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-sm text-gray-400 italic">Add more interests to see suggestions.</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 italic">Add more interests to see suggestions.</p>
                   )}
                </div>
 
@@ -189,7 +189,7 @@ const DashboardPage: React.FC = () => {
                   {trendingClubs.length > 0 && (
                      <div className="flex flex-col gap-4">
                         {trendingClubs.slice(0, 2).map((club: any) => (
-                           <div key={club._id} className="scale-[0.98] origin-left border border-white/10 rounded-xl overflow-hidden">
+                           <div key={club._id} className="scale-[0.98] origin-left border border-black/10 dark:border-white/10 rounded-xl overflow-hidden">
                               <ClubCard club={club} />
                            </div>
                         ))}

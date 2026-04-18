@@ -38,11 +38,11 @@ export const ClubDetailHeader: React.FC<ClubDetailHeaderProps> = ({ club, isMemb
 
       {/* Profile/Logo Info */}
       <div className="max-w-7xl mx-auto px-6 relative -mt-20 flex flex-col md:flex-row items-end md:items-center gap-6">
-        <div className="h-32 w-32 md:h-40 md:w-40 rounded-3xl border-8 border-gray-950 bg-gray-900 overflow-hidden shadow-2xl">
+        <div className="h-32 w-32 md:h-40 md:w-40 rounded-3xl border-8 border-gray-950 bg-white dark:bg-gray-900 overflow-hidden shadow-2xl">
           {club.logo ? (
             <img src={club.logo} alt={club.name} className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-indigo-600 text-5xl font-bold text-white">
+            <div className="w-full h-full flex items-center justify-center bg-indigo-600 text-5xl font-bold text-gray-900 dark:text-white">
               {club.name.charAt(0)}
             </div>
           )}
@@ -54,15 +54,15 @@ export const ClubDetailHeader: React.FC<ClubDetailHeaderProps> = ({ club, isMemb
               {club.category}
             </span>
             <span className="text-gray-500">•</span>
-            <span className="flex items-center gap-1.5 text-gray-400 text-sm">
+            <span className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400 text-sm">
               <Users className="h-4 w-4" />
               {club.memberCount} Members
             </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-3">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-3">
             {club.name}
           </h1>
-          <div className="flex flex-wrap items-center gap-6 text-gray-400 text-sm justify-center md:justify-start">
+          <div className="flex flex-wrap items-center gap-6 text-gray-600 dark:text-gray-400 text-sm justify-center md:justify-start">
             {club.meetingSchedule && (
               <span className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-indigo-400" />
@@ -96,8 +96,8 @@ export const ClubDetailHeader: React.FC<ClubDetailHeaderProps> = ({ club, isMemb
               disabled={isJoining || isLeaving}
               className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl font-bold transition-all ${
                 isMember
-                  ? 'bg-gray-800 text-white hover:bg-red-500/20 hover:text-red-400 border border-gray-700 hover:border-red-500/30'
-                  : 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-[0_0_20px_rgba(79,70,229,0.4)]'
+                  ? 'bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-red-500/20 hover:text-red-400 border border-gray-700 hover:border-red-500/30'
+                  : 'bg-indigo-600 text-gray-900 dark:text-white hover:bg-indigo-500 shadow-[0_0_20px_rgba(79,70,229,0.4)]'
               }`}
             >
               {isMember ? 'Joined' : 'Join Club'}

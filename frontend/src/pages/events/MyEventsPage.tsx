@@ -44,20 +44,20 @@ const MyEventsPage: React.FC = () => {
   return (
     <div className="min-h-screen pt-24 pb-16 px-6 max-w-full md:px-12 lg:px-20 mx-auto">
       <div className="mb-10">
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 flex items-center">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
           <TicketPercent className="mr-3 text-indigo-400 w-8 h-8" /> My RSVPs
         </h1>
-        <p className="text-gray-400">Manage your event schedule and RSVPs.</p>
+        <p className="text-gray-600 dark:text-gray-400">Manage your event schedule and RSVPs.</p>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-800 mb-8 overflow-x-auto">
+      <div className="flex border-b border-gray-200 dark:border-gray-800 mb-8 overflow-x-auto">
         {(['upcoming', 'past', 'cancelled'] as TabType[]).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`px-6 py-4 font-medium text-sm capitalize whitespace-nowrap transition-colors relative ${
-              activeTab === tab ? 'text-indigo-400' : 'text-gray-500 hover:text-gray-300'
+              activeTab === tab ? 'text-indigo-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-300'
             }`}
           >
             {tab}
@@ -77,8 +77,8 @@ const MyEventsPage: React.FC = () => {
           <Loader2 className="w-8 h-8 text-indigo-500 animate-spin" />
         </div>
       ) : filteredEvents.length === 0 ? (
-        <div className="text-center py-20 bg-gray-900/50 border border-gray-800 rounded-2xl">
-          <p className="text-gray-400">You have no {activeTab} events.</p>
+        <div className="text-center py-20 bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-2xl">
+          <p className="text-gray-600 dark:text-gray-400">You have no {activeTab} events.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

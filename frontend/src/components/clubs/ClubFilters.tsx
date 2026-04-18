@@ -43,7 +43,7 @@ export const ClubFilters: React.FC = () => {
           value={filters.search}
           onChange={handleSearch}
           placeholder="Search for clubs, interests, or keywords..."
-          className="block w-full bg-gray-900/50 border border-gray-800 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all backdrop-blur-sm"
+          className="block w-full bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-2xl pl-12 pr-4 py-4 text-gray-900 dark:text-white placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all backdrop-blur-sm"
         />
       </div>
 
@@ -57,8 +57,8 @@ export const ClubFilters: React.FC = () => {
               onClick={() => handleCategoryChange(cat)}
               className={`whitespace-nowrap rounded-full px-5 py-2 text-sm font-medium transition-all ${
                 (filters.category === cat || (cat === 'All Interests' && !filters.category))
-                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30'
-                  : 'bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white border border-gray-700/50'
+                  ? 'bg-indigo-600 text-gray-900 dark:text-white shadow-lg shadow-indigo-500/30'
+                  : 'bg-gray-50 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400 hover:bg-gray-800 hover:text-gray-900 dark:text-white border border-gray-700/50'
               }`}
             >
               {cat}
@@ -71,7 +71,7 @@ export const ClubFilters: React.FC = () => {
           <select
             value={filters.sortBy}
             onChange={handleSortChange}
-            className="bg-gray-900/50 border border-gray-800 rounded-xl px-4 py-2 text-sm text-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none backdrop-blur-sm"
+            className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-2 text-sm text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none backdrop-blur-sm"
           >
             <option value="active">Most Active</option>
             <option value="new">Newest First</option>

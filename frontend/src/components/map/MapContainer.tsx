@@ -47,11 +47,11 @@ export const MapContainer: React.FC = () => {
 
   if (!MAPBOX_TOKEN) {
     return (
-      <div className="w-full h-full bg-gray-900 flex items-center justify-center p-6 text-center border-l border-white/5">
+      <div className="w-full h-full bg-white dark:bg-gray-900 flex items-center justify-center p-6 text-center border-l border-black/5 dark:border-white/5">
         <div className="max-w-md">
           <MapPin className="w-12 h-12 text-gray-700 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-white mb-2">Mapbox Token Missing</h2>
-          <p className="text-gray-400">Please provide a valid <code className="bg-gray-800 px-1 rounded text-red-300">VITE_MAPBOX_TOKEN</code> in your environment variables to enable the interactive map.</p>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Mapbox Token Missing</h2>
+          <p className="text-gray-600 dark:text-gray-400">Please provide a valid <code className="bg-gray-50 dark:bg-gray-800 px-1 rounded text-red-300">VITE_MAPBOX_TOKEN</code> in your environment variables to enable the interactive map.</p>
         </div>
       </div>
     );
@@ -94,7 +94,7 @@ export const MapContainer: React.FC = () => {
                     <span className="absolute animate-ping inline-flex h-8 w-8 rounded-full bg-indigo-400 opacity-75"></span>
                  )}
                  <div className={`
-                   relative z-10 w-8 h-8 rounded-full border-2 shadow-lg flex items-center justify-center transition-all bg-gray-900
+                   relative z-10 w-8 h-8 rounded-full border-2 shadow-lg flex items-center justify-center transition-all bg-white dark:bg-gray-900
                    ${isSelected ? 'border-indigo-500 scale-125' : 'border-indigo-500/50 hover:border-indigo-400 scale-100'}
                  `}>
                     <MapPin className={`w-4 h-4 ${isSelected ? 'text-indigo-400' : 'text-indigo-200'}`} />
@@ -121,11 +121,11 @@ export const MapContainer: React.FC = () => {
               style={{ cursor: 'pointer', zIndex: isSelected ? 10 : 1 }}
             >
               <div className={`
-                p-2 rounded-xl bg-gray-900 border-2 transition-all shadow-xl flex items-center gap-2
-                ${isSelected ? 'border-amber-500 scale-110' : 'border-white/10 hover:border-white/30'}
+                p-2 rounded-xl bg-white dark:bg-gray-900 border-2 transition-all shadow-xl flex items-center gap-2
+                ${isSelected ? 'border-amber-500 scale-110' : 'border-black/10 dark:border-white/10 hover:border-white/30'}
               `}>
                 {res.type === 'dining' ? <Coffee size={14} className="text-amber-400" /> : <Library size={14} className="text-blue-400" />}
-                <span className="text-[10px] font-bold text-white whitespace-nowrap">{res.name}</span>
+                <span className="text-[10px] font-bold text-gray-900 dark:text-white whitespace-nowrap">{res.name}</span>
               </div>
             </Marker>
           );
@@ -143,26 +143,26 @@ export const MapContainer: React.FC = () => {
              closeButton={false}
              maxWidth="300px"
            >
-             <div className="bg-gray-900 border border-gray-700 rounded-xl overflow-hidden shadow-2xl p-0 min-w-[240px]">
+             <div className="bg-white dark:bg-gray-900 border border-gray-700 rounded-xl overflow-hidden shadow-2xl p-0 min-w-[240px]">
                {selectedEvent.coverImage && (
                  <img src={selectedEvent.coverImage} className="w-full h-24 object-cover" alt="Event cover" />
                )}
                <div className="p-4">
                  <div className="flex items-start justify-between gap-3 mb-2">
-                   <h3 className="font-bold text-white leading-tight">{selectedEvent.title}</h3>
-                   <button onClick={() => dispatch(setSelectedLocationId(null))} className="text-gray-500 hover:text-white shrink-0">
+                   <h3 className="font-bold text-gray-900 dark:text-white leading-tight">{selectedEvent.title}</h3>
+                   <button onClick={() => dispatch(setSelectedLocationId(null))} className="text-gray-500 hover:text-gray-900 dark:text-white shrink-0">
                       <X className="w-4 h-4" />
                    </button>
                  </div>
                  
-                 <div className="flex flex-col gap-1 text-xs text-gray-400 mb-3">
+                 <div className="flex flex-col gap-1 text-xs text-gray-600 dark:text-gray-400 mb-3">
                    <span className="flex items-center gap-1.5"><Info className="w-3.5 h-3.5 text-indigo-400" /> {(selectedEvent.location as any).name || 'Campus Resource'}</span>
                    <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-indigo-400" /> {selectedEvent.rsvpCount} Attending</span>
                  </div>
 
                  <a 
                    href={`/events/${selectedEvent._id}`}
-                   className="block w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-center rounded-lg text-white font-semibold text-xs transition-colors"
+                   className="block w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-center rounded-lg text-gray-900 dark:text-white font-semibold text-xs transition-colors"
                  >
                    View Details
                  </a>
@@ -181,13 +181,13 @@ export const MapContainer: React.FC = () => {
               closeButton={false}
               maxWidth="300px"
             >
-              <div className="bg-gray-900 border border-gray-700 rounded-xl overflow-hidden shadow-2xl p-4 min-w-[240px]">
+              <div className="bg-white dark:bg-gray-900 border border-gray-700 rounded-xl overflow-hidden shadow-2xl p-4 min-w-[240px]">
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="flex items-center gap-2">
                     {selectedResource.type === 'dining' ? <Coffee className="text-amber-400" size={18} /> : <Library className="text-blue-400" size={18} />}
-                    <h3 className="font-bold text-white leading-tight">{selectedResource.name}</h3>
+                    <h3 className="font-bold text-gray-900 dark:text-white leading-tight">{selectedResource.name}</h3>
                   </div>
-                  <button onClick={() => dispatch(setSelectedLocationId(null))} className="text-gray-500 hover:text-white shrink-0">
+                  <button onClick={() => dispatch(setSelectedLocationId(null))} className="text-gray-500 hover:text-gray-900 dark:text-white shrink-0">
                     <X className="w-4 h-4" />
                   </button>
                 </div>

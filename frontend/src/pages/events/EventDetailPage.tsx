@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useGetEventByIdQuery } from '../../services/eventApi';
 import { RSVPButton } from '../../components/events/RSVPButton';
 import { AttendeeList } from '../../components/events/AttendeeList';
+import { RSVPManagement } from '../../components/events/RSVPManagement';
 import { Calendar, MapPin, Share2, ArrowLeft, Clock, Info, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
@@ -61,7 +62,7 @@ const EventDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#030303] pb-32">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#030303] pb-32">
       {/* Immersive Cover Image */}
       <div className="h-[50vh] md:h-[65vh] relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-[#030303]/20 to-transparent z-10" />
@@ -79,7 +80,7 @@ const EventDetailPage: React.FC = () => {
         <div className="absolute top-28 left-6 md:left-12 z-20">
           <Link
             to="/events"
-            className="flex items-center text-xs font-black uppercase tracking-widest text-white/70 hover:text-white glass bg-white/5 px-5 py-3 rounded-2xl border-white/10 transition-all hover:translate-x-[-4px]"
+            className="flex items-center text-xs font-black uppercase tracking-widest text-gray-900 dark:text-white/70 hover:text-gray-900 dark:text-white glass bg-black/5 dark:bg-white/5 px-5 py-3 rounded-2xl border-black/10 dark:border-white/10 transition-all hover:translate-x-[-4px]"
           >
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Pulse
           </Link>
@@ -93,7 +94,7 @@ const EventDetailPage: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              className="glass rounded-[3rem] p-8 md:p-16 shadow-[0_40px_100px_rgba(0,0,0,0.5)] border-white/5 relative overflow-hidden"
+              className="glass rounded-[3rem] p-8 md:p-16 shadow-[0_40px_100px_rgba(0,0,0,0.5)] border-black/5 dark:border-white/5 relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 blur-[100px] -mr-32 -mt-32" />
               
@@ -107,28 +108,28 @@ const EventDetailPage: React.FC = () => {
                   {event.category}
                 </motion.div>
                 
-                <h1 className="text-4xl md:text-7xl font-display font-black text-white mb-10 leading-[0.9] tracking-tighter">
+                <h1 className="text-4xl md:text-7xl font-display font-black text-gray-900 dark:text-white mb-10 leading-[0.9] tracking-tighter">
                   {event.title}
                 </h1>
 
-                <div className="flex flex-wrap items-center gap-6 text-gray-400 mb-12 pb-12 border-b border-white/5">
-                  <div className="flex items-center glass bg-white/5 px-6 py-3 rounded-2xl border-white/5">
-                    <div className="w-10 h-10 premium-gradient rounded-full flex items-center justify-center font-black text-white mr-4 shadow-lg">
+                <div className="flex flex-wrap items-center gap-6 text-gray-600 dark:text-gray-400 mb-12 pb-12 border-b border-black/5 dark:border-white/5">
+                  <div className="flex items-center glass bg-black/5 dark:bg-white/5 px-6 py-3 rounded-2xl border-black/5 dark:border-white/5">
+                    <div className="w-10 h-10 premium-gradient rounded-full flex items-center justify-center font-black text-gray-900 dark:text-white mr-4 shadow-lg">
                       {event.category.charAt(0)}
                     </div>
                     <div>
                       <div className="text-[10px] font-black uppercase tracking-widest text-gray-500">Organized By</div>
-                      <div className="text-white font-bold tracking-tight uppercase text-xs">The Quad Elite</div>
+                      <div className="text-gray-900 dark:text-white font-bold tracking-tight uppercase text-xs">The Quad Elite</div>
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-8">
-                  <h3 className="text-2xl font-display font-black text-white tracking-tighter flex items-center gap-4">
+                  <h3 className="text-2xl font-display font-black text-gray-900 dark:text-white tracking-tighter flex items-center gap-4">
                     <div className="w-1.5 h-8 bg-indigo-500 rounded-full" />
                     Event Manifesto
                   </h3>
-                  <p className="text-gray-400 text-xl leading-relaxed font-light whitespace-pre-wrap">
+                  <p className="text-gray-600 dark:text-gray-400 text-xl leading-relaxed font-light whitespace-pre-wrap">
                     {event.description}
                   </p>
                 </div>
@@ -167,7 +168,7 @@ const EventDetailPage: React.FC = () => {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="mb-12 glass bg-white/5 rounded-3xl p-8 border-indigo-500/30"
+                        className="mb-12 glass bg-black/5 dark:bg-white/5 rounded-3xl p-8 border-indigo-500/30"
                       >
                          <QRScanner eventId={event._id} />
                       </motion.div>
@@ -176,12 +177,12 @@ const EventDetailPage: React.FC = () => {
 
                 <div className="flex items-center gap-4 mb-8">
                    <div className="w-2 h-10 bg-indigo-400 rounded-full" />
-                   <h3 className="text-2xl font-display font-black text-white tracking-tighter">
-                     Confirmed Delegates ({event.rsvpCount})
+                   <h3 className="text-2xl font-display font-black text-gray-900 dark:text-white tracking-tighter">
+                     RSVP Registry
                    </h3>
                 </div>
-                <div className="glass bg-white/5 rounded-[2rem] p-8 border-white/5">
-                  <AttendeeList eventId={event._id} />
+                <div className="glass bg-black/5 dark:bg-white/5 rounded-[2rem] p-8 border-black/5 dark:border-white/5">
+                  <RSVPManagement eventId={event._id} />
                 </div>
               </motion.div>
             )}
@@ -192,12 +193,12 @@ const EventDetailPage: React.FC = () => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="glass rounded-[3rem] p-10 md:p-16 border-white/5"
+                className="glass rounded-[3rem] p-10 md:p-16 border-black/5 dark:border-white/5"
               >
-                <h3 className="text-3xl font-display font-black text-white mb-10 tracking-tighter">
+                <h3 className="text-3xl font-display font-black text-gray-900 dark:text-white mb-10 tracking-tighter">
                   Attendee Registry ({event.rsvpCount})
                 </h3>
-                <div className="glass bg-white/5 rounded-[2rem] p-8 border-white/5">
+                <div className="glass bg-black/5 dark:bg-white/5 rounded-[2rem] p-8 border-black/5 dark:border-white/5">
                   <AttendeeList eventId={event._id} />
                 </div>
               </motion.div>
@@ -210,7 +211,7 @@ const EventDetailPage: React.FC = () => {
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="glass rounded-[3rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.4)] sticky top-28 border-white/10 relative overflow-hidden"
+              className="glass rounded-[3rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.4)] sticky top-28 border-black/10 dark:border-white/10 relative overflow-hidden"
             >
               <div className="absolute bottom-0 right-0 w-40 h-40 bg-indigo-500/10 blur-3xl -mr-20 -mb-20" />
               
@@ -220,7 +221,7 @@ const EventDetailPage: React.FC = () => {
                   initialIsRsvpd={false}
                   className="w-full py-6 text-sm font-black uppercase tracking-[0.2em] shadow-indigo-500/30"
                 />
-                <div className="glass bg-white/5 rounded-[2.5rem] p-8 border-white/5 flex flex-col items-center">
+                <div className="glass bg-black/5 dark:bg-white/5 rounded-[2.5rem] p-8 border-black/5 dark:border-white/5 flex flex-col items-center">
                   <QRCodeDisplay eventId={event._id} />
                   <p className="mt-6 text-[10px] font-black text-gray-500 uppercase tracking-widest">Your Digital Access Key</p>
                 </div>
@@ -228,13 +229,13 @@ const EventDetailPage: React.FC = () => {
 
               <div className="space-y-8 mb-10">
                 <div className="flex items-start group">
-                  <div className="glass bg-white/5 p-4 rounded-2xl mr-5 text-indigo-400 border-white/10 group-hover:scale-110 transition-transform">
+                  <div className="glass bg-black/5 dark:bg-white/5 p-4 rounded-2xl mr-5 text-indigo-400 border-black/10 dark:border-white/10 group-hover:scale-110 transition-transform">
                     <Calendar className="w-6 h-6" />
                   </div>
                   <div>
                     <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Schedule</p>
-                    <p className="font-bold text-white tracking-tight">{formattedDate}</p>
-                    <p className="text-gray-400 font-medium">
+                    <p className="font-bold text-gray-900 dark:text-white tracking-tight">{formattedDate}</p>
+                    <p className="text-gray-600 dark:text-gray-400 font-medium">
                       {formattedTime} — {formattedEndTime}
                     </p>
                     <div className="mt-4">
@@ -244,31 +245,31 @@ const EventDetailPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-start group">
-                  <div className="glass bg-white/5 p-4 rounded-2xl mr-5 text-indigo-400 border-white/10 group-hover:scale-110 transition-transform">
+                  <div className="glass bg-black/5 dark:bg-white/5 p-4 rounded-2xl mr-5 text-indigo-400 border-black/10 dark:border-white/10 group-hover:scale-110 transition-transform">
                     <MapPin className="w-6 h-6" />
                   </div>
                   <div>
                     <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Nexus Location</p>
-                    <p className="font-bold text-white tracking-tight">{locationStr || 'TBA'}</p>
-                    <p className="text-gray-400 font-medium">Campus Grounds</p>
+                    <p className="font-bold text-gray-900 dark:text-white tracking-tight">{locationStr || 'TBA'}</p>
+                    <p className="text-gray-600 dark:text-gray-400 font-medium">Campus Grounds</p>
                   </div>
                 </div>
 
                 <div className="flex items-start group">
-                  <div className="glass bg-white/5 p-4 rounded-2xl mr-5 text-indigo-400 border-white/10 group-hover:scale-110 transition-transform">
+                  <div className="glass bg-black/5 dark:bg-white/5 p-4 rounded-2xl mr-5 text-indigo-400 border-black/10 dark:border-white/10 group-hover:scale-110 transition-transform">
                     <Clock className="w-6 h-6" />
                   </div>
                   <div>
                     <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Duration</p>
-                    <p className="font-bold text-white tracking-tight">{event.durationMinutes} Minutes Experience</p>
+                    <p className="font-bold text-gray-900 dark:text-white tracking-tight">{event.durationMinutes} Minutes Experience</p>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-8 border-t border-white/5">
+              <div className="pt-8 border-t border-black/5 dark:border-white/5">
                 <button
                   onClick={handleShare}
-                  className="w-full flex items-center justify-center gap-3 px-6 py-4 glass bg-white/5 hover:bg-white/10 text-white font-black uppercase tracking-widest text-[11px] rounded-2xl transition-all duration-300 border-white/10"
+                  className="w-full flex items-center justify-center gap-3 px-6 py-4 glass bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-gray-900 dark:text-white font-black uppercase tracking-widest text-[11px] rounded-2xl transition-all duration-300 border-black/10 dark:border-white/10"
                 >
                   <Share2 className="w-4 h-4" /> Synchronize Link
                 </button>
