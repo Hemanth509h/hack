@@ -7,7 +7,7 @@ import { connectRedis, isRedisConnected } from './config/redis.js';
 import { initializeSocket } from './config/socket.js';
 import { initializeQueues } from './config/queue.js';
 import { startNotificationWorker } from './workers/notification.worker.js';
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 // Wrap express in native HTTP server so Socket.io can attach
 const httpServer = http.createServer(app);
 // Connect to Database and start server

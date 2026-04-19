@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 const router = Router();
 /**
  * @desc    Ingest raw analytical web behavior. Gracefully fail silently (204) to avoid disrupting user experience if DB hits max threshold
- * @route   POST /api/v1/analytics/track
+ * @route   POST /api/v1/events-tracking/track
  */
 router.post('/track', async (req, res) => {
     try {

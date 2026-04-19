@@ -43,7 +43,7 @@ export const trackPageView = (path) => {
   const anonymousId = getAnonymousId();
 
   // Async fire-and-forget
-  api.post('/analytics/track', {
+  api.post('/events-tracking/track', {
      path,
      action: 'page_view',
      category: 'navigation',
@@ -65,7 +65,7 @@ export const trackEvent = (category, action, label = null, value = null) => {
   const anonymousId = getAnonymousId();
   const path = window.location.pathname;
 
-  api.post('/analytics/track', {
+  api.post('/events-tracking/track', {
      path,
      category,
      action,

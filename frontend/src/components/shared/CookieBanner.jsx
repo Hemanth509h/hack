@@ -1,6 +1,6 @@
 import React from 'react';
 import CookieConsent from 'react-cookie-consent';
-import { initAnalytics } from '../../lib/analytics';
+import { initAnalytics } from '../../lib/telemetry';
 
 export const CookieBanner = () => {
   return (
