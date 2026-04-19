@@ -5,11 +5,9 @@ import { X } from 'lucide-react';
 
 function cn(...inputs) {
   return twMerge(clsx(inputs));
-}
-
 export 
 
-export const Badge: React.FC = ({
+export const Badge = ({
   children,
   variant = 'default',
   size = 'md',

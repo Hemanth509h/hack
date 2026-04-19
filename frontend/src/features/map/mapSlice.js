@@ -1,14 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-;
-  toggles: {
-    events;
-    buildings;
-    dining;
-  };
-  selectedLocationId: string | null;
-  searchQuery;
-}
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   viewport: {
@@ -29,7 +19,7 @@ const mapSlice = createSlice({
   name: 'map',
   initialState,
   reducers: {
-    setViewport: (state, action: PayloadAction<Partial<MapState['viewport']>>) => {
+    setViewport: (state, action) => {
       state.viewport = { ...state.viewport, ...action.payload };
     },
     toggleLayer: (state, action) => {

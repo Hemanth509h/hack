@@ -4,21 +4,18 @@ import { Search, Calendar, Users, SlidersHorizontal } from 'lucide-react';
 import api from '../../lib/api';
 import { motion } from 'framer-motion';
 
-const SearchPage: React.FC = () => {
+const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const rawQ = searchParams.get('q') || '';
   
   const [query, setQuery] = useState(rawQ);
-  const [type, setType] = useState<'all' | 'event' | 'club'>(
-    (searchParams.get('type') as 'all' | 'event' | 'club') || 'all'
-  );
+  const [type, setType] = useState(searchParams.get('type') || 'all');
   
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    // Only fire full search if query exists or user changed filters
     const fetchData = async () => {
       if (!rawQ) {
          setResults([]); 
@@ -39,14 +36,14 @@ const SearchPage: React.FC = () => {
     fetchData();
   }, [rawQ, type]);
 
-  const handleSearchCommit = (e: React.FormEvent) => {
+  const handleSearchCommit = (e) => {
     e.preventDefault();
     if (query.trim()) {
       setSearchParams({ q: query, type });
     }
   };
 
-  const handleTypeChange = (newType: 'all' | 'event' | 'club') => {
+  const handleTypeChange = (newType) => {
     setType(newType);
     if (rawQ) setSearchParams({ q: rawQ, type: newType });
   };
@@ -75,7 +72,7 @@ const SearchPage: React.FC = () => {
                      onClick={() => handleTypeChange('event')}
                      className={`flex items-center gap-2 text-left px-3 py-2 rounded-lg text-sm transition font-medium ${type === 'event' ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-800'}`}
                    >
-                     <CalendarIcon size={16} /> Events Only
+                     <Calendar size={16} /> Events Only
                    </button>
                    <button 
                      onClick={() => handleTypeChange('club')}
@@ -140,7 +137,7 @@ const SearchPage: React.FC = () => {
                           <div className={`w-16 h-16 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0 ${isEvent ? 'bg-indigo-900/40 text-indigo-400' : 'bg-pink-900/40 text-pink-400'}`}>
                               {item.coverImage || item.logo ? (
                                 <img src={item.coverImage || item.logo} alt={isEvent ? item.title : item.name} className="w-full h-full object-cover" />
-                              ) : isEvent ? <CalendarIcon /> : <Users />}
+                              ) : isEvent ? <Calendar /> : <Users />}
                           </div>
 
                           <div className="flex-1">

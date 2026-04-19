@@ -15,7 +15,7 @@ const projectSchema = z.object({
 
 
 
-export const CreateProjectModal: React.FC = ({ isOpen, onClose }) => {
+export const CreateProjectModal = ({ isOpen, onClose }) => {
   const [createProject, { isLoading }] = useCreateProjectMutation();
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: zodResolver(projectSchema)
@@ -109,7 +109,7 @@ export const CreateProjectModal: React.FC = ({ isOpen, onClose }) => {
   );
 };
 
-const AlignLeft: React.FC = ({ size, className }) => (
+const AlignLeft = ({ size, className }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <line x1="17" y1="10" x2="3" y2="10" />
     <line x1="21" y1="6" x2="3" y2="6" />

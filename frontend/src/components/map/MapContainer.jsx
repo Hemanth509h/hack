@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import Map, { Marker, Popup, NavigationControl, GeolocateControl, ViewStateChangeEvent } from 'react-map-gl/mapbox';
+import Map, { Marker, Popup, NavigationControl, GeolocateControl } from 'react-map-gl/mapbox';
 
 import { MapPin, Info, Users, X, Library, Coffee } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -17,7 +17,7 @@ const CAMPUS_RESOURCES = [
   { id: 'bld-2', type: 'building', name: 'Science Center', category: 'Labs', coords: [-71.115, 42.376] },
 ];
 
-export const MapContainer: React.FC = () => {
+export const MapContainer = () => {
   const dispatch = useAppDispatch();
   const { viewport, selectedLocationId, toggles } = useAppSelector((state) => state.map);
   
@@ -32,7 +32,7 @@ export const MapContainer: React.FC = () => {
   const mapData = useMemo(() => {
     return activeEvents.filter(e => {
       // Must have coordinates
-      const loc = e.location as any;
+      const loc = e.location;
       return loc?.coordinates && loc.coordinates.length === 2 && toggles.events;
     });
   }, [activeEvents, toggles.events]);
@@ -75,7 +75,7 @@ export const MapContainer: React.FC = () => {
         />
 
         {mapData.map((event) => {
-          const coords = (event.location as any).coordinates;
+          const coords = (event.location).coordinates;
           const isSelected = selectedLocationId === event._id;
           
           return (
@@ -132,10 +132,10 @@ export const MapContainer: React.FC = () => {
         })}
 
         {/* Selected Popup logic */}
-        {selectedEvent && (selectedEvent.location as any)?.coordinates && (
+        {selectedEvent && (selectedEvent.location)?.coordinates && (
            <Popup
-             longitude={(selectedEvent.location as any).coordinates[0]}
-             latitude={(selectedEvent.location as any).coordinates[1]}
+             longitude={(selectedEvent.location).coordinates[0]}
+             latitude={(selectedEvent.location).coordinates[1]}
              anchor="bottom"
              onClose={() => dispatch(setSelectedLocationId(null))}
              offset={24}
@@ -156,7 +156,7 @@ export const MapContainer: React.FC = () => {
                  </div>
                  
                  <div className="flex flex-col gap-1 text-xs text-gray-600 dark:text-gray-400 mb-3">
-                   <span className="flex items-center gap-1.5"><Info className="w-3.5 h-3.5 text-indigo-400" /> {(selectedEvent.location as any).name || 'Campus Resource'}</span>
+                   <span className="flex items-center gap-1.5"><Info className="w-3.5 h-3.5 text-indigo-400" /> {(selectedEvent.location).name || 'Campus Resource'}</span>
                    <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-indigo-400" /> {selectedEvent.rsvpCount} Attending</span>
                  </div>
 

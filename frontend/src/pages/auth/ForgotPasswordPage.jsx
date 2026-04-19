@@ -55,7 +55,6 @@ export default function ForgotPasswordPage() {
       </AuthLayout>
     );
   }
-
   return (
     <AuthLayout
       title="Reset Password"
@@ -65,7 +64,7 @@ export default function ForgotPasswordPage() {
         {error && (
           <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500 text-sm text-center">
             {'data' in error 
-              ? (error.data as any)?.error || 'Failed to process request'
+              ? (error.data)?.error || 'Failed to process request'
               : 'An unexpected error occurred'}
           </div>
         )}

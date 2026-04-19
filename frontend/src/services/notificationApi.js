@@ -1,27 +1,26 @@
 import { api } from './api';
-import { INotification, INotificationPreferences } from '../types/notification';
 
 export const notificationApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getNotifications: builder.query<{ notifications; unreadCount: number }, void>({
+    getNotifications: builder.query({
       query: () => '/notifications',
       providesTags: ['Notification'],
     }),
-    markAsRead: builder.mutation<void, string>({
+    markAsRead: builder.mutation({
       query: (id) => ({
         url: `/notifications/${id}/read`,
         method: 'PUT',
       }),
       invalidatesTags: ['Notification'],
     }),
-    markAllAsRead: builder.mutation<void, void>({
+    markAllAsRead: builder.mutation({
       query: () => ({
         url: '/notifications/read-all',
         method: 'PUT',
       }),
       invalidatesTags: ['Notification'],
     }),
-    deleteNotification: builder.mutation<void, string>({
+    deleteNotification: builder.mutation({
       query: (id) => ({
         url: `/notifications/${id}`,
         method: 'DELETE',
@@ -31,7 +30,7 @@ export const notificationApi = api.injectEndpoints({
     getPreferences: builder.query({
       query: () => '/notifications/preferences',
     }),
-    updatePreferences: builder.mutation<INotificationPreferences, Partial<INotificationPreferences>>({
+    updatePreferences: builder.mutation({
       query: (body) => ({
         url: '/notifications/preferences',
         method: 'POST',

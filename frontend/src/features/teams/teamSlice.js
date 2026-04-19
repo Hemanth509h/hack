@@ -1,11 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-;
-  searchQuery;
-  activeTab: 'leading' | 'joined' | 'requests';
-  selectedProjectId: string | null;
-}
-
+import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   filters: {
     skills: [],

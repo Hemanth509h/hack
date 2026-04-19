@@ -1,8 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export 
-
-
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   isOpen: false,
@@ -21,7 +17,7 @@ const chatSlice = createSlice({
         state.messages.push({
           id: 'welcome-1',
           sender: 'bot',
-          text: 'Hi there! I am Nexus, the Campus AI Assistant. How can I help you today?',
+          text: 'Hi there I am Nexus, the Campus AI Assistant. How can I help you today?',
           timestamp: new Date().toISOString()
         });
       }
@@ -44,11 +40,11 @@ const chatSlice = createSlice({
         {
           id: 'welcome-reset',
           sender: 'bot',
-          text: 'Conversation cleared! How can I assist you now?',
+          text: 'Conversation cleared How can I assist you now?',
           timestamp: new Date().toISOString()
         }
       ];
-    }
+    },
   },
 });
 

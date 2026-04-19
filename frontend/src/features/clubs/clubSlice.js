@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ClubFilter } from '../../types/club';
+import { createSlice } from '@reduxjs/toolkit';
+
 
 
 
@@ -19,7 +19,7 @@ const clubSlice = createSlice({
   name: 'clubs',
   initialState,
   reducers: {
-    setFilters: (state, action: PayloadAction<Partial<ClubFilter>>) => {
+    setFilters: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
     },
     resetFilters: (state) => {

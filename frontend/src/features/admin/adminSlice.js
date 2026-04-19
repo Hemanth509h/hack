@@ -1,8 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-;
-}
-
+import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   isSidebarOpen: true,
   dateRange: 'this-week',

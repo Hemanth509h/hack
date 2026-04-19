@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 
 
-export const StatCards: React.FC = () => {
+export const StatCards = () => {
   const stats = [
     {
       label: 'Total Members',

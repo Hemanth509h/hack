@@ -2,7 +2,7 @@ import React from 'react';
 
 
 
-export const PageContainer: React.FC = ({ 
+export const PageContainer = ({ 
   children, 
   className = "", 
   maxWidth = "max-w-7xl" 

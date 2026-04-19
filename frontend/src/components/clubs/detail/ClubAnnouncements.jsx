@@ -8,18 +8,18 @@ const MOCK_ANNOUNCEMENTS = [
   {
     id: '1',
     author: 'President Sarah',
-    content: "Hey everyone! Don't forget our general body meeting this Thursday at 6 PM in Hall A. We'll be discussing the upcoming hackathon!",
+    content: "Hey everyone Don't forget our general body meeting this Thursday at 6 PM in Hall A. We'll be discussing the upcoming hackathon",
     date: '2 hours ago'
   },
   {
     id: '2',
     author: 'Board Member Alex',
-    content: "The registration link for the Spring workshop is now live. Be sure to sign up before Friday!",
+    content: "The registration link for the Spring workshop is now live. Be sure to sign up before Friday",
     date: 'Yesterday'
   }
 ];
 
-export const ClubAnnouncements: React.FC = () => {
+export const ClubAnnouncements = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">

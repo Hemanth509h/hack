@@ -6,11 +6,9 @@ import { EventFilters } from '../../components/events/EventFilters';
 import { EventCard } from '../../components/events/EventCard';
 import { Plus, CalendarX } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { EventFilter, IEvent } from '../../types/event';
-import { RootState } from '../../store';
 import PageContainer from '../../components/layout/PageContainer';
 
-const EventsPage: React.FC = () => {
+const EventsPage = () => {
   const { searchQuery, selectedCategory } = useAppSelector((state) => state.events);
   const { user } = useAppSelector((state) => state.auth);
 
@@ -89,7 +87,7 @@ const EventsPage: React.FC = () => {
           </div>
           <h3 className="text-3xl font-display font-black text-gray-900 dark:text-white mb-4 tracking-tighter">Quiet on the Front</h3>
           <p className="text-gray-500 max-w-md mx-auto text-lg leading-relaxed font-light">
-            No events match your current filters. Be the pioneer and <span className="text-indigo-400 font-bold">start something new</span> today!
+            No events match your current filters. Be the pioneer and <span className="text-indigo-400 font-bold">start something new</span> today
           </p>
           <button className="mt-10 btn-glass">Clear All Filters</button>
         </div>

@@ -1,22 +1,21 @@
 import { api } from './api';
-import { IMessage, IConversation } from '../types/chat';
 
 export const chatApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getMessageHistory: builder.query<{ messages: IMessage[] }, { roomType; roomId: string }>({
+    getMessageHistory: builder.query({
       query: ({ roomType, roomId }) => `/chat/${roomType}/${roomId}`,
     }),
-    getConversations: builder.query<{ conversations: IConversation[] }, void>({
+    getConversations: builder.query({
       query: () => '/chat/conversations',
     }),
-    getOrCreateConversation: builder.mutation<{ conversation: IConversation }, string>({
+    getOrCreateConversation: builder.mutation({
       query: (participantId) => ({
         url: '/chat/conversations',
         method: 'POST',
         body: { participantId },
       }),
     }),
-    deleteMessage: builder.mutation<void, string>({
+    deleteMessage: builder.mutation({
       query: (id) => ({
         url: `/chat/messages/${id}`,
         method: 'DELETE',

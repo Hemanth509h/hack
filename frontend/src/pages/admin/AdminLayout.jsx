@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleSidebar } from '../../features/admin/adminSlice';
-import { RootState } from '../../store';
 import { useLogoutMutation } from '../../features/auth/authApi';
 import { logout } from '../../features/auth/authSlice';
 

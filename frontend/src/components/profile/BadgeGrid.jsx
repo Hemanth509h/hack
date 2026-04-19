@@ -1,8 +1,6 @@
-import React from 'react';
-import { IBadge } from '../../types/profile';
 import { Shield, Sparkles } from 'lucide-react';
 
-export const BadgeGrid: React.FC = ({ badges }) => {
+export const BadgeGrid = ({ badges }) => {
   if (!badges || badges.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-8 border border-dashed border-gray-200 dark:border-gray-800 rounded-xl bg-white dark:bg-gray-900/50">
@@ -12,7 +10,6 @@ export const BadgeGrid: React.FC = ({ badges }) => {
       </div>
     );
   }
-
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {badges.map((badge) => (

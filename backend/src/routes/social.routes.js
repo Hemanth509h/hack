@@ -1,19 +1,10 @@
 import { Router } from 'express';
-import { 
-  createPost, 
-  getSocialFeed, 
-  likePost, 
-  addComment 
-} from '../controllers/social.controller';
-import { requireAuth } from '../middleware/auth.middleware';
-
+import { createPost, getSocialFeed, likePost, addComment } from '../controllers/social.controller.js';
+import { requireAuth } from '../middleware/auth.middleware.js';
 const router = Router();
-
 router.use(requireAuth);
-
 router.post('/', createPost);
 router.get('/', getSocialFeed);
 router.post('/:id/like', likePost);
 router.post('/:id/comment', addComment);
-
 export default router;

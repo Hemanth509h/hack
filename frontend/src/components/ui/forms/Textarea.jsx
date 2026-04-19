@@ -10,7 +10,7 @@ export const Textarea = forwardRef(
     const inputId = id || `textarea-${Math.random().toString(36).substring(2, 9)}`;
     const [charCount, setCharCount] = useState(0);
 
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const handleChange = ( e) => {
       setCharCount(e.target.value.length);
       if (onChange) onChange(e);
     };
@@ -47,7 +47,7 @@ export const Textarea = forwardRef(
               )
             )}
             aria-invalid={!!error}
-            aria-describedby={error ? `${inputId}-error` : helperText ? `${inputId}-description` : undefined}
+            aria-describedby={error ? `${inputId}-error` : helperText ? `${inputId}-description` }
             {...props}
           />
         </div>
@@ -66,6 +66,5 @@ export const Textarea = forwardRef(
         )}
       </div>
     );
-  }
 );
 Textarea.displayName = 'Textarea';

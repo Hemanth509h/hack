@@ -7,12 +7,12 @@ import { MemberManagementTable } from '../../components/clubs/dashboard/MemberMa
 import { Calendar, Bell, Users, Settings, Plus, ArrowLeft, BarChart3, TrendingUp, Shield, Sparkles } from 'lucide-react';
 import PageContainer from '../../components/layout/PageContainer';
 
-export const ClubDashboardPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+export const ClubDashboardPage = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const { data: detailData, isLoading: isDetailLoading } = useFetchClubByIdQuery(id!);
-  const { data: membersData, isLoading: isMembersLoading } = useFetchClubMembersQuery(id!);
-  const { data: _analyticsData } = useFetchClubAnalyticsQuery(id!);
+  const { data: detailData, isLoading: isDetailLoading } = useFetchClubByIdQuery(id);
+  const { data: membersData, isLoading: isMembersLoading } = useFetchClubMembersQuery(id);
+  const { data: _analyticsData } = useFetchClubAnalyticsQuery(id);
 
   if (isDetailLoading || isMembersLoading) {
     return (
@@ -24,7 +24,6 @@ export const ClubDashboardPage: React.FC = () => {
       </div>
     );
   }
-
   if (!detailData) return null;
 
   const containerVariants = {
@@ -108,7 +107,7 @@ export const ClubDashboardPage: React.FC = () => {
                 </div>
               </div>
               <div className="glass rounded-[3rem] border-black/5 dark:border-white/5 shadow-2xl overflow-hidden">
-                <MemberManagementTable members={membersData?.members || []} clubId={id!} />
+                <MemberManagementTable members={membersData?.members || []} clubId={id} />
               </div>
             </motion.section>
 

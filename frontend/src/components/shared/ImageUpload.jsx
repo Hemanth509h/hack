@@ -5,7 +5,7 @@ import ImageCropper from './ImageCropper';
 
 
 
-const ImageUpload: React.FC = ({ 
+const ImageUpload = ({ 
   value, 
   onChange, 
   aspectRatio = 1, 
@@ -15,20 +15,18 @@ const ImageUpload: React.FC = ({
 }) => {
   const fileInputRef = useRef(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [selectedFileUrl, setSelectedFileUrl] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [selectedFileUrl, setSelectedFileUrl] = useState(null);
+  const [error, setError] = useState(null);
 
-  const onFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onFileSelect = ( e) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       if (file.size > 10 * 1024 * 1024) {
          setError('File is too large. Max 10MB allowed.');
          return;
-      }
       const imageUrl = URL.createObjectURL(file);
       setSelectedFileUrl(imageUrl);
       setError(null);
-    }
   };
 
   const uploadCroppedImage = async (file) => {
@@ -50,10 +48,9 @@ const ImageUpload: React.FC = ({
       setError(err.response?.data?.error || 'Upload failed');
     } finally {
       setIsUploading(false);
-    }
   };
 
-  const clearImage = (e: React.MouseEvent) => {
+  const clearImage = ( e) => {
     e.stopPropagation(); // prevent triggering upload click
     onChange('');
   };

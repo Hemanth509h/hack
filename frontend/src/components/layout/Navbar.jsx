@@ -4,19 +4,17 @@ import { Link, useLocation } from 'react-router-dom';
 import { useSocket } from '../../context/SocketContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { clsx, type ClassValue } from 'clsx';
+import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import NotificationPopover from './NotificationPopover';
 
 function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-import NotificationPopover from './NotificationPopover';
 
 
-
-const Navbar: React.FC = ({ onSearchClick }) => {
+const Navbar = ({ onSearchClick }) => {
   const [isNotifOpen, setIsNotifOpen] = React.useState(false);
   const { isConnected } = useSocket();
   const { theme, toggleTheme } = useTheme();
@@ -92,7 +90,7 @@ const Navbar: React.FC = ({ onSearchClick }) => {
   );
 };
 
-const NavLink: React.FC = ({ to, icon, label, active }) => (
+const NavLink = ({ to, icon, label, active }) => (
   <Link to={to} className={cn(
     "flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-200 group",
     active ? "bg-black/10 dark:bg-white/10 text-gray-900 dark:text-white" : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white hover:bg-black/5 dark:hover:bg-white/5"

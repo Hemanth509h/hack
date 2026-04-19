@@ -1,25 +1,5 @@
 import { api } from '../../services/api';
 
-// Admin DTOs / Interfaces
-export ;
-  upcomingEvents: { total; changePercentage: number };
-  newClubRequests: { total; hasHighPriority: boolean };
-  systemHealth: { status: 'Operational' | 'Warning' | 'Critical' };
-  engagementTrends: { date; volume: number }[];
-}
-
-export 
-
-export [];
-  expectedMembership;
-  applicationDate;
-}
-
-export ;
-  apiResponseTime;
-  recentErrors: { id; time; message: string }[];
-}
-
 export const adminApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAdminStats: builder.query({
@@ -35,7 +15,7 @@ export const adminApi = api.injectEndpoints({
       }
     }),
     
-    getUsers: builder.query<{ users; total: number }, { page; limit?; search?; role?; status?: string }>({
+    getUsers: builder.query({
       query: (params) => ({
         url: '/admin/users',
         params,
@@ -57,7 +37,7 @@ export const adminApi = api.injectEndpoints({
       providesTags: ['Club'],
     }),
 
-    resolveClubApplication: builder.mutation<{ success; message: string }, { clubId; status: 'approve' | 'reject'; reason?: string }>({
+    resolveClubApplication: builder.mutation({
       query: ({ clubId, status, ...body }) => ({
         url: `/admin/clubs/${clubId}/${status}`,
         method: 'PUT',
@@ -70,7 +50,7 @@ export const adminApi = api.injectEndpoints({
       query: () => '/admin/system/health',
     }),
     
-    clearCache: builder.mutation<{ success: boolean }, void>({
+    clearCache: builder.mutation({
       query: () => ({
         url: '/admin/system/clear-cache',
         method: 'POST',

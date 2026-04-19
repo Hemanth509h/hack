@@ -1,5 +1,4 @@
 import { api } from './api';
-import { IClub, IClubMember, ClubFilter, PaginatedClubResponse, FeaturedClubsResponse, ClubDetailResponse, ClubMembersResponse, ClubAnalytics } from '../types/club';
 
 export const clubApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -11,7 +10,7 @@ export const clubApi = api.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.clubs.map(({ _id }) => ({ type: 'Club' as const, id: _id })),
+              ...result.clubs.map(({ _id }) => ({ type: 'Club', id: _id })),
               { type: 'Club', id: 'LIST' },
             ]
           : [{ type: 'Club', id: 'LIST' }],
@@ -24,7 +23,7 @@ export const clubApi = api.injectEndpoints({
       query: (id) => `/clubs/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Club', id }],
     }),
-    createClub: builder.mutation<{ message; club: IClub }, Partial<IClub>>({
+    createClub: builder.mutation({
       query: (newClub) => ({
         url: '/clubs',
         method: 'POST',
@@ -32,7 +31,7 @@ export const clubApi = api.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'Club', id: 'LIST' }],
     }),
-    updateClub: builder.mutation<IClub, { id; updates: Partial<IClub> }>({
+    updateClub: builder.mutation({
       query: ({ id, updates }) => ({
         url: `/clubs/${id}`,
         method: 'PATCH',
@@ -53,7 +52,7 @@ export const clubApi = api.injectEndpoints({
         { type: 'Club', id: 'LIST' },
       ],
     }),
-    leaveClub: builder.mutation<void, string>({
+    leaveClub: builder.mutation({
       query: (clubId) => ({
         url: `/clubs/${clubId}/leave`,
         method: 'POST',
@@ -85,7 +84,7 @@ export const clubApi = api.injectEndpoints({
         { type: 'Club', id: `${clubId}-members` },
       ],
     }),
-    rejectMember: builder.mutation<void, { clubId; userId: string }>({
+    rejectMember: builder.mutation({
       query: ({ clubId, userId }) => ({
         url: `/clubs/${clubId}/members/${userId}/reject`,
         method: 'POST',
@@ -95,7 +94,7 @@ export const clubApi = api.injectEndpoints({
     fetchClubAnalytics: builder.query({
       query: (clubId) => `/clubs/${clubId}/analytics`,
     }),
-    fetchMyClubs: builder.query<{ leading; memberOf: IClub[] }, void>({
+    fetchMyClubs: builder.query({
       query: () => '/clubs/my-clubs',
       providesTags: ['Club'],
     }),

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ArrowLeft, Save, GripVertical, Image } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const PortfolioBuilderPage: React.FC = () => {
+const PortfolioBuilderPage = () => {
   const [sections, setSections] = useState([
     { id: '1', type: 'text', title: 'About My Work', content: 'In my free time...' },
     { id: '2', type: 'projects', title: 'Featured Projects', items: [] },

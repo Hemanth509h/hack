@@ -1,11 +1,7 @@
-import React from 'react';
-import { IClubMember } from '../../../types/club';
 import { Check, X, Shield, ShieldAlert, MoreHorizontal, User } from 'lucide-react';
 import { useApproveMemberMutation, useRejectMemberMutation, useUpdateMemberRoleMutation } from '../../../services/clubApi';
 
-
-
-export const MemberManagementTable: React.FC = ({ members, clubId }) => {
+export const MemberManagementTable = ({ members, clubId }) => {
   const [approve] = useApproveMemberMutation();
   const [reject] = useRejectMemberMutation();
   const [updateRole] = useUpdateMemberRoleMutation();

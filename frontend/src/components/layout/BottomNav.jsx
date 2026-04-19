@@ -2,14 +2,13 @@ import React from 'react';
 import { Home, Calendar, Users, Map, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import { clsx, type ClassValue } from 'clsx';
+import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
-
-const BottomNav: React.FC = () => {
+const BottomNav = () => {
   const location = useLocation();
 
   return (
@@ -18,14 +17,14 @@ const BottomNav: React.FC = () => {
         <NavItem to="/discover" icon={<Home size={22} />} active={location.pathname === '/discover'} />
         <NavItem to="/events" icon={<Calendar size={22} />} active={location.pathname.startsWith('/events')} />
         <NavItem to="/clubs" icon={<Users size={22} />} active={location.pathname === '/clubs'} />
-        <NavItem to="/map" icon={<MapIcon size={22} />} active={location.pathname === '/map'} />
+        <NavItem to="/map" icon={<Map size={22} />} active={location.pathname === '/map'} />
         <NavItem to="/profile" icon={<User size={22} />} active={location.pathname === '/profile'} />
       </div>
     </div>
   );
 };
 
-const NavItem: React.FC = ({ to, icon, active }) => (
+const NavItem = ({ to, icon, active }) => (
   <Link to={to} className={cn(
     "relative flex flex-col items-center justify-center w-12 h-12 rounded-2xl transition-all duration-300",
     active ? "bg-indigo-500/10 text-indigo-400" : "text-gray-500 hover:text-gray-900 dark:text-white"

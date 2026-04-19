@@ -20,8 +20,6 @@ const getCroppedImg = async (imageSrc, pixelCrop) => {
 
   if (!ctx) {
     throw new Error('No 2d context');
-  }
-
   canvas.width = pixelCrop.width;
   canvas.height = pixelCrop.height;
 
@@ -43,7 +41,6 @@ const getCroppedImg = async (imageSrc, pixelCrop) => {
         resolve(file);
       } else {
         reject(new Error('Canvas is empty'));
-      }
     }, 'image/jpeg');
   });
 };
@@ -65,7 +62,6 @@ const ImageCropper = ({ imageSrc, onCropComplete, onCancel, aspectRatio = 1 }) =
       onCropComplete(file);
     } catch (e) {
       console.error(e);
-    }
   };
 
   return (

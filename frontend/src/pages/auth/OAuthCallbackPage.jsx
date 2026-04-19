@@ -18,7 +18,7 @@ export default function OAuthCallbackPage() {
     if (accessToken && refreshToken) {
       // First, we set credentials with standard info, leaving user blank temporarily.
       // We'll rely on the route or a follow-up query to fetch the user.
-      dispatch(setCredentials({ user: null, token: accessToken, refreshToken }));
+      dispatch(setCredentials({ user, token: accessToken, refreshToken }));
     } else {
       navigate('/login?error=oauth_failed');
     }
@@ -31,7 +31,7 @@ export default function OAuthCallbackPage() {
 
   useEffect(() => {
     if (isSuccess && user) {
-      dispatch(setCredentials({ user, token: accessToken!, refreshToken: refreshToken! }));
+      dispatch(setCredentials({ user, token: accessToken, refreshToken: refreshToken }));
       navigate('/discover');
     } else if (isError) {
       navigate('/login?error=auth_failed');

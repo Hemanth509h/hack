@@ -2,7 +2,7 @@ import React from 'react';
 import { Users, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export const ClubMemberships: React.FC = ({ clubs }) => {
+export const ClubMemberships = ({ clubs }) => {
   if (!clubs || clubs.length === 0) {
     return (
       <div className="p-8 text-center border border-dashed border-gray-200 dark:border-gray-800 rounded-xl bg-white dark:bg-gray-900/50">
@@ -11,7 +11,6 @@ export const ClubMemberships: React.FC = ({ clubs }) => {
       </div>
     );
   }
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {clubs.map((clubMembership) => (

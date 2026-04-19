@@ -1,10 +1,9 @@
 import React from 'react';
-import { IClubMember } from '../../../types/club';
 import { Shield, User } from 'lucide-react';
 
 
 
-export const LeadershipSection: React.FC = ({ leadership }) => {
+export const LeadershipSection = ({ leadership }) => {
   return (
     <div className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-3xl p-8 mb-12">
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 flex items-center gap-3">

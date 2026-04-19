@@ -2,7 +2,7 @@ import React from 'react';
 import CookieConsent from 'react-cookie-consent';
 import { initAnalytics } from '../../lib/analytics';
 
-export const CookieBanner: React.FC = () => {
+export const CookieBanner = () => {
   return (
     <CookieConsent
       location="bottom"

@@ -1,8 +1,6 @@
 import { api } from './api';
 
 export ;
-}
-
 export const locationApi = api.injectEndpoints({
   endpoints: (builder) => ({
     searchLocations: builder.query({

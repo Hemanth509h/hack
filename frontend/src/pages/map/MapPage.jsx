@@ -4,7 +4,7 @@ import { EventsNearbyPanel } from '../../components/map/EventsNearbyPanel';
 import { useAppDispatch } from '../../store/hooks';
 import { setViewport } from '../../features/map/mapSlice';
 
-const MapPage: React.FC = () => {
+const MapPage = () => {
   const dispatch = useAppDispatch();
 
   // On mount, try to get user's live location if permitted to center the map natively before Mapbox loads.

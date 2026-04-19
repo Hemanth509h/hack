@@ -2,14 +2,13 @@ import React from 'react';
 import { useFetchClubsQuery, useFetchFeaturedClubsQuery } from '../../services/clubApi';
 import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { ClubCard } from '../../components/clubs/ClubCard';
 import { ClubFilters } from '../../components/clubs/ClubFilters';
 import { Sparkles, Trophy, Plus, Compass } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import PageContainer from '../../components/layout/PageContainer';
 
-export const ClubsPage: React.FC = () => {
+export const ClubsPage = () => {
   const filters = useSelector((state) => state.clubs.filters);
   const { user } = useSelector((state) => state.auth);
   const { data: featuredData } = useFetchFeaturedClubsQuery();

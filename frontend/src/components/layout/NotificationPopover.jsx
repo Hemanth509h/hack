@@ -5,7 +5,7 @@ import { useGetNotificationsQuery, useMarkAsReadMutation, useDeleteNotificationM
 
 
 
-const NotificationPopover: React.FC = ({ isOpen, onClose }) => {
+const NotificationPopover = ({ isOpen, onClose }) => {
   const { data, isLoading } = useGetNotificationsQuery();
   const [markAsRead] = useMarkAsReadMutation();
   const [deleteNotification] = useDeleteNotificationMutation();

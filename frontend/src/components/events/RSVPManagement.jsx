@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 
 
-export const RSVPManagement: React.FC = ({ eventId }) => {
+export const RSVPManagement = ({ eventId }) => {
   const { data, isLoading, error } = useGetEventAttendeesQuery(eventId);
   const [approveRSVP] = useApproveRSVPMutation();
   const [rejectRSVP] = useRejectRSVPMutation();
@@ -17,22 +17,19 @@ export const RSVPManagement: React.FC = ({ eventId }) => {
       </div>
     );
   }
-
   if (error || !data) {
     return <div className="text-center py-8 text-gray-500">Failed to load RSVP registry.</div>;
   }
-
   const attendees = data.attendees;
 
   if (attendees.length === 0) {
     return (
       <div className="text-center py-12 glass bg-black/5 dark:bg-white/5 rounded-3xl border-dashed border-black/10 dark:border-white/10">
-        <UserIcon className="w-12 h-12 text-gray-700 mx-auto mb-4" />
+        <User className="w-12 h-12 text-gray-700 mx-auto mb-4" />
         <p className="text-gray-500 font-medium">No active or pending RSVPs yet.</p>
       </div>
     );
   }
-
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-left border-separate border-spacing-y-4">

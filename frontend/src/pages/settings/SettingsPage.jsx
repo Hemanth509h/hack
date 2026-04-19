@@ -14,11 +14,10 @@ import {
 import PageContainer from '../../components/layout/PageContainer';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { useLogoutMutation } from '../../features/auth/authApi';
 import { logout } from '../../features/auth/authSlice';
 
-const SettingsPage: React.FC = () => {
+const SettingsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);

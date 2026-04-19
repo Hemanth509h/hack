@@ -125,7 +125,7 @@ function App() {
         <CookieBanner />
       </div>
     </SocketProvider>
-  )
+  );
 }
 
-export default App
+export default App;

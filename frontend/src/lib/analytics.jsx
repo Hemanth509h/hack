@@ -10,7 +10,6 @@ const getAnonymousId = () => {
   if (!aId) {
     aId = uuidv4();
     localStorage.setItem("quad_anonymous_id", aId);
-  }
   return aId;
 };
 
@@ -23,22 +22,18 @@ export const initAnalytics = (consentGranted) => {
   if (consentGranted && !isInitialized) {
     ReactGA.initialize(GA_MEASUREMENT_ID);
     isInitialized = true;
-  }
 };
 
 export const setAnalyticsUser = (userId) => {
   if (isInitialized) {
     ReactGA.set({ userId });
-  }
   localStorage.setItem("quad_user_id", userId);
 };
 
 export const trackPageView = (path) => {
   // 1. Google Analytics
   if (isInitialized) {
-    ReactGA.send({ hitType: "pageview", page: path });
-  }
-
+    ReactGA.send({ hitType: "pageview", page });
   // 2. Custom Mongoose Backend Aggregation
   const userId = localStorage.getItem("quad_user_id");
   const anonymousId = getAnonymousId();
@@ -50,7 +45,7 @@ export const trackPageView = (path) => {
       action: "page_view",
       category: "navigation",
       anonymousId,
-      metadata: { userId },
+      metadata,
     })
     .catch(() => {}); // Suppress errors to not pollute console
 };
@@ -63,8 +58,6 @@ export const trackEvent = (category, action, label, value) => {
       label,
       value,
     });
-  }
-
   const userId = localStorage.getItem("quad_user_id");
   const anonymousId = getAnonymousId();
   const path = window.location.pathname;
@@ -77,7 +70,7 @@ export const trackEvent = (category, action, label, value) => {
       label,
       value,
       anonymousId,
-      metadata: { userId },
+      metadata,
     })
     .catch(() => {});
 };

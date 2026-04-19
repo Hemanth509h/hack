@@ -4,8 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, Mic, Sparkles, CalendarPlus } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { RootState } from '../../store';
-import { toggleChat, addMessage, setTyping, ChatMessage } from '../../features/chat/chatSlice';
+import { toggleChat, addMessage, setTyping } from '../../features/chat/chatSlice';
 
 export const ChatWidget = () => {
   const dispatch = useDispatch();
@@ -49,7 +48,7 @@ export const ChatWidget = () => {
     }, 1500);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = ( e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();
@@ -157,9 +156,9 @@ export const ChatWidget = () => {
                     <Sparkles size={12} className="text-gray-900 dark:text-white" />
                   </div>
                   <div className="bg-gray-50 dark:bg-gray-800 border border-gray-700 text-gray-600 dark:text-gray-400 rounded-2xl rounded-tl-sm px-4 py-3 flex gap-1.5 items-center">
-                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat, duration: 0.8 }} className="w-1.5 h-1.5 bg-gray-500 rounded-full" />
-                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat, duration: 0.8, delay: 0.15 }} className="w-1.5 h-1.5 bg-gray-500 rounded-full" />
-                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat, duration: 0.8, delay: 0.3 }} className="w-1.5 h-1.5 bg-gray-500 rounded-full" />
+                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.8 }} className="w-1.5 h-1.5 bg-gray-500 rounded-full" />
+                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.8, delay: 0.15 }} className="w-1.5 h-1.5 bg-gray-500 rounded-full" />
+                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.8, delay: 0.3 }} className="w-1.5 h-1.5 bg-gray-500 rounded-full" />
                   </div>
                 </div>
               )}

@@ -24,7 +24,7 @@ const clubSchema = z.object({
 
 
 
-export const ClubForm: React.FC = () => {
+export const ClubForm = () => {
   const [step, setStep] = useState(1);
   const [createClub, { isLoading }] = useCreateClubMutation();
   const { data: usersData } = useGetUsersQuery({ page: 1, limit: 100, role: 'student' });
@@ -41,10 +41,10 @@ export const ClubForm: React.FC = () => {
 
   const nextStep = async () => {
     const fieldsToValidate = step === 1 
-      ? ['name', 'category', 'description', 'headId'] as const
+      ? ['name', 'category', 'description', 'headId']
       : step === 2 
-      ? ['logo', 'coverImage', 'meetingSchedule'] as const
-      : ['website', 'instagram', 'discord'] as const;
+      ? ['logo', 'coverImage', 'meetingSchedule']
+      : ['website', 'instagram', 'discord'];
       
     const isValid = await trigger(fieldsToValidate);
     if (isValid) setStep((s) => s + 1);
@@ -69,7 +69,7 @@ export const ClubForm: React.FC = () => {
         }
       };
       
-      const result = await createClub(formattedData as any).unwrap();
+      const result = await createClub(formattedData).unwrap();
       if (result.club?._id) {
         navigate(`/clubs/${result.club._id}`);
       }
@@ -190,7 +190,7 @@ export const ClubForm: React.FC = () => {
               >
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-                    <ImageIcon className="h-5 w-5 text-indigo-400" /> Visuals & Logistics
+                    <Image className="h-5 w-5 text-indigo-400" /> Visuals & Logistics
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400 text-sm">Make your club stand out with beautiful imagery.</p>
                 </div>
@@ -245,7 +245,7 @@ export const ClubForm: React.FC = () => {
               >
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-                    <LinkIcon className="h-5 w-5 text-indigo-400" /> Connectivity
+                    <Link className="h-5 w-5 text-indigo-400" /> Connectivity
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400 text-sm">Where can members find you online?</p>
                 </div>

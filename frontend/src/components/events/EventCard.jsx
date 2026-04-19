@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, MapPin, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { IEvent } from '../../types/event';
 
 
 
@@ -11,7 +10,7 @@ const itemVariants = {
   visible: { opacity: 1, y: 0 }
 };
 
-export const EventCard: React.FC = ({ event, isRecommended }) => {
+export const EventCard = ({ event, isRecommended }) => {
   const dateObj = new Date(event.date);
   const formattedDate = dateObj.toLocaleDateString('en-US', {
     weekday: 'short',

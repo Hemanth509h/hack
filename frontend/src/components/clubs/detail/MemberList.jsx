@@ -1,10 +1,9 @@
 import React from 'react';
-import { IClubMember } from '../../../types/club';
 import { User, Search } from 'lucide-react';
 
 
 
-export const MemberList: React.FC = ({ members }) => {
+export const MemberList = ({ members }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
   
   const filteredMembers = members.filter(m => 

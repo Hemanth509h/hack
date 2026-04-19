@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { removeToast } from '../../features/notifications/notificationSlice';
 import { X, CheckCircle, AlertTriangle, Info, XCircle } from 'lucide-react';
 import cn from 'clsx';
 
-export const GlobalToast: React.FC = () => {
+export const GlobalToast = () => {
   const toasts = useSelector((state) => state.notifications.toastQueue);
   const dispatch = useDispatch();
 

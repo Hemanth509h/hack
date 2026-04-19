@@ -1,12 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-
-
-
-
 const ThemeContext = createContext(undefined);
 
-export const ThemeProvider: React.FC = ({ children }) => {
+export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('theme');
@@ -23,7 +19,6 @@ export const ThemeProvider: React.FC = ({ children }) => {
   useEffect(() => {
     const root = window.document.documentElement;
     const body = window.document.body;
-    console.log('Applying theme:', theme);
     if (theme === 'dark') {
       root.classList.add('dark');
       body.classList.add('dark');

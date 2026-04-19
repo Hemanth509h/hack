@@ -1,16 +1,5 @@
 import { api } from '../../services/api';
 
-export 
-
-export 
-
-export ;
-  accessToken;
-  refreshToken;
-}
-
-export 
-
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
@@ -29,14 +18,14 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
-    logout: builder.mutation<void, void>({
+    logout: builder.mutation({
       query: () => ({
         url: '/auth/logout',
         method: 'POST',
       }),
     }),
 
-    refreshToken: builder.mutation<{ accessToken: string }, { refreshToken: string }>({
+    refreshToken: builder.mutation({
       query: (body) => ({
         url: '/auth/refresh',
         method: 'POST',
@@ -44,7 +33,7 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
-    forgotPassword: builder.mutation<{ message: string }, { email: string }>({
+    forgotPassword: builder.mutation({
       query: (body) => ({
         url: '/auth/forgot-password',
         method: 'POST',
@@ -52,7 +41,7 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
-    resetPassword: builder.mutation<{ message: string }, ResetPasswordRequest>({
+    resetPassword: builder.mutation({
       query: (body) => ({
         url: '/auth/reset-password',
         method: 'POST',
@@ -62,7 +51,7 @@ export const authApi = api.injectEndpoints({
 
     getMe: builder.query({
       query: () => '/auth/me',
-      transformResponse: (response: { message; user: AuthResponse['user'] }) => response.user,
+      transformResponse: (response) => response.user,
       providesTags: ['User'],
     }),
   }),

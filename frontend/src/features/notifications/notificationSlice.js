@@ -1,9 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { INotificationPreferences } from '../../types/notification';
-
-export 
-
-
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   unreadCount: 0,
@@ -27,10 +22,9 @@ const notificationSlice = createSlice({
     setPreferences: (state, action) => {
       state.preferences = action.payload;
     },
-    addToast: (state, action: PayloadAction<Omit<NotificationToast, 'id'>>) => {
+    addToast: (state, action) => {
       state.toastQueue.push({
-        ...action.payload,
-        id: Math.random().toString(36).substring(2, 9),
+        ...action.payload, id: Math.random().toString(36).substring(2, 9),
       });
     },
     removeToast: (state, action) => {

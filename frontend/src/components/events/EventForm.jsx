@@ -22,7 +22,7 @@ const eventSchema = z.object({
 
 
 
-export const EventForm: React.FC = () => {
+export const EventForm = () => {
   const [step, setStep] = useState(1);
   const [createEvent, { isLoading }] = useCreateEventMutation();
   const { data: usersData } = useGetUsersQuery({ page: 1, limit: 100, role: 'student' });
@@ -44,8 +44,8 @@ export const EventForm: React.FC = () => {
 
   const nextStep = async () => {
     const fieldsToValidate = step === 1 
-      ? ['title', 'category', 'description', 'organizerId'] as const
-      : ['date', 'durationMinutes', 'locationDetails'] as const;
+      ? ['title', 'category', 'description', 'organizerId']
+      : ['date', 'durationMinutes', 'locationDetails'];
       
     const isValid = await trigger(fieldsToValidate);
     if (isValid) setStep((s) => s + 1);

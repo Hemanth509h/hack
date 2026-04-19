@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import PageContainer from '../components/layout/PageContainer';
 
-const PostCard = ({ post }: { post: any }) => {
+const PostCard = ({ post }) => {
   const [likePost] = useLikePostMutation();
   const [addComment] = useAddCommentMutation();
   const [commentText, setCommentText] = useState('');

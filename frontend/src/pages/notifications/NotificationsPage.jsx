@@ -3,7 +3,7 @@ import { NotificationList } from '../../components/notifications/NotificationLis
 import { Bell, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const NotificationsPage: React.FC = () => {
+const NotificationsPage = () => {
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
       <div className="flex items-center justify-between mb-8">

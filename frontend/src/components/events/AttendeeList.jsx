@@ -4,7 +4,7 @@ import { Loader2 } from 'lucide-react';
 
 
 
-export const AttendeeList: React.FC = ({ eventId }) => {
+export const AttendeeList = ({ eventId }) => {
   const { data, isLoading, error } = useGetEventAttendeesQuery(eventId);
 
   if (isLoading) {
@@ -14,11 +14,9 @@ export const AttendeeList: React.FC = ({ eventId }) => {
       </div>
     );
   }
-
   if (error || !data) {
     return <div className="text-sm text-gray-500 py-4">Waitlist hidden or unavailable.</div>;
   }
-
   const attendees = data.attendees;
   const displayLimit = 10;
   const visibleAttendees = attendees.slice(0, displayLimit);

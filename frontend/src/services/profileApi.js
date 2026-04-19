@@ -1,13 +1,11 @@
 import { api } from './api';
-import { IProfile } from '../types/profile';
-
 export const profileApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getProfile: builder.query({
       query: (userId) => `/users/${userId}/profile`,
       providesTags: (_result, _error, arg) => [{ type: 'User', id: arg }],
     }),
-    updateProfile: builder.mutation<IProfile, { userId; body: Partial<IProfile> }>({
+    updateProfile: builder.mutation({
       query: ({ userId, body }) => ({
         url: `/users/${userId}/profile`,
         method: 'PUT',
@@ -23,7 +21,7 @@ export const profileApi = api.injectEndpoints({
       }),
       invalidatesTags: (_r, _e, arg) => [{ type: 'User', id: arg.userId }],
     }),
-    uploadAvatar: builder.mutation<{ avatarUrl: string }, { userId; formData: FormData }>({
+    uploadAvatar: builder.mutation({
       query: ({ userId, formData }) => ({
         url: `/users/${userId}/avatar`,
         method: 'POST',
@@ -46,7 +44,7 @@ export const profileApi = api.injectEndpoints({
       }),
       invalidatesTags: (_r, _e, arg) => [{ type: 'User', id: arg.userId }],
     }),
-    updateLocation: builder.mutation<{ message, homeLocation: any }, { userId; latitude; longitude: number }>({
+    updateLocation: builder.mutation({
       query: ({ userId, latitude, longitude }) => ({
         url: `/users/${userId}/location`,
         method: 'POST',

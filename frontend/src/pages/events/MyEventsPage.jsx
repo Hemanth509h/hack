@@ -4,12 +4,10 @@ import { useAppSelector } from '../../store/hooks';
 import { EventCard } from '../../components/events/EventCard';
 import { Loader2, TicketPercent } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { RSVPResponse } from '../../types/event';
-import { RootState } from '../../store';
 
 
 
-const MyEventsPage: React.FC = () => {
+const MyEventsPage = () => {
   const { user } = useAppSelector((state) => state.auth);
   const userId = user?.id ?? '';
 

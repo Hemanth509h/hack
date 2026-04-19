@@ -1,5 +1,4 @@
 import React from 'react';
-import { IClub } from '../../types/club';
 import { Users, ChevronRight } from 'lucide-react';
 import { useJoinClubMutation } from '../../services/clubApi';
 import { Link } from 'react-router-dom';
@@ -7,10 +6,10 @@ import { motion } from 'framer-motion';
 
 
 
-export const ClubCard: React.FC = ({ club, isFeatured }) => {
+export const ClubCard = ({ club, isFeatured }) => {
   const [joinClub, { isLoading: isJoining }] = useJoinClubMutation();
 
-  const handleJoin = (e: React.MouseEvent) => {
+  const handleJoin = (e) => {
     e.preventDefault();
     e.stopPropagation();
     joinClub(club._id);

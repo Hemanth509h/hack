@@ -14,8 +14,6 @@ const loginSchema = z.object({
   rememberMe: z.boolean().optional(),
 });
 
-
-
 export default function LoginPage() {
   const [login, { isLoading, error }] = useLoginMutation();
   const dispatch = useDispatch();
@@ -53,7 +51,7 @@ export default function LoginPage() {
     }
   };
 
-  const handleOAuthLogin = (provider: 'google' | 'microsoft') => {
+  const handleOAuthLogin = (provider) => {
     // Redirect to backend OAuth endpoint
     window.location.href = `http://localhost:5000/api/v1/auth/${provider}`;
   };
@@ -66,13 +64,10 @@ export default function LoginPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {error && (
           <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500 text-sm text-center">
-            {'data' in error 
-              ? (error.data as any)?.error || 'Invalid credentials'
-              : 'An unexpected error occurred'}
+            {error.data?.error || 'Invalid credentials'}
           </div>
         )}
 
-        {/* Email Input */}
         <div>
           <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Email</label>
           <div className="relative">
@@ -91,7 +86,6 @@ export default function LoginPage() {
           )}
         </div>
 
-        {/* Password Input */}
         <div>
           <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Password</label>
           <div className="relative">
@@ -110,7 +104,6 @@ export default function LoginPage() {
           )}
         </div>
 
-        {/* Options Row */}
         <div className="flex items-center justify-between text-sm">
           <label className="flex items-center space-x-2 cursor-pointer">
             <input
@@ -125,7 +118,6 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={isLoading}
@@ -135,14 +127,12 @@ export default function LoginPage() {
         </button>
       </form>
 
-      {/* OAuth Separator */}
       <div className="mt-6 flex items-center">
         <div className="flex-1 border-t border-black/10 dark:border-white/10"></div>
         <span className="px-3 text-gray-500 text-sm">Or continue with</span>
         <div className="flex-1 border-t border-black/10 dark:border-white/10"></div>
       </div>
 
-      {/* OAuth Buttons */}
       <div className="mt-6 grid grid-cols-2 gap-4">
         <button
           type="button"
@@ -157,12 +147,11 @@ export default function LoginPage() {
           onClick={() => handleOAuthLogin('microsoft')}
           className="flex items-center justify-center space-x-2 py-2.5 px-4 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 rounded-lg transition-colors text-gray-900 dark:text-white text-sm font-medium"
         >
-          <Github size={18} /> {/* Note: A Microsoft logo isn't standard in lucide, using generic or Github placeholder for now */}
+          <Github size={18} />
           <span>Microsoft</span>
         </button>
       </div>
 
-      {/* Bottom Text */}
       <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
         Don't have an account?{' '}
         <Link to="/register" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors font-medium">

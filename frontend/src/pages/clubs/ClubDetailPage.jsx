@@ -3,18 +3,17 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useFetchClubByIdQuery, useFetchClubMembersQuery } from '../../services/clubApi';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { ClubDetailHeader } from '../../components/clubs/detail/ClubDetailHeader';
 import { LeadershipSection } from '../../components/clubs/detail/LeadershipSection';
 import { MemberList } from '../../components/clubs/detail/MemberList';
 import { ClubAnnouncements } from '../../components/clubs/detail/ClubAnnouncements';
 import { Loader2, ChevronLeft, MapPin, Calendar, Trophy } from 'lucide-react';
 
-export const ClubDetailPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+export const ClubDetailPage = () => {
+  const { id } = useParams();
   const { user } = useSelector((state) => state.auth);
-  const { data: detailData, isLoading: isDetailLoading } = useFetchClubByIdQuery(id!);
-  const { data: membersData, isLoading: isMembersLoading } = useFetchClubMembersQuery(id!);
+  const { data: detailData, isLoading: isDetailLoading } = useFetchClubByIdQuery(id);
+  const { data: membersData, isLoading: isMembersLoading } = useFetchClubMembersQuery(id);
 
   if (isDetailLoading || isMembersLoading) {
     return (
@@ -23,7 +22,6 @@ export const ClubDetailPage: React.FC = () => {
       </div>
     );
   }
-
   if (!detailData) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center">
@@ -35,7 +33,6 @@ export const ClubDetailPage: React.FC = () => {
       </div>
     );
   }
-
   const { club, leadership } = detailData;
   const isMember = membersData?.members.some(m => m.user._id === user?.id && m.status === 'approved') || false;
   const isPresident = leadership.some(m => m.user._id === user?.id && m.role === 'president');

@@ -1,16 +1,14 @@
 import React from 'react';
 import { Calendar, MapPin, Users, ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { clsx, type ClassValue } from 'clsx';
+import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-
-
-const EventCard: React.FC = ({ event, featured }) => {
+const EventCard = ({ event, featured }) => {
   return (
     <motion.div
       whileHover={{ y: -12, scale: 1.02 }}

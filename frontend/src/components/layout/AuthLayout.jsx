@@ -1,10 +1,7 @@
-import { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
-
-
 
 export default function AuthLayout({ children, title, subtitle }) {
   const { theme, toggleTheme } = useTheme();

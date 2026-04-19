@@ -6,7 +6,7 @@ import { useGetEventsQuery } from '../../services/eventApi';
 import { Map, MapPin, Building, Utensils, Navigation, Clock, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export const EventsNearbyPanel: React.FC = () => {
+export const EventsNearbyPanel = () => {
   const dispatch = useAppDispatch();
   const { toggles, selectedLocationId, searchQuery } = useAppSelector((state) => state.map);
   const { data } = useGetEventsQuery();
@@ -14,7 +14,7 @@ export const EventsNearbyPanel: React.FC = () => {
 
   const filteredEvents = activeEvents.filter(e => {
      if (searchQuery && !e.title.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-     return !!(e.location as any)?.coordinates;
+     return !!(e.location)?.coordinates;
   });
 
   return (
@@ -81,7 +81,7 @@ export const EventsNearbyPanel: React.FC = () => {
             <div className="space-y-1.5 mt-3">
                <div className="flex items-center text-xs text-gray-600 dark:text-gray-400 gap-1.5">
                   <MapPin className="w-3.5 h-3.5 text-gray-500" />
-                  <span className="truncate">{(event.location as any)?.name || 'Main Campus'}</span>
+                  <span className="truncate">{(event.location)?.name || 'Main Campus'}</span>
                </div>
                <div className="flex items-center text-xs text-gray-600 dark:text-gray-400 gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-gray-500" />

@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { useGetConversationsQuery, useGetMessageHistoryQuery } from '../../services/chatApi';
 import { useSocket } from '../../hooks/useSocket';
 import { ConversationList } from '../../components/chat/ConversationList';
 import { MessageWindow } from '../../components/chat/MessageWindow';
-import { IMessage } from '../../types/chat';
 import { Loader2, MessageSquare } from 'lucide-react';
 
-const ChatPage: React.FC = () => {
+const ChatPage = () => {
   const currentUser = useSelector((state) => state.auth.user);
   const { data: convData, isLoading: convLoading, refetch: refetchConvs } = useGetConversationsQuery();
-  const [activeConvId, setActiveConvId] = useState<string | null>(null);
+  const [activeConvId, setActiveConvId] = useState(null);
   const [messages, setMessages] = useState([]);
   const { socket } = useSocket();
 
   const { data: historyData } = useGetMessageHistoryQuery(
-    { roomType: 'direct', roomId: activeConvId! },
+    { roomType: 'direct', roomId: activeConvId },
     { skip: !activeConvId }
   );
 

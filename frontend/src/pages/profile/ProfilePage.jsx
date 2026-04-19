@@ -2,7 +2,6 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetProfileQuery } from '../../services/profileApi';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { ProfileHeader } from '../../components/profile/ProfileHeader';
 import { SkillsList } from '../../components/profile/SkillsList';
 import { BadgeGrid } from '../../components/profile/BadgeGrid';
@@ -11,16 +10,20 @@ import { EventHistory } from '../../components/profile/EventHistory';
 import { Github, Linkedin, Globe } from 'lucide-react';
 import PageContainer from '../../components/layout/PageContainer';
 
-const ProfilePage: React.FC = () => {
-  const { userId } = useParams<{ userId: string }>();
+const ProfilePage = () => {
+  const { userId } = useParams();
   const currentUser = useSelector((state) => state.auth.user);
   
   const targetId = userId || currentUser?.id;
 
-  const { data: profile, isLoading, isError } = useGetProfileQuery(targetId as string, {
+  const { data: profile, isLoading, isError } = useGetProfileQuery(targetId, {
     skip: !targetId,
   });
 
+  if (!targetId) {
+    return <div className="text-center py-20 text-gray-500">Please sign in to view your profile.</div>;
+  }
+  
   if (isLoading || !profile) return (
      <div className="flex items-center justify-center min-h-[50vh]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500" />
@@ -29,7 +32,7 @@ const ProfilePage: React.FC = () => {
 
   if (isError) return <div className="text-center py-20 text-red-500 font-medium">Profile not found.</div>;
 
-  const isOwner = currentUser?.id === profile._id || currentUser?.id === (profile as any).id;
+  const isOwner = currentUser?.id === profile._id || currentUser?.id === (profile).id;
 
   return (
     <PageContainer>

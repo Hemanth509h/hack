@@ -6,7 +6,7 @@ import { Calendar, Users, Briefcase, Clock, ArrowRight, Sparkles } from 'lucide-
 import { formatDistanceToNow } from 'date-fns';
 import { Link } from 'react-router-dom';
 
-const CommunityFeedPage: React.FC = () => {
+const CommunityFeedPage = () => {
   const { data, isLoading } = useGetFeedQuery({ limit: 10 });
   const items = data?.items || [];
 
@@ -41,7 +41,7 @@ const CommunityFeedPage: React.FC = () => {
   );
 };
 
-const FeedCard: React.FC = ({ item, index }) => {
+const FeedCard = ({ item, index }) => {
   const Icon = item.type === 'event' ? Calendar : item.type === 'club' ? Users ;
   const colorClass = item.type === 'event' ? 'text-indigo-400 bg-indigo-500/10' : 
                     item.type === 'club' ? 'text-emerald-400 bg-emerald-500/10' : 

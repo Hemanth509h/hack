@@ -1,12 +1,7 @@
-import React from 'react';
-import { IClub } from '../../../types/club';
 import { Users, Calendar, Globe, Instagram, MessageCircle } from 'lucide-react';
 import { useJoinClubMutation, useLeaveClubMutation } from '../../../services/clubApi';
 
-
-
-
-export const ClubDetailHeader: React.FC = ({ club, isMember, isPresident }) => {
+export const ClubDetailHeader = ({ club, isMember, isPresident }) => {
   const [joinClub, { isLoading: isJoining }] = useJoinClubMutation();
   const [leaveClub, { isLoading: isLeaving }] = useLeaveClubMutation();
 

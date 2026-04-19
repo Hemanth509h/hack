@@ -1,4 +1,3 @@
-import { IEvent } from '../types/event';
 
 export const buildGoogleCalendarUrl = (event) => {
   const start = new Date(event.date);

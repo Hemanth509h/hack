@@ -6,7 +6,7 @@ import EventCard from '../components/discovery/EventCard';
 import NearbyEvents from '../components/events/NearbyEvents';
 import PageContainer from '../components/layout/PageContainer';
 
-const DiscoverPage: React.FC = () => {
+const DiscoverPage = () => {
   const [trending, setTrending] = useState([]);
   const [recommended, setRecommended] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,7 +39,6 @@ const DiscoverPage: React.FC = () => {
       </div>
     );
   }
-
   return (
     <PageContainer className="space-y-24 py-10">
       {/* Featured / Trending Section */}

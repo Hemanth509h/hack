@@ -6,12 +6,12 @@ import { setNotificationPanelOpen } from '../../features/dashboard/dashboardSlic
 import { Link } from 'react-router-dom';
 
 const mockNotifications = [
-  { id: 1, type: 'event', title: 'Hackathon starts in 1 hour!', time: '1h ago', icon, color: 'text-indigo-400 bg-indigo-400/10', link: '/events' },
-  { id: 2, type: 'team', title: 'Alex requested to join your project', time: '3h ago', icon, color: 'text-amber-400 bg-amber-400/10', link: '/teams/my-projects' },
-  { id: 3, type: 'club', title: 'New announcement from CS Club', time: '1d ago', icon, color: 'text-emerald-400 bg-emerald-400/10', link: '/clubs/my-clubs' },
+  { id: 1, type: 'event', title: 'Hackathon starts in 1 hour', time: '1h ago', icon: Calendar, color: 'text-indigo-400 bg-indigo-400/10', link: '/events' },
+  { id: 2, type: 'team', title: 'Alex requested to join your project', time: '3h ago', icon: Users, color: 'text-amber-400 bg-amber-400/10', link: '/teams/my-projects' },
+  { id: 3, type: 'club', title: 'New announcement from CS Club', time: '1d ago', icon: Briefcase, color: 'text-emerald-400 bg-emerald-400/10', link: '/clubs/my-clubs' },
 ];
 
-export const NotificationPanel: React.FC = () => {
+export const NotificationPanel = () => {
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector((state) => state.dashboard.isNotificationPanelOpen);
 

@@ -1,8 +1,11 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { io, Socket } from 'socket.io-client';
+const _jsxFileName = "frontend/src/context/SocketContext.tsx";import React, { createContext, useContext, useEffect, useState, } from 'react';
+import { io, } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
+
 import { incrementUnread, addToast } from '../features/notifications/notificationSlice';
+
+
+
 
 
 
@@ -14,7 +17,7 @@ export const useSocket = () => {
   return context;
 };
 
-export const SocketProvider: React.FC = ({ children }) => {
+export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
   const dispatch = useDispatch();
@@ -49,8 +52,8 @@ export const SocketProvider: React.FC = ({ children }) => {
   }, [token, dispatch]);
 
   return (
-    <SocketContext.Provider value={{ socket, isConnected }}>
-      {children}
-    </SocketContext.Provider>
+    React.createElement(SocketContext.Provider, { value: { socket, isConnected }, __self: this, __source: {fileName: _jsxFileName, lineNumber: 55}}
+      , children
+    )
   );
 };

@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { IMessage, IConversation } from '../../types/chat';
 import { Send, Phone, Video, Info, MoreVertical, Paperclip, Smile } from 'lucide-react';
 
 
 
-export const MessageWindow: React.FC = ({
+export const MessageWindow = ({
   conversation,
   messages,
   onSendMessage,
@@ -25,7 +24,7 @@ export const MessageWindow: React.FC = ({
     scrollToBottom();
   }, [messages]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = ( e) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
     onSendMessage(inputValue.trim());
@@ -77,7 +76,7 @@ export const MessageWindow: React.FC = ({
                 <Smile className="text-gray-600" size={32} />
              </div>
              <h4 className="text-gray-900 dark:text-white font-bold">No messages here yet</h4>
-             <p className="text-gray-500 text-sm max-w-xs">Start the conversation by sending a friendly "Hello!"</p>
+             <p className="text-gray-500 text-sm max-w-xs">Start the conversation by sending a friendly "Hello"</p>
           </div>
         ) : (
           messages.map((msg, i) => {

@@ -1,43 +1,16 @@
 import { api } from './api';
 
-export 
-
-export 
-
-export [];
-  pendingRequests: string[];
-  associatedEvent?: {
-    _id;
-    title;
-    date;
-  };
-  deadline?;
-  status: 'open' | 'full' | 'completed';
-  createdAt;
-  updatedAt;
-}
-
-export 
-
-export ;
-  matchScore;
-  breakdown;
-}
-
-export ;
-}
-
 export const teamApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getMatches: builder.query<{ matches; fromCache: boolean }, void>({
+    getMatches: builder.query({
       query: () => '/teams/matches',
       providesTags: ['Team'],
     }),
-    getMyProjects: builder.query<{ projects: TeamProject[] }, void>({
+    getMyProjects: builder.query({
       query: () => '/teams/my-projects',
       providesTags: ['Team'],
     }),
-    browseProjects: builder.query<{ projects; pagination: any }, { page?; limit?; skill?; event?: string }>({
+    browseProjects: builder.query({
       query: (params) => ({
         url: '/teams/browse',
         params,
@@ -48,7 +21,7 @@ export const teamApi = api.injectEndpoints({
       query: (id) => `/teams/projects/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Team', id }],
     }),
-    createProject: builder.mutation<{ message; project: TeamProject }, Partial<TeamProject>>({
+    createProject: builder.mutation({
       query: (body) => ({
         url: '/teams/projects',
         method: 'POST',
@@ -56,7 +29,7 @@ export const teamApi = api.injectEndpoints({
       }),
       invalidatesTags: ['Team'],
     }),
-    updateProject: builder.mutation<{ message; project: TeamProject }, { id; body: Partial<TeamProject> }>({
+    updateProject: builder.mutation({
       query: ({ id, body }) => ({
         url: `/teams/projects/${id}`,
         method: 'PUT',
@@ -64,14 +37,14 @@ export const teamApi = api.injectEndpoints({
       }),
       invalidatesTags: (_result, _error, { id }) => ['Team', { type: 'Team', id }],
     }),
-    deleteProject: builder.mutation<{ message: string }, string>({
+    deleteProject: builder.mutation({
       query: (id) => ({
         url: `/teams/projects/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Team'],
     }),
-    requestToJoin: builder.mutation<{ message: string }, { projectId; message?: string }>({
+    requestToJoin: builder.mutation({
       query: ({ projectId, message }) => ({
         url: `/teams/projects/${projectId}/request`,
         method: 'POST',
@@ -79,11 +52,11 @@ export const teamApi = api.injectEndpoints({
       }),
       invalidatesTags: (_result, _error, { projectId }) => [{ type: 'Team', id: projectId }],
     }),
-    getIncomingRequests: builder.query<{ requests: JoinRequest[] }, void>({
+    getIncomingRequests: builder.query({
       query: () => '/teams/requests',
       providesTags: ['Team'],
     }),
-    acceptRequest: builder.mutation<{ message: string }, { projectId; requesterId: string }>({
+    acceptRequest: builder.mutation({
       query: ({ projectId, requesterId }) => ({
         url: `/teams/requests/${projectId}/accept`,
         method: 'PUT',
@@ -91,7 +64,7 @@ export const teamApi = api.injectEndpoints({
       }),
       invalidatesTags: ['Team'],
     }),
-    declineRequest: builder.mutation<{ message: string }, { projectId; requesterId: string }>({
+    declineRequest: builder.mutation({
       query: ({ projectId, requesterId }) => ({
         url: `/teams/requests/${projectId}/decline`,
         method: 'PUT',

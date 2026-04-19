@@ -1,12 +1,8 @@
-import React from 'react';
-import { INotification } from '../../types/notification';
 import { useMarkAsReadMutation } from '../../services/notificationApi';
 import { Bell, Calendar, Info, Users } from 'lucide-react';
 import cn from 'clsx';
 
-
-
-export const NotificationItem: React.FC = ({ notification }) => {
+export const NotificationItem = ({ notification }) => {
   const [markAsRead] = useMarkAsReadMutation();
 
   const handleRead = () => {

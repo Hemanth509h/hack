@@ -11,7 +11,7 @@ export const chatApi = api.injectEndpoints({
         body,
       }),
     }),
-    submitFeedback: builder.mutation<{ success: boolean }, { messageId; helpful: boolean }>({
+    submitFeedback: builder.mutation({
       query: (body) => ({
         url: '/chat/feedback',
         method: 'POST',

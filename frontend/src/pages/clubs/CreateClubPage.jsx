@@ -2,17 +2,15 @@ import React from 'react';
 import { ClubForm } from '../../components/clubs/ClubForm';
 import { ArrowLeft, Sparkles } from 'lucide-react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { Navigate, useNavigate } from 'react-router-dom';
 
-export const CreateClubPage: React.FC = () => {
+export const CreateClubPage = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
 
   if (user?.role !== 'admin') {
     return <Navigate to="/clubs" replace />;
   }
-
   return (
     <div className="min-h-screen pt-24 pb-20 px-6 max-w-4xl mx-auto">
       <div className="text-center mb-12">

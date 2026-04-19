@@ -1,29 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSocket } from '../../context/SocketContext';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { useGetMessageHistoryQuery } from '../../services/chatApi';
 import { MessageBubble } from './MessageBubble';
-import { IMessage } from '../../types/chat';
 import { Send, Smile } from 'lucide-react';
 import cn from 'clsx';
 
 
 
-export const ChatWindow: React.FC = ({ roomType, roomId, title }) => {
+export const ChatWindow = ({ roomType, roomId, title }) => {
   const { data, isLoading } = useGetMessageHistoryQuery({ roomType, roomId });
   const { socket, isConnected } = useSocket();
   const currentUser = useSelector((state) => state.auth.user);
   
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
-  const [isTyping, setIsTyping] = useState<{name: string} | null>(null);
+  const [isTyping, setIsTyping] = useState(null);
   const bottomRef = useRef(null);
 
   useEffect(() => {
     if (data?.messages) {
       setMessages(data.messages);
-    }
   }, [data]);
 
   useEffect(() => {
@@ -39,7 +36,6 @@ export const ChatWindow: React.FC = ({ roomType, roomId, title }) => {
     socket.on('typing:start', (data) => {
       if(data.name !== currentUser?.name) {
         setIsTyping(data);
-      }
     });
 
     socket.on('typing:stop', () => {
@@ -57,10 +53,9 @@ export const ChatWindow: React.FC = ({ roomType, roomId, title }) => {
   useEffect(() => {
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
   }, [messages, isTyping]);
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleSend = ( e) => {
     e.preventDefault();
     if (!inputText.trim() || !socket || !currentUser) return;
     
@@ -77,7 +72,7 @@ export const ChatWindow: React.FC = ({ roomType, roomId, title }) => {
     socket.emit('typing:stop', { roomType, roomId });
   };
 
-  const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTyping = ( e) => {
     setInputText(e.target.value);
     if (!socket) return;
     
@@ -85,7 +80,6 @@ export const ChatWindow: React.FC = ({ roomType, roomId, title }) => {
       socket.emit('typing:start', { roomType, roomId, name: currentUser?.name });
     } else {
       socket.emit('typing:stop', { roomType, roomId });
-    }
   };
 
   return (

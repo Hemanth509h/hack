@@ -3,10 +3,9 @@ import { Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useGetNotificationsQuery } from '../../services/notificationApi';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { setUnreadCount } from '../../features/notifications/notificationSlice';
 
-export const NotificationBadge: React.FC = () => {
+export const NotificationBadge = () => {
   const { data } = useGetNotificationsQuery();
   const dispatch = useDispatch();
   const unreadCount = useSelector((state) => state.notifications.unreadCount);
@@ -14,7 +13,6 @@ export const NotificationBadge: React.FC = () => {
   useEffect(() => {
     if (data?.unreadCount !== undefined) {
       dispatch(setUnreadCount(data.unreadCount));
-    }
   }, [data, dispatch]);
 
   return (

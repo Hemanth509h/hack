@@ -1,5 +1,4 @@
 import React from 'react';
-import { IMessage } from '../../types/chat';
 import { User } from '../../features/auth/authSlice';
 import cn from 'clsx';
 // Removed date-fns to use native Intl formatter
@@ -7,8 +6,8 @@ import cn from 'clsx';
 
 
 
-export const MessageBubble: React.FC = ({ message, currentUser }) => {
-  const isMine = currentUser?.id === message.sender._id || currentUser?.id === (message.sender as any).id;
+export const MessageBubble = ({ message, currentUser }) => {
+  const isMine = currentUser?.id === message.sender._id || currentUser?.id === (message.sender).id;
 
   return (
     <div className={cn("flex w-full mt-4 space-x-3 max-w-xl", isMine ? "ml-auto justify-end" : "")}>

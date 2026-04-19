@@ -7,7 +7,7 @@ import EventCard from '../discovery/EventCard';
 import { MapPin } from 'lucide-react';
 import { getDistance, convertDistance } from 'geolib';
 
-const NearbyEvents: React.FC = () => {
+const NearbyEvents = () => {
   const { coordinates, loading, error, requestLocation, permission } = useGeolocation();
   const { user } = useAppSelector(state => state.auth);
   const [updateLocation] = useUpdateLocationMutation();
@@ -15,7 +15,7 @@ const NearbyEvents: React.FC = () => {
 
   useEffect(() => {
     if (coordinates && user?.id) {
-       updateLocation({ userId: user.id, latitude: coordinates.lat, longitude: coordinates.lng });
+      updateLocation({ userId: user.id, latitude: coordinates.lat, longitude: coordinates.lng });
     }
   }, [coordinates, user?.id, updateLocation]);
 
@@ -33,15 +33,14 @@ const NearbyEvents: React.FC = () => {
       </div>
     );
   }
-
   // Calculate distances locally for robust sorting
   let eventsWithDistance = (data?.events || [])
     .filter(e => {
-        const loc = e.location as any;
+        const loc = e.location;
         return loc?.coordinates && loc.coordinates.length === 2;
     })
     .map(event => {
-      const coords = (event.location as any).coordinates;
+      const coords = (event.location).coordinates;
       let distanceMiles = null;
       if (coordinates) {
          const distMeters = getDistance(
@@ -56,7 +55,6 @@ const NearbyEvents: React.FC = () => {
   if (coordinates) {
      eventsWithDistance.sort((a, b) => (a.distanceMiles || 0) - (b.distanceMiles || 0));
   }
-
   return (
     <div className="mb-10">
        <div className="flex items-center justify-between mb-4">

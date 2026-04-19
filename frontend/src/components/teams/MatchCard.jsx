@@ -14,8 +14,6 @@ function getMatchTier(score) {
   if (score >= 0.85) return 'high';
   if (score >= 0.65) return 'mid';
   return 'low';
-}
-
 const avatarColors = [
   'from-violet-500 to-indigo-600',
   'from-pink-500 to-rose-600',
@@ -24,7 +22,7 @@ const avatarColors = [
   'from-blue-500 to-cyan-600',
 ];
 
-export const MatchCard: React.FC = ({ match, rank, onViewDetails }) => {
+export const MatchCard = ({ match, rank, onViewDetails }) => {
   const [hovered, setHovered] = useState(false);
   const tier = getMatchTier(match.matchScore);
   const colors = matchColors[tier];
@@ -54,7 +52,6 @@ export const MatchCard: React.FC = ({ match, rank, onViewDetails }) => {
           {match.user.avatar
             ? <img src={match.user.avatar} alt={match.user.name} className="w-full h-full object-cover rounded-2xl" />
             : initials
-          }
         </div>
 
         {/* Info */}

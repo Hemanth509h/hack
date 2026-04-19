@@ -1,8 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export 
-
-export 
+import { createSlice } from '@reduxjs/toolkit';
 
 const tokenFromStorage = localStorage.getItem('token');
 
@@ -17,10 +13,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (
-      state,
-      action
-    ) => {
+    setCredentials: (state, action) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isAuthenticated = true;
@@ -42,7 +35,7 @@ const authSlice = createSlice({
     updateUser: (state, action) => {
       state.user = action.payload;
       state.isAuthenticated = true;
-    }
+    },
   },
 });
 

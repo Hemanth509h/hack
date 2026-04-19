@@ -1,11 +1,10 @@
 import React from 'react';
-import { IProfile } from '../../types/profile';
 import { Download, Edit3, GraduationCap, Briefcase, Trophy } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 
 
-export const ProfileHeader: React.FC = ({ profile, isOwner }) => {
+export const ProfileHeader = ({ profile, isOwner }) => {
   return (
     <div className="relative pt-40 pb-12 glass rounded-t-[3rem] overflow-hidden border-black/5 dark:border-white/5 shadow-[0_40px_100px_rgba(0,0,0,0.5)]">
       {/* Immersive Cover */}

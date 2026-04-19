@@ -9,7 +9,7 @@ import { useRequestToJoinMutation, useBrowseProjectsQuery } from '../../services
 
 const avatarColors = ['from-violet-500 to-indigo-600', 'from-pink-500 to-rose-600', 'from-emerald-500 to-teal-600'];
 
-export const MatchDetailModal: React.FC = ({ match, onClose }) => {
+export const MatchDetailModal = ({ match, onClose }) => {
   const [message, setMessage] = useState('');
   const [selectedProject, setSelectedProject] = useState('');
   const [sent, setSent] = useState(false);
@@ -61,7 +61,6 @@ export const MatchDetailModal: React.FC = ({ match, onClose }) => {
                 {match.user.avatar
                   ? <img src={match.user.avatar} alt={match.user.name} className="w-full h-full object-cover rounded-2xl" />
                   : initials
-                }
               </div>
               <div>
                 <h2 className="text-2xl font-black text-gray-900 dark:text-white">{match.user.name}</h2>
@@ -174,7 +173,7 @@ export const MatchDetailModal: React.FC = ({ match, onClose }) => {
                 <textarea
                   value={message}
                   onChange={e => setMessage(e.target.value)}
-                  placeholder="Add an optional message… (e.g. 'Your React skills would be perfect for our dashboard feature!')"
+                  placeholder="Add an optional message… (e.g. 'Your React skills would be perfect for our dashboard feature')"
                   rows={3}
                   className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-500 resize-none focus:outline-none focus:border-indigo-500 transition-colors mb-3"
                 />
@@ -194,7 +193,7 @@ export const MatchDetailModal: React.FC = ({ match, onClose }) => {
                 className="flex flex-col items-center py-8 text-center"
               >
                 <CheckCircle className="w-14 h-14 text-emerald-400 mb-3" />
-                <h3 className="text-gray-900 dark:text-white font-bold text-lg">Request Sent!</h3>
+                <h3 className="text-gray-900 dark:text-white font-bold text-lg">Request Sent</h3>
                 <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">Your team invite has been delivered to {match.user.name}.</p>
               </motion.div>
             )}

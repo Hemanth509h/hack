@@ -1,8 +1,6 @@
-import React from 'react';
-import { ISkill } from '../../types/profile';
 import { Code, Search } from 'lucide-react';
 
-export const SkillsList: React.FC = ({ skills }) => {
+export const SkillsList = ({ skills }) => {
   if (!skills || skills.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-6 border border-dashed border-gray-700 rounded-xl bg-white dark:bg-gray-900/50">
@@ -11,7 +9,6 @@ export const SkillsList: React.FC = ({ skills }) => {
       </div>
     );
   }
-
   return (
     <div className="flex flex-wrap gap-2">
       {skills.map(s => (

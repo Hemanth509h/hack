@@ -19,8 +19,8 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CreateProjectModal } from '../../components/teams/CreateProjectModal';
 
-const TeamsPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'browse' | 'matches' | 'my-projects'>('browse');
+const TeamsPage = () => {
+  const [activeTab, setActiveTab] = useState('browse');
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   const { data: browseData, isLoading: browseLoading } = useBrowseProjectsQuery({});
@@ -100,7 +100,7 @@ const TeamsPage: React.FC = () => {
             ) : (
               <EmptyState 
                 title="No projects found" 
-                description="Be the first to start a project for upcoming campus events!"
+                description="Be the first to start a project for upcoming campus events"
                 icon={<Briefcase size={48} className="text-gray-600" />}
               />
             )}
@@ -135,7 +135,7 @@ const TeamsPage: React.FC = () => {
             ) : (
               <EmptyState 
                 title="No matches yet" 
-                description="Complete your profile and add more skills to find your perfect team matches!"
+                description="Complete your profile and add more skills to find your perfect team matches"
                 icon={<Users size={48} className="text-gray-600" />}
               />
             )}
@@ -186,7 +186,7 @@ const TeamsPage: React.FC = () => {
   );
 };
 
-const TabButton: React.FC void; label; icon: React.ReactNode }> = ({ active, onClick, label, icon }) => (
+const TabButton = ({ active, onClick, label, icon }) => (
   <button 
     onClick={onClick}
     className={`flex items-center space-x-2 px-6 py-2.5 rounded-xl font-bold text-sm transition-all ${
@@ -198,7 +198,7 @@ const TabButton: React.FC void; label; icon: React.ReactNode }> = ({ active, onC
   </button>
 );
 
-const ProjectCard: React.FC = ({ project }) => (
+const ProjectCard = ({ project }) => (
   <motion.div 
     whileHover={{ y: -4 }}
     className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-[2.5rem] p-8 hover:bg-black/10 dark:hover:bg-white/10 transition-all flex flex-col h-full"
@@ -250,7 +250,7 @@ const ProjectCard: React.FC = ({ project }) => (
   </motion.div>
 );
 
-const MatchCard: React.FC = ({ match }) => (
+const MatchCard = ({ match }) => (
   <div className="p-6 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl hover:bg-black/10 dark:hover:bg-white/10 transition-all">
     <div className="flex items-center space-x-4 mb-6">
       <img 
@@ -300,7 +300,7 @@ const MatchCard: React.FC = ({ match }) => (
   </div>
 );
 
-const EmptyState: React.FC = ({ title, description, icon }) => (
+const EmptyState = ({ title, description, icon }) => (
   <div className="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-black/5 dark:border-white/5 rounded-[3rem]">
     <div className="mb-6 p-6 bg-black/5 dark:bg-white/5 rounded-full">
       {icon}

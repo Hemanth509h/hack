@@ -3,8 +3,8 @@ import { Calendar, MapPin, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import cn from 'clsx';
 
-export const EventHistory: React.FC = ({ events }) => {
-  const [tab, setTab] = useState<'upcoming' | 'past'>('upcoming');
+export const EventHistory = ({ events }) => {
+  const [tab, setTab] = useState('upcoming');
 
   if (!events || events.length === 0) {
     return (
@@ -14,7 +14,6 @@ export const EventHistory: React.FC = ({ events }) => {
       </div>
     );
   }
-
   const now = new Date();
   const upcomingEvents = events.filter(e => new Date(e.event.startDate) >= now);
   const pastEvents = events.filter(e => new Date(e.event.startDate) < now);

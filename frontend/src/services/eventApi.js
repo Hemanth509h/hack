@@ -1,5 +1,4 @@
 import { api } from './api';
-import { IEvent, EventFilter, PaginatedEventResponse, RSVPResponse } from '../types/event';
 
 export const eventApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -8,7 +7,7 @@ export const eventApi = api.injectEndpoints({
         let qs = '';
         if (filters) {
           const params = new URLSearchParams();
-          (Object.entries(filters) as [string, string | number | undefined][]).forEach(([key, value]) => {
+          Object.entries(filters).forEach(([key, value]) => {
             if (value !== undefined && value !== '') {
               params.append(key, value.toString());
             }
@@ -20,33 +19,33 @@ export const eventApi = api.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.events.map(({ _id }) => ({ type: 'Event' as const, id: _id })),
-              { type: 'Event' as const, id: 'LIST' },
+              ...result.events.map(({ _id }) => ({ type: 'Event', id: _id })),
+              { type: 'Event', id: 'LIST' },
             ]
-          : [{ type: 'Event' as const, id: 'LIST' }],
+          : [{ type: 'Event', id: 'LIST' }],
     }),
 
     getEventById: builder.query({
       query: (id) => `/events/${id}`,
-      providesTags: (_result, _error, id) => [{ type: 'Event' as const, id }],
+      providesTags: (_result, _error, id) => [{ type: 'Event', id }],
     }),
 
-    createEvent: builder.mutation<IEvent, Partial<IEvent>>({
+    createEvent: builder.mutation({
       query: (body) => ({
         url: '/events',
         method: 'POST',
         body,
       }),
-      invalidatesTags: [{ type: 'Event' as const, id: 'LIST' }],
+      invalidatesTags: [{ type: 'Event', id: 'LIST' }],
     }),
 
-    updateEvent: builder.mutation<IEvent, { id; data: Partial<IEvent> }>({
+    updateEvent: builder.mutation({
       query: ({ id, data }) => ({
         url: `/events/${id}`,
         method: 'PUT',
         body: data,
       }),
-      invalidatesTags: (_result, _error, { id }) => [{ type: 'Event' as const, id }],
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Event', id }],
     }),
 
     rsvpToEvent: builder.mutation({
@@ -59,8 +58,8 @@ export const eventApi = api.injectEndpoints({
           await queryFulfilled;
           dispatch(
             eventApi.util.invalidateTags([
-              { type: 'Event' as const, id },
-              { type: 'Event' as const, id: 'LIST' },
+              { type: 'Event', id },
+              { type: 'Event', id: 'LIST' },
             ])
           );
         } catch {
@@ -69,7 +68,7 @@ export const eventApi = api.injectEndpoints({
       },
     }),
 
-    cancelRsvp: builder.mutation<{ message: string }, string>({
+    cancelRsvp: builder.mutation({
       query: (id) => ({
         url: `/events/${id}/rsvp`,
         method: 'DELETE',
@@ -79,8 +78,8 @@ export const eventApi = api.injectEndpoints({
           await queryFulfilled;
           dispatch(
             eventApi.util.invalidateTags([
-              { type: 'Event' as const, id },
-              { type: 'Event' as const, id: 'LIST' },
+              { type: 'Event', id },
+              { type: 'Event', id: 'LIST' },
             ])
           );
         } catch {
@@ -89,27 +88,27 @@ export const eventApi = api.injectEndpoints({
       },
     }),
 
-    getEventAttendees: builder.query<{ attendees: { _id; name; avatar?: string }[] }, string>({
+    getEventAttendees: builder.query({
       query: (id) => `/events/${id}/attendees`,
-      providesTags: (_result, _error, id) => [{ type: 'User' as const, id: `EVENT_ATTENDEES_${id}` }],
+      providesTags: (_result, _error, id) => [{ type: 'User', id: `EVENT_ATTENDEES_${id}` }],
     }),
 
-    getMyRsvps: builder.query<{ events: RSVPResponse[] }, string>({
+    getMyRsvps: builder.query({
       query: (userId) => `/users/${userId}/events`,
-      providesTags: [{ type: 'Event' as const, id: 'MY_RSVPS' }],
+      providesTags: [{ type: 'Event', id: 'MY_RSVPS' }],
     }),
 
-    getQrCodeData: builder.query<{ data; signature: string }, string>({
+    getQrCodeData: builder.query({
       query: (eventId) => `/events/${eventId}/checkin/qr`,
     }),
 
-    submitCheckIn: builder.mutation<{ message; rsvp; userId: string }, { eventId; data?; signature?; userId?: string }>({
+    submitCheckIn: builder.mutation({
       query: ({ eventId, ...body }) => ({
         url: `/events/${eventId}/checkin`,
         method: 'POST',
         body,
       }),
-      invalidatesTags: (_result, _error, { eventId }) => [{ type: 'User' as const, id: `EVENT_ATTENDEES_${eventId}` }],
+      invalidatesTags: (_result, _error, { eventId }) => [{ type: 'User', id: `EVENT_ATTENDEES_${eventId}` }],
     }),
 
     approveRSVP: builder.mutation({
@@ -118,18 +117,18 @@ export const eventApi = api.injectEndpoints({
         method: 'POST',
       }),
       invalidatesTags: (_result, _error, { eventId }) => [
-        { type: 'Event' as const, id: eventId },
-        { type: 'User' as const, id: `EVENT_ATTENDEES_${eventId}` }
+        { type: 'Event', id: eventId },
+        { type: 'User', id: `EVENT_ATTENDEES_${eventId}` }
       ],
     }),
 
-    rejectRSVP: builder.mutation<void, { eventId; userId: string }>({
+    rejectRSVP: builder.mutation({
       query: ({ eventId, userId }) => ({
         url: `/events/${eventId}/rsvp/${userId}/reject`,
         method: 'POST',
       }),
       invalidatesTags: (_result, _error, { eventId }) => [
-        { type: 'User' as const, id: `EVENT_ATTENDEES_${eventId}` }
+        { type: 'User', id: `EVENT_ATTENDEES_${eventId}` }
       ],
     }),
   }),

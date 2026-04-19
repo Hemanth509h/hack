@@ -5,8 +5,6 @@ import { AlertCircle } from 'lucide-react';
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
-}
-
 export 
 
 export const Input = forwardRef(
@@ -43,7 +41,7 @@ export const Input = forwardRef(
               className
             )}
             aria-invalid={!!error}
-            aria-describedby={error ? `${inputId}-error` : helperText ? `${inputId}-description` : undefined}
+            aria-describedby={error ? `${inputId}-error` : helperText ? `${inputId}-description` }
             {...props}
           />
 
@@ -68,6 +66,5 @@ export const Input = forwardRef(
         )}
       </div>
     );
-  }
 );
 Input.displayName = 'Input';

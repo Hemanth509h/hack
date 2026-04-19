@@ -38,7 +38,6 @@ export const trackPageView = (path) => {
   if (isInitialized) {
     ReactGA.send({ hitType: 'pageview', page: path });
   }
-
   // 2. Custom Mongoose Backend Aggregation
   const userId = localStorage.getItem('quad_user_id');
   const anonymousId = getAnonymousId();
@@ -53,12 +52,7 @@ export const trackPageView = (path) => {
   }).catch(() => {}); // Suppress errors to not pollute console
 };
 
-export const trackEvent = (
-  category: 'event_discovery' | 'club_join' | 'team_match' | 'system', 
-  action, 
-  label?, 
-  value?
-) => {
+export const trackEvent = (category, action, label = null, value = null) => {
   if (isInitialized) {
     ReactGA.event({
       category,
@@ -67,7 +61,6 @@ export const trackEvent = (
       value
     });
   }
-
   const userId = localStorage.getItem('quad_user_id');
   const anonymousId = getAnonymousId();
   const path = window.location.pathname;

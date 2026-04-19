@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { useLogoutMutation } from '../../features/auth/authApi';
 import { logout } from '../../features/auth/authSlice';
 import { useTheme } from '../../context/ThemeContext';
@@ -23,14 +22,14 @@ import {
   Sun,
   Moon
 } from 'lucide-react';
-import { clsx, type ClassValue } from 'clsx';
+import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-const Sidebar: React.FC void }> = ({ onSearchClick }) => {
+const Sidebar = ({ onSearchClick }) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -56,7 +55,7 @@ const Sidebar: React.FC void }> = ({ onSearchClick }) => {
     { to: '/events', icon: <Calendar size={22} />, label: 'Events' },
     { to: '/clubs', icon: <Users size={22} />, label: 'Clubs' },
     { to: '/teams', icon: <Briefcase size={22} />, label: 'Teams' },
-    { to: '/map', icon: <MapIcon size={22} />, label: 'Campus Map' },
+    { to: '/map', icon: <Map size={22} />, label: 'Campus Map' },
     { to: '/chat', icon: <MessageSquare size={22} />, label: 'Messages' },
   ];
 
@@ -136,7 +135,7 @@ const Sidebar: React.FC void }> = ({ onSearchClick }) => {
   );
 };
 
-const SidebarLink: React.FC = ({ to, icon, label, active }) => (
+const SidebarLink = ({ to, icon, label, active }) => (
   <Link 
     to={to} 
     className={cn(

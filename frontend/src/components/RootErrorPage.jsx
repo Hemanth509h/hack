@@ -3,7 +3,7 @@ import { useRouteError, isRouteErrorResponse, useNavigate } from 'react-router-d
 import { AlertTriangle, Home, RotateCcw, ShieldAlert } from 'lucide-react';
 
 
-const RootErrorPage: React.FC = () => {
+const RootErrorPage = () => {
   const error = useRouteError();
   const navigate = useNavigate();
 
@@ -16,7 +16,6 @@ const RootErrorPage: React.FC = () => {
   } else if (error instanceof Error) {
     errorMessage = error.message;
   }
-
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-950 flex items-center justify-center p-6 text-gray-800 dark:text-gray-100 font-sans">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -35,7 +34,7 @@ const RootErrorPage: React.FC = () => {
           {errorCode}
         </h1>
         
-        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Oops! Something went wrong</h2>
+        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Oops Something went wrong</h2>
         
         <p className="text-gray-600 dark:text-gray-400 mb-10 leading-relaxed bg-black/5 dark:bg-white/5 p-4 rounded-2xl border border-black/5 dark:border-white/5 font-mono text-sm break-words">
           {errorMessage}
@@ -60,7 +59,7 @@ const RootErrorPage: React.FC = () => {
 
         <div className="mt-12 flex items-center justify-center gap-2 text-gray-600 text-xs font-bold uppercase tracking-widest">
            <ShieldAlert size={14} />
-           <span>System Status
+           <span>System Status</span>
         </div>
       </div>
     </div>

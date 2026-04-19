@@ -8,9 +8,9 @@ export default function BroadcastPage() {
   const [message, setMessage] = useState('');
   const [priority, setPriority] = useState('normal');
   const [isSending, setIsSending] = useState(false);
-  const [sentStatus, setSentStatus] = useState<string | null>(null);
+  const [sentStatus, setSentStatus] = useState(null);
 
-  const handleBroadcast = async (e: React.FormEvent) => {
+  const handleBroadcast = async ( e) => {
     e.preventDefault();
     setIsSending(true);
     
@@ -137,7 +137,7 @@ export default function BroadcastPage() {
                  </div>
                  <div className="p-4 bg-black/5 dark:bg-white/5 rounded-xl border border-black/5 dark:border-white/5 opacity-50">
                     <div className="text-[10px] text-gray-600 font-black uppercase mb-1">Yesterday</div>
-                    <div className="text-gray-900 dark:text-white text-xs font-bold">Welcome to the new Quad Portal!</div>
+                    <div className="text-gray-900 dark:text-white text-xs font-bold">Welcome to the new Quad Portal</div>
                  </div>
               </div>
            </div>

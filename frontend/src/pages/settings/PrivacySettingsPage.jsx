@@ -3,7 +3,7 @@ import { Eye, ArrowLeft, Shield, Globe, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PageContainer from '../../components/layout/PageContainer';
 
-const PrivacySettingsPage: React.FC = () => {
+const PrivacySettingsPage = () => {
   const navigate = useNavigate();
 
   return (
@@ -63,7 +63,7 @@ const PrivacySettingsPage: React.FC = () => {
   );
 };
 
-const PrivacyToggle: React.FC = ({ 
+const PrivacyToggle = ({ 
   icon, title, description, defaultChecked 
 }) => {
   const [checked, setChecked] = React.useState(defaultChecked);
@@ -89,7 +89,7 @@ const PrivacyToggle: React.FC = ({
   );
 };
 
-const Info: React.FC = ({ size }) => (
+const Info = ({ size }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10" />
     <line x1="12" y1="16" x2="12" y2="12" />

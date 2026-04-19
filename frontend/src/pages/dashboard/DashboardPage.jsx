@@ -17,7 +17,7 @@ import { clearFilters } from '../../features/events/eventSlice';
 import { Link } from 'react-router-dom';
 import PageContainer from '../../components/layout/PageContainer';
 
-const DashboardPage: React.FC = () => {
+const DashboardPage = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   

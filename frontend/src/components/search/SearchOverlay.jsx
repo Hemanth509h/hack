@@ -7,9 +7,9 @@ import api from '../../lib/api';
 
 
 
-const SearchOverlay: React.FC = ({ isOpen, onClose }) => {
+const SearchOverlay = ({ isOpen, onClose }) => {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<{ events: any[], clubs: any[], users: any[] }>({ events: [], clubs: [], users: [] });
+  const [results, setResults] = useState({ events: [], clubs: [], users: [] });
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef(null);
 
@@ -24,7 +24,7 @@ const SearchOverlay: React.FC = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = ( e) => {
     if (e.key === 'Enter' && query.trim().length >= 2) {
       navigate(`/search?q=${encodeURIComponent(query.trim())}`);
       onClose();
@@ -38,7 +38,6 @@ const SearchOverlay: React.FC = ({ isOpen, onClose }) => {
           setResults({ events: [], clubs: [], users: [] });
           return;
         }
-
         setIsLoading(true);
         try {
           const { data } = await api.get(`/search/autocomplete?q=${searchQuery}`);
@@ -103,7 +102,7 @@ const SearchOverlay: React.FC = ({ isOpen, onClose }) => {
                 <div className="py-20 text-center">
                   <motion.div
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 20, repeat, ease: "linear" }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                     className="mx-auto mb-10 w-24 h-24 rounded-full border border-indigo-500/20 flex items-center justify-center"
                   >
                     <History className="text-indigo-500/30" size={48} />
@@ -187,7 +186,7 @@ const SearchOverlay: React.FC = ({ isOpen, onClose }) => {
   );
 };
 
-const SearchResultItem: React.FC void }> = ({ icon, title, subtitle, path, onClose }) => {
+const SearchResultItem = ({ icon, title, subtitle, path, onClose }) => {
   const navigate = useNavigate();
   return (
     <button 

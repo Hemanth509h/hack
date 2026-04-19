@@ -49,7 +49,7 @@ export default function RegisterPage() {
   const selectedSkills = watch('skills') || [];
   const selectedInterests = watch('interests') || [];
 
-  const toggleSelection = (field: 'skills' | 'interests', item) => {
+  const toggleSelection = (field, item) => {
     const current = watch(field) || [];
     if (current.includes(item)) {
       setValue(field, current.filter(i => i !== item));
@@ -65,7 +65,6 @@ export default function RegisterPage() {
     } else if (step === 2) {
       isValid = await trigger(['major', 'graduationYear']);
     }
-    
     if (isValid) {
       setStep(s => s + 1);
     }
@@ -109,7 +108,7 @@ export default function RegisterPage() {
         {error && (
           <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500 text-sm text-center">
             {'data' in error 
-              ? (error.data as any)?.error || 'Registration failed'
+              ? (error.data)?.error || 'Registration failed'
               : 'An unexpected error occurred'}
           </div>
         )}

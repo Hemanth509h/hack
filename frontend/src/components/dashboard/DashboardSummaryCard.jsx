@@ -12,7 +12,7 @@ const colorStyles = {
   amber: 'bg-amber-500/10 border-amber-500/20 text-amber-400 hover:border-amber-500/40',
 };
 
-export const DashboardSummaryCard: React.FC = ({
+export const DashboardSummaryCard = ({
   title,
   count,
   icon,

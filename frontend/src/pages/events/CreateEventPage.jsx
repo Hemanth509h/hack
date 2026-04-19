@@ -2,16 +2,14 @@ import React from 'react';
 import { EventForm } from '../../components/events/EventForm';
 
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { Navigate } from 'react-router-dom';
 
-export const CreateEventPage: React.FC = () => {
+export const CreateEventPage = () => {
   const { user } = useSelector((state) => state.auth);
 
   if (user?.role !== 'admin') {
     return <Navigate to="/events" replace />;
   }
-
   return (
     <div className="min-h-screen pt-24 pb-20 px-6 max-w-4xl mx-auto">
       <div className="text-center mb-10">

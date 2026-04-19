@@ -17,7 +17,7 @@ const securitySchema = z.object({
 
 
 
-const SecuritySettingsPage: React.FC = () => {
+const SecuritySettingsPage = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(securitySchema)
@@ -26,7 +26,7 @@ const SecuritySettingsPage: React.FC = () => {
   const onSubmit = async (data) => {
     // Implement password change logic here
     console.log('Changing password', data);
-    alert('In a real app, this would call your backend /auth/change-password endpoint!');
+    alert('In a real app, this would call your backend /auth/change-password endpoint');
   };
 
   return (

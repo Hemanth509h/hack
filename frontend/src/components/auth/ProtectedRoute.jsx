@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store';
 import { setInitializing, updateUser } from '../../features/auth/authSlice';
 import { useGetMeQuery } from '../../features/auth/authApi';
 import { Loader2 } from 'lucide-react';
 
-export const ProtectedRoute: React.FC = () => {
+export const ProtectedRoute = () => {
   const { isAuthenticated, token, user, isInitializing } = useSelector((state) => state.auth);
   const location = useLocation();
   const dispatch = useDispatch();
@@ -32,18 +31,16 @@ export const ProtectedRoute: React.FC = () => {
       </div>
     );
   }
-
+  
   if (!isAuthenticated && !token) {
     // Redirect them to the /login page, but save the current location they were trying to go to
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
-
+  
   return <Outlet />;
 };
 
-
-
-export const RoleGuard: React.FC = ({ allowedRoles }) => {
+export const RoleGuard = ({ allowedRoles }) => {
   const { isAuthenticated, user, isInitializing, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
@@ -67,20 +64,20 @@ export const RoleGuard: React.FC = ({ allowedRoles }) => {
       </div>
     );
   }
-
+  
   if (!isAuthenticated && !token) {
     return <Navigate to="/login" replace />;
   }
-
+  
   // If user is not yet populated but we're not initializing/loading, they shouldn't be here
   if (!user) {
     return <Navigate to="/login" replace />;
   }
-
+  
   // Handle generic JWT state where 'user' details haven't fully populated yet
   if (!allowedRoles.includes(user.role)) {
     return <Navigate to="/unauthorized" replace />;
   }
-
+  
   return <Outlet />;
 };

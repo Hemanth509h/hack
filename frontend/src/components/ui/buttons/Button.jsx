@@ -5,8 +5,6 @@ import { twMerge } from 'tailwind-merge';
 
 function cn(...inputs) {
   return twMerge(clsx(inputs));
-}
-
 export 
 
 export const Button = forwardRef(
@@ -54,6 +52,5 @@ export const Button = forwardRef(
         {!isLoading && rightIcon && <span className="ml-2">{rightIcon}</span>}
       </button>
     );
-  }
 );
 Button.displayName = 'Button';

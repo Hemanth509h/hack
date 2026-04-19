@@ -7,14 +7,13 @@ import { RSVPManagement } from '../../components/events/RSVPManagement';
 import { Calendar, MapPin, Share2, ArrowLeft, Clock, Info, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import AddToCalendarDropdown from '../../components/events/AddToCalendarDropdown';
 import QRCodeDisplay from '../../components/events/checkin/QRCodeDisplay';
 import QRScanner from '../../components/events/checkin/QRScanner';
 
-const EventDetailPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const { data: event, isLoading, error } = useGetEventByIdQuery(id!);
+const EventDetailPage = () => {
+  const { id } = useParams();
+  const { data: event, isLoading, error } = useGetEventByIdQuery(id);
   const currentUser = useSelector((state) => state.auth.user);
   const [showScanner, setShowScanner] = React.useState(false);
 
@@ -25,7 +24,6 @@ const EventDetailPage: React.FC = () => {
       </div>
     );
   }
-
   if (error || !event) {
     return (
       <div className="min-h-screen flex items-center justify-center pt-24">
@@ -33,7 +31,6 @@ const EventDetailPage: React.FC = () => {
       </div>
     );
   }
-
   const startDate = new Date(event.date);
   const formattedDate = startDate.toLocaleDateString('en-US', {
     weekday: 'long',

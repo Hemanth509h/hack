@@ -1,10 +1,7 @@
 import { createBrowserRouter, redirect } from 'react-router-dom';
-// System Update: 2026-04-18T14:15:00Z - Triggering reload for governance features
 import App from './App';
 import DashboardPage from './pages/dashboard/DashboardPage';
 import { ProtectedRoute, RoleGuard } from './components/auth/ProtectedRoute';
-
-
 
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
@@ -15,9 +12,7 @@ import SystemManagementPage from './pages/admin/SystemManagementPage';
 import BroadcastPage from './pages/admin/BroadcastPage';
 import EventManagementPage from './pages/admin/EventManagementPage';
 
-// NetworkPage not yet implemented — using Placeholder
 import SearchPage from './pages/search/SearchPage';
-
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
@@ -36,11 +31,9 @@ import CreateClubPage from './pages/clubs/CreateClubPage';
 import MyClubsPage from './pages/clubs/MyClubsPage';
 import MapPage from './pages/map/MapPage';
 
-// Notifications
 import NotificationsPage from './pages/notifications/NotificationsPage';
 import NotificationPreferences from './pages/notifications/NotificationPreferences';
 
-// Profile
 import ProfilePage from './pages/profile/ProfilePage';
 import EditProfilePage from './pages/profile/EditProfilePage';
 import DiscoverPage from './pages/DiscoverPage';
@@ -77,37 +70,21 @@ export const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <App />, // App contains the Navbar and Global layouts
+    element: <App />,
     errorElement: <RootErrorPage />,
     children: [
       {
         index: true,
         loader: () => redirect('/discover'),
       },
-      // Protected Routes for all authenticated students
       {
         element: <ProtectedRoute />,
         children: [
-          {
-            path: 'discover',
-            element: <DiscoverPage />,
-          },
-          {
-            path: 'dashboard',
-            element: <DashboardPage />,
-          },
-          {
-            path: 'map',
-            element: <MapPage />,
-          },
-          {
-            path: 'search',
-            element: <SearchPage />,
-          },
-          {
-            path: 'feed',
-            element: <PulsePage />,
-          },
+          { path: 'discover', element: <DiscoverPage /> },
+          { path: 'dashboard', element: <DashboardPage /> },
+          { path: 'map', element: <MapPage /> },
+          { path: 'search', element: <SearchPage /> },
+          { path: 'feed', element: <PulsePage /> },
           {
             path: 'events',
             children: [
@@ -127,14 +104,8 @@ export const router = createBrowserRouter([
               { path: ':id/dashboard', element: <ClubDashboardPage /> },
             ]
           },
-          {
-            path: 'teams',
-            element: <TeamsPage />,
-          },
-          {
-            path: 'notifications',
-            element: <NotificationsPage />,
-          },
+          { path: 'teams', element: <TeamsPage /> },
+          { path: 'notifications', element: <NotificationsPage /> },
           {
             path: 'settings',
             children: [
@@ -144,23 +115,19 @@ export const router = createBrowserRouter([
               { path: 'security', element: <SecuritySettingsPage /> },
             ]
           },
-          {
-            path: 'chat',
-            element: <ChatPage />,
-          },
+          { path: 'chat', element: <ChatPage /> },
           {
             path: 'profile',
             children: [
-              { index: true, element: <ProfilePage /> }, // fallback to self if available
+              { index: true, element: <ProfilePage /> },
               { path: ':userId', element: <ProfilePage /> },
               { path: 'edit', element: <EditProfilePage /> },
             ]
           },
         ]
-      }
+      },
     ],
   },
-  // Role-specific routes OUTSIDE the main App layout to avoid Navbar overlap
   {
     element: <RoleGuard allowedRoles={['admin']} />,
     children: [

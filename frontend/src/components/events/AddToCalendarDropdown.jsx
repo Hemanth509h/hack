@@ -1,10 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { CalendarPlus, Download, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IEvent } from '../../types/event';
 import { buildGoogleCalendarUrl, buildOutlookCalendarUrl, getIcsDownloadUrl } from '../../lib/calendarUtils';
-
-
 
 const AddToCalendarDropdown = ({ event }) => {
   const [isOpen, setIsOpen] = useState(false);

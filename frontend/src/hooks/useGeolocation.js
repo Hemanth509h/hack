@@ -1,10 +1,5 @@
 import { useState, useEffect } from 'react';
 
- | null;
-  error: string | null;
-  loading;
-}
-
 export const useGeolocation = (options = { enableHighAccuracy: true }) => {
   const [state, setState] = useState({
     coordinates: null,

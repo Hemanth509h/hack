@@ -1,5 +1,4 @@
-import { createApi, fetchBaseQuery, BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
-import { RootState } from '../store';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { setCredentials, logout } from '../features/auth/authSlice';
 
 const baseQuery = fetchBaseQuery({
@@ -30,7 +29,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
       );
 
       if (refreshResult.data) {
-        const { accessToken, refreshToken: newRefreshToken } = refreshResult.data as { accessToken, refreshToken: string };
+        const { accessToken, refreshToken: newRefreshToken } = refreshResult.data;
         const user = (api.getState()).auth.user;
         api.dispatch(setCredentials({ user, token: accessToken, refreshToken: newRefreshToken }));
 
@@ -51,7 +50,7 @@ export const api = createApi({
   baseQuery: baseQueryWithReauth,
   tagTypes: ['User', 'Event', 'Club', 'Team', 'Notification', 'Location', 'Post'],
   endpoints: (builder) => ({
-    getHealth: builder.query<{ status; message: string }, void>({
+    getHealth: builder.query({
       query: () => '/health',
     }),
   }),

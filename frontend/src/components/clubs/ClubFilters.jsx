@@ -1,19 +1,17 @@
 import React from 'react';
 import { Search, Filter, SortAsc } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { setFilters } from '../../features/clubs/clubSlice';
-
 
 const CATEGORIES = [
   'All Interests', 'Tech', 'Arts', 'Debate', 'Volley', 'Music', 'Sports', 'Cultural', 'Business'
 ];
 
-export const ClubFilters: React.FC = () => {
+export const ClubFilters = () => {
   const dispatch = useDispatch();
   const filters = useSelector((state) => state.clubs.filters);
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = ( e) => {
     dispatch(setFilters({ search: e.target.value, page: 1 }));
   };
 
@@ -24,9 +22,9 @@ export const ClubFilters: React.FC = () => {
     }));
   };
 
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSortChange = ( e) => {
     dispatch(setFilters({ 
-      sortBy: e.target.value as 'active' | 'new' | 'popular', 
+      sortBy: e.target.value, 
       page: 1 
     }));
   };

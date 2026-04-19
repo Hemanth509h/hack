@@ -1,10 +1,9 @@
 import React from 'react';
-import { IConversation } from '../../types/chat';
 import { Search } from 'lucide-react';
 
 
 
-export const ConversationList: React.FC = ({ 
+export const ConversationList = ({ 
   conversations, 
   activeId, 
   onSelect,
@@ -27,7 +26,7 @@ export const ConversationList: React.FC = ({
       <div className="flex-1 overflow-y-auto custom-scrollbar">
         {conversations.length === 0 ? (
           <div className="p-8 text-center text-gray-500 text-sm">
-            No conversations yet. Start chatting with students from the community!
+            No conversations yet. Start chatting with students from the community
           </div>
         ) : (
           conversations.map((conv) => {

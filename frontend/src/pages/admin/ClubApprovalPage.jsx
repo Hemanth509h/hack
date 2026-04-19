@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { useGetPendingClubsQuery, useResolveClubApplicationMutation } from '../../features/admin/adminApi';
 
 const ClubApprovalPage = () => {
-  const [selectedApp, setSelectedApp] = useState<string | null>(null);
+  const [selectedApp, setSelectedApp] = useState(null);
   const [rejectReason, setRejectReason] = useState('');
 
   const { data: pendingClubs = [], isLoading } = useGetPendingClubsQuery();

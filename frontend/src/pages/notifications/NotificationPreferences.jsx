@@ -3,7 +3,7 @@ import { useGetPreferencesQuery, useUpdatePreferencesMutation } from '../../serv
 import { Save, Bell, Mail, Smartphone } from 'lucide-react';
 import cn from 'clsx';
 
-const NotificationPreferences: React.FC = () => {
+const NotificationPreferences = () => {
   const { data, isLoading } = useGetPreferencesQuery();
   const [updatePrefs, { isLoading: isUpdating }] = useUpdatePreferencesMutation();
 

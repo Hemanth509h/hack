@@ -19,7 +19,7 @@ const avatarColors = [
   'from-blue-500 to-cyan-600',
 ];
 
-export const ProjectCard: React.FC = ({ project, isLeader, index = 0 }) => {
+export const ProjectCard = ({ project, isLeader, index = 0 }) => {
   const status = statusConfig[project.status];
   const pendingCount = project.pendingRequests?.length || 0;
 
@@ -99,7 +99,6 @@ export const ProjectCard: React.FC = ({ project, isLeader, index = 0 }) => {
               {member.avatar
                 ? <img src={member.avatar} className="w-full h-full object-cover rounded-full" alt={member.name} />
                 : member.name.charAt(0).toUpperCase()
-              }
             </div>
           ))}
           {project.members.length > 5 && (

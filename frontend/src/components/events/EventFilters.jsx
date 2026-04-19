@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 
 const CATEGORIES = ['All Events', 'Workshops', 'Hackathons', 'Cultural', 'Sports', 'Career'];
 
-export const EventFilters: React.FC = () => {
+export const EventFilters = () => {
   const dispatch = useAppDispatch();
   const { searchQuery, selectedCategory } = useAppSelector((state) => state.events);
   

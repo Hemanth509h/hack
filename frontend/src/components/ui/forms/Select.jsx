@@ -33,7 +33,7 @@ export const Select = forwardRef(
               )
             )}
             aria-invalid={!!error}
-            aria-describedby={error ? `${selectId}-error` : helperText ? `${selectId}-description` : undefined}
+            aria-describedby={error ? `${selectId}-error` : helperText ? `${selectId}-description` }
             {...props}
           >
             {/* Map options appropriately. Disable first 'placeholder' option if empty string value */}
@@ -63,6 +63,5 @@ export const Select = forwardRef(
         )}
       </div>
     );
-  }
 );
 Select.displayName = 'Select';

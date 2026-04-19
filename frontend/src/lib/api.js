@@ -5,7 +5,7 @@ import { setCredentials, logout } from '../features/auth/authSlice';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
 
 const api = axios.create({
-  baseURL,
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -25,12 +25,9 @@ api.interceptors.request.use(
 
 // Lock and subscriber logic for concurrent refresh requests
 let isRefreshing = false;
-let failedQueue: Array<{
-  resolve: (value?) => void;
-  reject: (reason?) => void;
-}> = [];
+let failedQueue = [];
 
-const processQueue = (error, token: string | null = null) => {
+const processQueue = (error, token = null) => {
   failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
@@ -61,20 +58,19 @@ api.interceptors.response.use(
             return Promise.reject(err);
           });
       }
-
       originalRequest._retry = true;
       isRefreshing = true;
 
       // To refresh, we usually need the refresh token. 
       // Depending on how we store it, maybe it's in an HTTPOnly cookie or local storage.
-      // Assuming it's in store or an HTTPOnly cookie handled by the backend!
+      // Assuming it's in store or an HTTPOnly cookie handled by the backend
       // But wait: the backend `/auth/refresh` expects { token: <refreshToken> } inside body.
       // Let's get refresh token from cookies? Or maybe from state?
       // Since local storage doesn't show a refresh token, we probably stored it somewhere else or didn't.
       // In authSlice, we only store 'token' (access token).
       // Let's check `backend/src/controllers/auth.controller.ts` -> how returns?
       // It returns: { message, user, accessToken, refreshToken }.
-      // So we must store the refresh token if we want to use it!
+      // So we must store the refresh token if we want to use it
       // BUT, earlier we only modified authSlice to store `token`.
       // I need to update authSlice to store `refreshToken` too, or use an HttpOnly cookie.
       // Back in `auth.controller.ts`, loginUser returns tokens in JSON. 
@@ -87,13 +83,12 @@ api.interceptors.response.use(
         isRefreshing = false;
         return Promise.reject(error);
       }
-
       try {
         const { data } = await axios.post(`${API_URL}/auth/refresh`, {
           token: refreshToken,
         });
 
-        // Backend returns `{ accessToken, refreshToken: string }`
+        // Backend returns `{ accessToken, refreshToken }`
         store.dispatch(
           setCredentials({
             user: state.auth.user, // keep existing user
@@ -116,7 +111,6 @@ api.interceptors.response.use(
         isRefreshing = false;
       }
     }
-
     const message = error.response?.data?.error || 'An unexpected error occurred';
     console.error('[API Error]:', message);
     return Promise.reject(error);

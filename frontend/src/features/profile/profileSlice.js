@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 
 
@@ -16,7 +16,7 @@ const profileSlice = createSlice({
   name: 'profile',
   initialState,
   reducers: {
-    updateLayoutPreferences: (state, action: PayloadAction<Partial<ProfileLayoutPreferences>>) => {
+    updateLayoutPreferences: (state, action) => {
       state.layoutPreferences = { ...state.layoutPreferences, ...action.payload };
     },
   },

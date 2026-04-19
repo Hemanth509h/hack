@@ -5,7 +5,7 @@ import { useRsvpToEventMutation, useCancelRsvpMutation } from '../../services/ev
 
 
 
-export const RSVPButton: React.FC = ({ eventId, initialIsRsvpd, className = '', onSuccess }) => {
+export const RSVPButton = ({ eventId, initialIsRsvpd, className = '', onSuccess }) => {
   const [rsvp] = useRsvpToEventMutation();
   const [cancelRsvp] = useCancelRsvpMutation();
   const [isRsvpd, setIsRsvpd] = useState(initialIsRsvpd);

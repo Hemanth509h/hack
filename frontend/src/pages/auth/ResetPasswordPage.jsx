@@ -15,8 +15,6 @@ const resetPasswordSchema = z.object({
   path: ["confirmPassword"],
 });
 
-
-
 export default function ResetPasswordPage() {
   const [success, setSuccess] = useState(false);
   const [resetPassword, { isLoading, error }] = useResetPasswordMutation();
@@ -28,7 +26,6 @@ export default function ResetPasswordPage() {
 
   useEffect(() => {
     if (!token || !email) {
-      // If accessed without valid token/email, send back to login
       navigate('/login');
     }
   }, [token, email, navigate]);
@@ -41,25 +38,23 @@ export default function ResetPasswordPage() {
     resolver: zodResolver(resetPasswordSchema),
   });
 
-
-  const handleManualSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleManualSubmit = async (e) => {
     e.preventDefault();
     handleSubmit(async (data) => {
       try {
-        // We know the backend expects { email, token, newPassword } according to controller
         const payload = {
-          email: email!,
-          token: token!,
+          email: email,
+          token: token,
           newPassword: data.password,
-        } as any;
+        };
         
         await resetPassword(payload).unwrap();
         setSuccess(true);
       } catch (err) {
-        // error handling handled by RTK Query state
+        console.error(err);
       }
     })();
-  }
+  };
 
   if (success) {
     return (
@@ -90,9 +85,7 @@ export default function ResetPasswordPage() {
       <form onSubmit={handleManualSubmit} className="space-y-4">
         {error && (
           <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500 text-sm text-center">
-            {'data' in error 
-              ? (error.data as any)?.error || 'Invalid or expired token'
-              : 'An unexpected error occurred'}
+            {error.data?.error || 'Invalid or expired token'}
           </div>
         )}
 

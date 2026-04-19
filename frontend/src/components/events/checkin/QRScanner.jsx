@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 
 const QRScanner = ({ eventId }) => {
-  const [scanResult, setScanResult] = useState<'idle' | 'success' | 'error'>('idle');
+  const [scanResult, setScanResult] = useState('idle');
   const [resultMessage, setResultMessage] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [manualMode, setManualMode] = useState(false);
@@ -15,7 +15,7 @@ const QRScanner = ({ eventId }) => {
 
   const [submitCheckIn] = useSubmitCheckInMutation();
 
-  const handleScan = async (scannedData: string | undefined) => {
+  const handleScan = async (scannedData) => {
     if (!scannedData || isProcessing || scanResult !== 'idle') return;
 
     setIsProcessing(true);
@@ -31,7 +31,7 @@ const QRScanner = ({ eventId }) => {
       const res = await submitCheckIn(payload).unwrap();
       
       setScanResult('success');
-      setResultMessage(res.message || 'Check-in successful!');
+      setResultMessage(res.message || 'Check-in successful');
 
       // Auto reset after 3 seconds
       setTimeout(() => {
@@ -48,7 +48,7 @@ const QRScanner = ({ eventId }) => {
     }
   };
 
-  const handleManualCheckin = async (e: React.FormEvent) => {
+  const handleManualCheckin = async ( e) => {
     e.preventDefault();
     if (!manualUserId.trim() || isProcessing) return;
 
@@ -56,7 +56,7 @@ const QRScanner = ({ eventId }) => {
     try {
        const res = await submitCheckIn({ eventId, userId: manualUserId.trim() }).unwrap();
        setScanResult('success');
-       setResultMessage(res.message || 'Manual check-in successful!');
+       setResultMessage(res.message || 'Manual check-in successful');
        setManualUserId('');
 
        setTimeout(() => {
@@ -93,10 +93,8 @@ const QRScanner = ({ eventId }) => {
        <div className="relative aspect-square bg-black">
           {!manualMode ? (
              <Scanner 
-               // @ts-ignore
                onResult={(text, _result) => handleScan(text)} 
                onError={(error) => console.log(error?.message)}
-               // @ts-ignore
                options={{ delayBetweenScanAttempts: 1000 }}
              />
           ) : (
@@ -136,7 +134,7 @@ const QRScanner = ({ eventId }) => {
               >
                 {scanResult === 'success' ? <CheckCircle2 size={64} className="mb-4 drop-shadow-md" /> : <XCircle size={64} className="mb-4 drop-shadow-md" />}
                 <h3 className="text-2xl font-black drop-shadow-md">
-                  {scanResult === 'success' ? 'Approved!' : 'Check-in Error'}
+                  {scanResult === 'success' ? 'Approved' : 'Check-in Error'}
                 </h3>
                 <p className="font-semibold text-gray-900 dark:text-white/90 drop-shadow">{resultMessage}</p>
               </motion.div>

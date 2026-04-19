@@ -4,11 +4,11 @@ import { NotificationItem } from './NotificationItem';
 import { Check } from 'lucide-react';
 import cn from 'clsx';
 
-export const NotificationList: React.FC = () => {
+export const NotificationList = () => {
   const { data, isLoading } = useGetNotificationsQuery();
   const [markAllAsRead] = useMarkAllAsReadMutation();
-  const [filter, setFilter] = useState<'all' | 'unread'>('all');
-  const [typeFilter, setTypeFilter] = useState<'all' | 'event_update' | 'club_announcement' | 'team_request' | 'system'>('all');
+  const [filter, setFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
 
   const notifications = data?.notifications || [];
 
@@ -36,7 +36,7 @@ export const NotificationList: React.FC = () => {
           {['all', 'event_update', 'club_announcement', 'team_request', 'system'].map(t => (
             <button
               key={t}
-              onClick={() => setTypeFilter(t as any)}
+              onClick={() => setTypeFilter(t)}
               className={cn(
                 "px-3 py-1 rounded-full border transition-all",
                 typeFilter === t ? "bg-primary-500/20 border-primary-500 text-primary-400" : "bg-transparent border-gray-700 text-gray-600 dark:text-gray-400 hover:border-gray-600"
@@ -66,7 +66,7 @@ export const NotificationList: React.FC = () => {
             <div className="w-16 h-16 bg-gray-50 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
                <Check className="w-8 h-8 text-gray-600" />
             </div>
-            <p className="text-gray-600 dark:text-gray-400 font-medium">You're all caught up!</p>
+            <p className="text-gray-600 dark:text-gray-400 font-medium">You're all caught up</p>
             <p className="text-sm text-gray-500 mt-1">No new notifications here.</p>
           </div>
         ) : (

@@ -5,8 +5,8 @@ import { Loader2, Shield, Users, Compass, ArrowRight, LayoutDashboard, LogOut } 
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export const MyClubsPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'leading' | 'member'>('leading');
+export const MyClubsPage = () => {
+  const [activeTab, setActiveTab] = useState('leading');
   const { data, isLoading } = useFetchMyClubsQuery();
   const [leaveClub] = useLeaveClubMutation();
 
@@ -18,7 +18,6 @@ export const MyClubsPage: React.FC = () => {
       </div>
     );
   }
-
   const handleLeave = (id, name) => {
     if (window.confirm(`Are you sure you want to leave ${name}?`)) {
       leaveClub(id);
