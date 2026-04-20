@@ -44,7 +44,7 @@ export default function LoginPage() {
         })
       );
       
-      const redirectPath = response.user.role === 'admin' && !location.state?.from ? '/admin' : from;
+      const redirectPath = response.user.role === 'admin' ? '/admin' : from;
       navigate(redirectPath, { replace: true });
     } catch (err) {
       console.error('Login failed:', err);

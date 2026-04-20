@@ -32,7 +32,8 @@ export default function OAuthCallbackPage() {
   useEffect(() => {
     if (isSuccess && user) {
       dispatch(setCredentials({ user, token: accessToken, refreshToken: refreshToken }));
-      navigate('/discover');
+      const redirectPath = user.role === 'admin' ? '/admin' : '/discover';
+      navigate(redirectPath);
     } else if (isError) {
       navigate('/login?error=auth_failed');
     }
