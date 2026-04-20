@@ -53,7 +53,7 @@ export default function LoginPage() {
 
   const handleOAuthLogin = (provider) => {
     // Redirect to backend OAuth endpoint
-    window.location.href = `http://localhost:5000/api/v1/auth/${provider}`;
+    window.location.href = `/api/v1/auth/${provider}`;
   };
 
   return (

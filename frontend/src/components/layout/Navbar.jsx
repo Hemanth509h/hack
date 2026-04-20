@@ -29,15 +29,13 @@ const Navbar = ({ onSearchClick }) => {
           <div className="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center font-bold text-gray-900 dark:text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
             Q
           </div>
-          <span className="font-display font-bold text-2xl tracking-tighter hidden sm:block">The Quad</span>
+          <span className="font-display font-bold text-2xl tracking-tighter hidden xs:block">The Quad</span>
         </Link>
 
-        {/* Nav Links */}
-        <div className="hidden md:flex items-center space-x-2">
-          <NavLink to="/discover" icon={<Home size={20} />} label="Home" active={location.pathname === '/discover'} />
-          <NavLink to="/events" icon={<Calendar size={20} />} label="Events" active={location.pathname.startsWith('/events')} />
-          <NavLink to="/clubs" icon={<Users size={20} />} label="Clubs" active={location.pathname === '/clubs'} />
-          <NavLink to="/teams" icon={<Briefcase size={20} />} label="Teams" active={location.pathname === '/teams'} />
+        {/* Nav Links - Desktop Only (Hidden if Sidebar is present and redundant) */}
+        {/* We keep this container empty or remove it to avoid redundancy with the Sidebar */}
+        <div className="hidden xl:flex items-center space-x-1">
+          {/* Only show these if you specifically want them in both places, but user said it's not responsive/redundant */}
         </div>
 
         {/* Actions */}

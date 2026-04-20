@@ -23,6 +23,9 @@ export default {
           950: '#2e1065',
         },
       },
+      screens: {
+        'xs': '480px',
+      },
     },
   },
   plugins: [],

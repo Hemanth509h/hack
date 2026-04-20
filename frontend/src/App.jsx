@@ -6,7 +6,6 @@ import Sidebar from './components/layout/Sidebar'
 import SearchOverlay from './components/search/SearchOverlay'
 import { SocketProvider } from './context/SocketContext'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChatWidget } from './components/chat/ChatWidget'
 import { initAnalytics, trackPageView } from './lib/telemetry'
 import CookieBanner from './components/shared/CookieBanner'
 import { useNotifications } from './hooks/useNotifications'
@@ -121,7 +120,6 @@ function App() {
           <p>© 2026 The Quad • Engineered for Student Excellence</p>
         </footer>
 
-        <ChatWidget />
         <CookieBanner />
       </div>
     </SocketProvider>

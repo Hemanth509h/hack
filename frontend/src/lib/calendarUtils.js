@@ -38,5 +38,5 @@ export const buildOutlookCalendarUrl = (event) => {
 };
 
 export const getIcsDownloadUrl = (eventId) => {
-  return `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1'}/events/${eventId}/calendar.ics`;
+  return `${import.meta.env.VITE_API_URL || '/api/v1'}/events/${eventId}/calendar.ics`;
 };

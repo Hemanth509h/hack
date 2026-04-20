@@ -26,9 +26,10 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (!token) return;
 
-    const socketInstance = io(import.meta.env.VITE_WS_URL || 'http://localhost:5000', {
+    const socketInstance = io(import.meta.env.VITE_WS_URL || undefined, {
       auth: { token },
-      transports: ['websocket'],
+      // Allow polling fallback for better compatibility
+      transports: ['polling', 'websocket'],
     });
 
     socketInstance.on('connect', () => setIsConnected(true));

@@ -91,7 +91,7 @@ const Sidebar = ({ onSearchClick }) => {
         </button>
       </div>
 
-      <nav className="flex-1 px-4 space-y-1.5 mt-2">
+      <nav className="flex-1 px-4 space-y-1.5 mt-2 overflow-y-auto custom-scrollbar">
         <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest px-6 mb-4 opacity-50">
           Main Menu
         </div>

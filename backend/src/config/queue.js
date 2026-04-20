@@ -15,6 +15,9 @@ const getRedisConnection = () => {
             password: parsed.password || undefined,
             // Some Redis Cloud providers require TLS
             tls: uri.startsWith('rediss://') ? {} : undefined,
+            // Suppress "IMPORTANT! Eviction policy is volatile-lru. It should be "noeviction"" warning
+            // This is necessary for managed Redis instances like Redis Cloud where CONFIG SET is restricted.
+            skipVersionCheck: true,
             maxRetriesPerRequest: null // Required by BullMQ when using ioredis
         };
     }
@@ -26,6 +29,7 @@ const getRedisConnection = () => {
             port: parseInt(parsed.port),
             username: parsed.username,
             password: parsed.password,
+            skipVersionCheck: true,
             maxRetriesPerRequest: null
         };
     }

@@ -12,14 +12,12 @@ export const useNotifications = () => {
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(
-        (registration) => {
-          console.log('SW registered:', registration);
-        },
-        (error) => {
-          console.log('SW registration failed:', error);
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (let registration of registrations) {
+          registration.unregister();
+          console.log('SW unregistered to force update');
         }
-      );
+      });
     }
   }, []);
 
