@@ -3,10 +3,12 @@ import { useFetchMyClubsQuery, useLeaveClubMutation } from '../../services/clubA
 import { ClubCard } from '../../components/clubs/ClubCard';
 import { Loader2, Shield, Users, Compass, ArrowRight, LayoutDashboard, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const MyClubsPage = () => {
   const [activeTab, setActiveTab] = useState('leading');
+  const { user } = useSelector((state) => state.auth);
   const { data, isLoading } = useFetchMyClubsQuery();
   const [leaveClub] = useLeaveClubMutation();
 
@@ -80,9 +82,11 @@ export const MyClubsPage = () => {
                 <Shield className="h-12 w-12 text-gray-700 mx-auto mb-4" />
                 <h3 className="text-xl font-bold text-gray-600 dark:text-gray-400">Not leading any clubs</h3>
                 <p className="text-gray-500 mt-2 mb-8">Ready to take charge? Start your own movement today.</p>
-                <Link to="/clubs/create" className="inline-flex items-center gap-2 bg-indigo-600 text-gray-900 dark:text-white px-8 py-4 rounded-2xl font-bold hover:bg-indigo-500 transition-all shadow-xl">
-                  Create a Club <ArrowRight className="h-4 w-4" />
-                </Link>
+                {user?.role === 'admin' && (
+                  <Link to="/clubs/create" className="inline-flex items-center gap-2 bg-indigo-600 text-gray-900 dark:text-white px-8 py-4 rounded-2xl font-bold hover:bg-indigo-500 transition-all shadow-xl">
+                    Create a Club <ArrowRight className="h-4 w-4" />
+                  </Link>
+                )}
               </div>
             )}
           </motion.div>

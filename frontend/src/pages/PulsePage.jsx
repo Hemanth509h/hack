@@ -193,7 +193,7 @@ const PulsePage = () => {
               <div className="flex items-center justify-between pt-8 mt-4 border-t border-black/5 dark:border-white/5">
                 <div className="flex gap-4">
                   <button className="p-4 rounded-2xl glass bg-black/5 dark:bg-white/5 text-gray-500 hover:text-indigo-400 hover:bg-black/10 dark:hover:bg-white/10 transition-all">
-                    <ImageIcon className="w-6 h-6" />
+                    <Image className="w-6 h-6" />
                   </button>
                   <button className="p-4 rounded-2xl glass bg-black/5 dark:bg-white/5 text-gray-500 hover:text-indigo-400 hover:bg-black/10 dark:hover:bg-white/10 transition-all">
                     <Sparkles className="w-6 h-6" />

@@ -54,7 +54,7 @@ const PortfolioBuilderPage = () => {
                  )}
                  {sec.type === 'projects' && (
                     <div className="border border-dashed border-gray-700 rounded-lg p-10 flex flex-col items-center justify-center text-gray-500 bg-gray-100 dark:bg-gray-950/50 hover:bg-gray-900 hover:border-primary-500/50 hover:text-primary-400 transition-all cursor-pointer group/inner">
-                       <ImageIcon className="w-8 h-8 mb-2 opacity-50 group-hover/inner:opacity-100 transition-opacity" />
+                       <Image className="w-8 h-8 mb-2 opacity-50 group-hover/inner:opacity-100 transition-opacity" />
                        <span className="font-medium text-sm">Add Project Card</span>
                     </div>
                  )}

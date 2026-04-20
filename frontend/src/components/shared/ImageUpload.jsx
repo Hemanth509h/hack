@@ -89,7 +89,7 @@ const ImageUpload = ({
             {isUploading ? (
                <Loader2 className="animate-spin mb-2" size={32} />
             ) : (
-               <ImageIcon size={32} className="mb-2 opacity-50" />
+               <Image size={32} className="mb-2 opacity-50" />
             )}
             <span className="text-sm font-medium">{isUploading ? 'Uploading...' : 'Click to Upload Image'}</span>
           </div>
