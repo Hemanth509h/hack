@@ -5,6 +5,10 @@
       "destination": "https://hack-vutz.onrender.com/api/$1"
     },
     {
+      "source": "/socket.io/(.*)",
+      "destination": "https://hack-vutz.onrender.com/socket.io/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
