@@ -4,7 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useRegisterMutation } from '../../features/auth/authApi';
+import { useRegisterMutation, useLoginMutation } from '../../features/auth/authApi';
+import { setCredentials } from '../../features/auth/authSlice';
+import { useDispatch } from 'react-redux';
 import AuthLayout from '../../components/layout/AuthLayout';
 import { Loader2, Mail, Lock, User, BookOpen, Calendar, CheckCircle2 } from 'lucide-react';
 
@@ -29,8 +31,13 @@ const PREDEFINED_INTERESTS = ['Hackathons', 'Open Source', 'Web Dev', 'Data Scie
 export default function RegisterPage() {
   const [step, setStep] = useState(1);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [registerUser, { isLoading, error }] = useRegisterMutation();
+  const [registerUser, { isLoading: isRegistering, error: registerError }] = useRegisterMutation();
+  const [login, { isLoading: isLoggingIn, error: loginError }] = useLoginMutation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const isLoading = isRegistering || isLoggingIn;
+  const error = registerError || loginError;
 
   const {
     register,
@@ -77,6 +84,7 @@ export default function RegisterPage() {
 
   const onSubmit = async (data) => {
     try {
+      // 1. Register the user
       await registerUser({
         name: data.name,
         email: data.email,
@@ -86,13 +94,29 @@ export default function RegisterPage() {
         interests: data.interests || [],
       }).unwrap();
       
+      // 2. Automatically log in
+      const loginResponse = await login({ 
+        email: data.email, 
+        password: data.password 
+      }).unwrap();
+
+      // 3. Set credentials in store
+      dispatch(
+        setCredentials({
+          user: loginResponse.user,
+          token: loginResponse.accessToken,
+          refreshToken: loginResponse.refreshToken,
+        })
+      );
+
       setIsSuccess(true);
-      // Auto redirect after 3 seconds
+      
+      // 4. Auto redirect to home after 3 seconds
       setTimeout(() => {
-        navigate('/login');
+        navigate('/discover');
       }, 3000);
     } catch (err) {
-      console.error('Registration error:', err);
+      console.error('Registration/Login error:', err);
     }
   };
 
@@ -120,14 +144,14 @@ export default function RegisterPage() {
             <div className="space-y-2">
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Registration Successful!</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Your account has been created. Redirecting you to login in a few seconds...
+                Your account has been created and you've been logged in. Redirecting you home in a few seconds...
               </p>
             </div>
             <button
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/discover')}
               className="w-full py-2.5 px-4 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors shadow-lg shadow-green-500/20"
             >
-              Go to Login Now
+              Go to Home Now
             </button>
           </motion.div>
         ) : (
