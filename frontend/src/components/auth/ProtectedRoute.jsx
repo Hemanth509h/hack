@@ -18,10 +18,12 @@ export const ProtectedRoute = () => {
     if (fetchedUser) {
       dispatch(updateUser(fetchedUser));
       dispatch(setInitializing(false));
+    } else if (user) {
+      dispatch(setInitializing(false));
     } else if (isError || (!token && isInitializing)) {
       dispatch(setInitializing(false));
     }
-  }, [fetchedUser, isError, token, isInitializing, dispatch]);
+  }, [fetchedUser, user, isError, token, isInitializing, dispatch]);
 
   if (isInitializing || isLoading) {
     return (
@@ -52,10 +54,12 @@ export const RoleGuard = ({ allowedRoles }) => {
     if (fetchedUser) {
       dispatch(updateUser(fetchedUser));
       dispatch(setInitializing(false));
+    } else if (user) {
+      dispatch(setInitializing(false));
     } else if (isError || (!token && isInitializing)) {
       dispatch(setInitializing(false));
     }
-  }, [fetchedUser, isError, token, isInitializing, dispatch]);
+  }, [fetchedUser, user, isError, token, isInitializing, dispatch]);
 
   if (isInitializing || isLoading) {
     return (

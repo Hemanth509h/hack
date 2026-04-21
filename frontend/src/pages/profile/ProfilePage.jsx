@@ -24,13 +24,13 @@ const ProfilePage = () => {
     return <div className="text-center py-20 text-gray-500">Please sign in to view your profile.</div>;
   }
   
+  if (isError) return <div className="text-center py-20 text-red-500 font-medium">Profile not found.</div>;
+
   if (isLoading || !profile) return (
      <div className="flex items-center justify-center min-h-[50vh]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500" />
      </div>
   );
-
-  if (isError) return <div className="text-center py-20 text-red-500 font-medium">Profile not found.</div>;
 
   const isOwner = currentUser?.id === profile._id || currentUser?.id === (profile).id;
 
