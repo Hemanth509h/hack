@@ -79,7 +79,10 @@ export const RoleGuard = ({ allowedRoles }) => {
   }
   
   // Handle generic JWT state where 'user' details haven't fully populated yet
-  if (!allowedRoles.includes(user.role)) {
+  const userRole = user.role?.toLowerCase().trim();
+  const isAuthorized = allowedRoles.some(role => role.toLowerCase() === userRole);
+
+  if (!isAuthorized) {
     return <Navigate to="/unauthorized" replace />;
   }
   

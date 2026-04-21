@@ -27,6 +27,9 @@ app.use(passport.initialize());
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', message: 'Backend is running!' });
 });
+app.get('/api/v1/health', (req, res) => {
+    res.json({ status: 'ok', message: 'API v1 is healthy' });
+});
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/events', eventRoutes);
 app.use('/api/v1/clubs', clubRoutes);

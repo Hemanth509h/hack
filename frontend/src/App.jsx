@@ -9,8 +9,10 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { initAnalytics, trackPageView } from './lib/telemetry'
 import CookieBanner from './components/shared/CookieBanner'
 import { useNotifications } from './hooks/useNotifications'
+import { useGetHealthQuery } from './services/api'
 
 function App() {
+  useGetHealthQuery(); // Ping backend on mount
   useNotifications();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
